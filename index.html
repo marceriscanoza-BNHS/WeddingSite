@@ -145,8 +145,7 @@
 </head>
 <body class="bg-earth-50 text-earth-900 font-sans antialiased selection:bg-earth-300 selection:text-earth-900">
 
-    <!-- Navigation Header -->
-    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 px-6 md:px-12">
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 bg-earth-50/90 backdrop-blur-md border-b border-earth-200/50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a href="#home" class="font-serif text-2xl md:text-3xl font-semibold tracking-wider text-earth-900 flex items-center gap-2">
                 <span>C</span>
@@ -183,41 +182,33 @@
         </div>
     </nav>
 
-    <!-- Floating Background Music Control -->
+    <!-- Floating Audio Player Bar -->
     <div class="fixed bottom-6 right-6 z-40 flex items-center gap-2">
-        <!-- Streaming chunk marker -->
-        <!-- Track Title Badge (Shows current song name) -->
         <div id="audio-track-badge" class="hidden sm:flex items-center gap-2 bg-earth-900/90 text-earth-100 text-xs py-2 px-3.5 rounded-full shadow-xl border border-earth-400/30 backdrop-blur-md">
             <i class="fa-solid fa-compact-disc text-earth-400 animate-spin" style="animation-duration: 4s;"></i>
-            <span id="audio-track-title" class="font-medium max-w-[140px] truncate">Song 1 of 5</span>
+            <span id="audio-track-title" class="font-medium max-w-[140px] truncate">1/5: Loading...</span>
         </div>
 
-        <!-- Next Song Button -->
         <button id="audio-next" class="w-10 h-10 rounded-full bg-earth-900/80 text-earth-100 shadow-xl flex items-center justify-center hover:scale-105 transition-all text-xs border border-earth-300/20" title="Skip to Next Song">
             <i class="fa-solid fa-forward-step"></i>
         </button>
 
-        <!-- Main Play/Pause Button -->
         <button id="audio-toggle" class="w-12 h-12 rounded-full bg-earth-800 text-earth-100 shadow-xl flex items-center justify-center hover:scale-105 transition-all group border border-earth-300/30" title="Play / Pause Background Music">
             <i id="audio-icon" class="fa-solid fa-music group-hover:animate-bounce"></i>
         </button>
 
-        <!-- Audio element -->
         <audio id="bg-music" preload="auto"></audio>
     </div>
 
-    <!-- Hero / Landing Section -->
     <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-12 px-4">
-        <!-- Hero Background Image Overlay -->
         <div class="absolute inset-0 z-0">
             <img src="1.jpg" 
                  alt="Connie & Eris Couple Landing Image" 
                  class="w-full h-full object-cover object-center filter brightness-[0.80] contrast-[0.95]"
-                 onerror="this.onerror=null; this.src='https://placehold.co/1920x1080/6e472e/f7f2ea?text=1.jpg+Missing';">
+                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1920&q=80';">
             <div class="absolute inset-0 bg-gradient-to-b from-earth-900/60 via-earth-900/40 to-earth-900/85"></div>
         </div>
 
-        <!-- Hero Content Container -->
         <div class="relative z-10 text-center text-earth-50 max-w-4xl mx-auto px-4 mt-8">
             <p class="font-serif italic text-2xl md:text-3xl text-earth-200 tracking-wide mb-3">We are getting married</p>
             <h1 class="font-serif text-6xl md:text-8xl lg:text-9xl font-normal tracking-wide mb-6 text-white drop-shadow-md">
@@ -250,7 +241,6 @@
                 </div>
             </div>
 
-            <!-- Action Buttons -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
                 <a href="#rsvp" class="w-full sm:w-auto px-8 py-4 rounded-full bg-earth-500 text-earth-50 hover:bg-earth-600 transition-all font-semibold tracking-wider uppercase text-xs sm:text-sm shadow-lg hover:shadow-xl hover:-translate-y-0.5">
                     Confirm Attendance
@@ -261,14 +251,12 @@
             </div>
         </div>
 
-        <!-- Scroll Down Indicator -->
         <a href="#attire" class="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-earth-200 animate-bounce flex flex-col items-center gap-1 opacity-75 hover:opacity-100">
             <span class="text-[10px] uppercase tracking-widest font-light">Scroll Down</span>
             <i class="fa-solid fa-chevron-down text-xs"></i>
         </a>
     </section>
 
-    <!-- What to Wear Section (SHADES OF BROWN FEATURE) -->
     <section id="attire" class="py-20 px-6 md:px-12 bg-earth-50 relative">
         <div class="max-w-6xl mx-auto">
             <div class="text-center max-w-3xl mx-auto mb-16">
@@ -280,48 +268,41 @@
                 <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full"></div>
             </div>
 
-            <!-- Color Palette Inspector Widget -->
             <div class="glass-card p-6 md:p-10 rounded-3xl mb-12 shadow-md border border-earth-300">
                 <h3 class="text-center font-serif text-2xl md:text-3xl text-earth-900 mb-2">Interactive Color Swatch Palette</h3>
                 <p class="text-center text-sm md:text-base text-earth-700 mb-8 font-medium">Click any shade below to inspect sample dress code outfits & styling descriptions</p>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mb-8">
-                    <!-- Swatch 1: Champagne / Cream -->
                     <button onclick="selectSwatch('champagne')" id="swatch-champagne" class="swatch-btn flex flex-col items-center p-4 rounded-2xl transition-all duration-300 hover:scale-105 border-2 border-earth-200 shadow-sm bg-white">
                         <span class="w-14 h-14 rounded-full mb-2 border border-black/10 shadow-inner" style="background-color: #F3E8D8;"></span>
                         <span class="text-xs sm:text-sm font-bold text-earth-900">Champagne</span>
                         <span class="text-xs text-earth-600">Light Beige</span>
                     </button>
 
-                    <!-- Swatch 2: Latte -->
                     <button onclick="selectSwatch('latte')" id="swatch-latte" class="swatch-btn flex flex-col items-center p-4 rounded-2xl transition-all duration-300 hover:scale-105 border-2 border-earth-200 shadow-sm bg-white">
                         <span class="w-14 h-14 rounded-full mb-2 border border-black/10 shadow-inner" style="background-color: #E6D7C3;"></span>
                         <span class="text-xs sm:text-sm font-bold text-earth-900">Warm Latte</span>
                         <span class="text-xs text-earth-600">Nude / Tan</span>
                     </button>
 
-                    <!-- Swatch 3: Camel -->
                     <button onclick="selectSwatch('camel')" id="swatch-camel" class="swatch-btn flex flex-col items-center p-4 rounded-2xl transition-all duration-300 hover:scale-105 border-2 border-earth-200 shadow-sm bg-white">
                         <span class="w-14 h-14 rounded-full mb-2 border border-black/10 shadow-inner" style="background-color: #C19A6B;"></span>
                         <span class="text-xs sm:text-sm font-bold text-earth-900">Classic Camel</span>
                         <span class="text-xs text-earth-600">Golden Brown</span>
                     </button>
 
-                    <!-- Swatch 4: Terracotta / Rust -->
                     <button onclick="selectSwatch('terracotta')" id="swatch-terracotta" class="swatch-btn flex flex-col items-center p-4 rounded-2xl transition-all duration-300 hover:scale-105 border-2 border-earth-200 shadow-sm bg-white">
                         <span class="w-14 h-14 rounded-full mb-2 border border-black/10 shadow-inner" style="background-color: #C86D51;"></span>
                         <span class="text-xs sm:text-sm font-bold text-earth-900">Terracotta</span>
                         <span class="text-xs text-earth-600">Rust Earth</span>
                     </button>
 
-                    <!-- Swatch 5: Mocha -->
                     <button onclick="selectSwatch('mocha')" id="swatch-mocha" class="swatch-btn flex flex-col items-center p-4 rounded-2xl transition-all duration-300 hover:scale-105 border-2 border-earth-200 shadow-sm bg-white">
                         <span class="w-14 h-14 rounded-full mb-2 border border-black/10 shadow-inner" style="background-color: #705335;"></span>
                         <span class="text-xs sm:text-sm font-bold text-earth-900">Mocha</span>
                         <span class="text-xs text-earth-600">Rich Medium</span>
                     </button>
 
-                    <!-- Swatch 6: Espresso -->
                     <button onclick="selectSwatch('espresso')" id="swatch-espresso" class="swatch-btn flex flex-col items-center p-4 rounded-2xl transition-all duration-300 hover:scale-105 border-2 border-earth-200 shadow-sm bg-white">
                         <span class="w-14 h-14 rounded-full mb-2 border border-black/10 shadow-inner" style="background-color: #3B2F2F;"></span>
                         <span class="text-xs sm:text-sm font-bold text-earth-900">Deep Espresso</span>
@@ -329,9 +310,8 @@
                     </button>
                 </div>
 
-                <!-- Swatch Active Details Banner with Live Sample Outfit Image -->
                 <div id="swatch-detail-box" class="p-6 md:p-8 rounded-2xl bg-earth-100/90 border-2 border-earth-300 text-center transition-all flex flex-col md:flex-row items-center gap-6 shadow-sm">
-                    <img id="swatch-img" src="2.jpg" alt="Sample dress code outfit" class="w-full md:w-48 h-48 object-cover rounded-xl border-2 border-earth-300 shadow-md flex-shrink-0" onerror="this.onerror=null; this.src='https://placehold.co/400x400/c59d7b/ffffff?text=2.jpg+Missing';">
+                    <img id="swatch-img" src="2.jpg" alt="Sample dress code outfit" class="w-full md:w-48 h-48 object-cover rounded-xl border-2 border-earth-300 shadow-md flex-shrink-0" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80';">
                     <div class="text-left flex-1">
                         <span class="text-xs uppercase font-bold tracking-widest text-earth-600">Selected Shade Style Guide</span>
                         <h4 id="swatch-title" class="font-serif text-2xl md:text-3xl font-bold text-earth-900 mt-1">Select a color swatch above</h4>
@@ -340,9 +320,8 @@
                 </div>
             </div>
 
-            <!-- Moodboard & Style Inspiration Cards (Ladies: Dress / Gentlemen: Long sleeves) -->
+            <!-- Moodboard & Style Inspiration Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <!-- Ladies Style Card -->
                 <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-earth-200 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center gap-3 mb-4 text-earth-700">
@@ -357,11 +336,11 @@
                             <img src="9.jpg" 
                                  alt="Ladies Dress Code Sample 1" 
                                  class="rounded-xl h-52 w-full object-cover border border-earth-200"
-                                 onerror="this.onerror=null; this.src='https://placehold.co/400x500/c59d7b/ffffff?text=9.jpg+Missing';">
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80';">
                             <img src="10.jpg" 
                                  alt="Ladies Dress Code Sample 2" 
                                  class="rounded-xl h-52 w-full object-cover border border-earth-200"
-                                 onerror="this.onerror=null; this.src='https://placehold.co/400x500/a87854/ffffff?text=10.jpg+Missing';">
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?auto=format&fit=crop&w=400&q=80';">
                         </div>
                     </div>
                     <div class="p-4 bg-earth-50 rounded-xl border border-earth-200 text-sm text-earth-800">
@@ -369,7 +348,6 @@
                     </div>
                 </div>
 
-                <!-- Gentlemen Style Card -->
                 <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-earth-200 flex flex-col justify-between">
                     <div>
                         <div class="flex items-center gap-3 mb-4 text-earth-700">
@@ -384,11 +362,11 @@
                             <img src="11.jpg" 
                                  alt="Gentlemen Dress Code Sample 1" 
                                  class="rounded-xl h-52 w-full object-cover border border-earth-200"
-                                 onerror="this.onerror=null; this.src='https://placehold.co/400x500/8c5d3d/ffffff?text=11.jpg+Missing';">
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80';">
                             <img src="12.jpg" 
                                  alt="Gentlemen Dress Code Sample 2" 
                                  class="rounded-xl h-52 w-full object-cover border border-earth-200"
-                                 onerror="this.onerror=null; this.src='https://placehold.co/400x500/6e472e/ffffff?text=12.jpg+Missing';">
+                                 onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&w=400&q=80';">
                         </div>
                     </div>
                     <div class="p-4 bg-earth-50 rounded-xl border border-earth-200 text-sm text-earth-800">
@@ -397,7 +375,6 @@
                 </div>
             </div>
 
-            <!-- Dos & Don'ts Quick Note -->
             <div class="mt-8 bg-earth-100/80 rounded-2xl p-6 border border-earth-200 flex flex-col sm:flex-row gap-6 items-center justify-around text-sm md:text-base text-earth-900">
                 <div class="flex items-center gap-3">
                     <span class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-base flex-shrink-0">✓</span>
@@ -411,7 +388,6 @@
         </div>
     </section>
 
-    <!-- Schedule Section -->
     <section id="schedule" class="py-20 px-6 md:px-12 bg-earth-100/50">
         <div class="max-w-4xl mx-auto">
             <div class="text-center mb-16">
@@ -420,9 +396,7 @@
                 <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full"></div>
             </div>
 
-            <!-- Timeline List -->
             <div class="relative border-l-2 border-earth-300 ml-4 md:ml-32 space-y-12">
-                <!-- Mass Event -->
                 <div class="relative pl-8 md:pl-10">
                     <span class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-earth-600 border-4 border-earth-100"></span>
                     <div class="md:absolute md:-left-36 md:top-0 text-base font-bold text-earth-700 mb-1 md:mb-0">
@@ -439,7 +413,6 @@
                         <p class="text-earth-700 text-sm md:text-base">Poblacion, Bustos, Bulacan</p>
                         <p class="text-earth-800 text-sm md:text-base italic bg-earth-50 p-3 rounded-lg border border-earth-200">Please arrive at least 15–20 minutes early for holy mass seating.</p>
 
-                        <!-- Unplugged Ceremony Notice -->
                         <div class="mt-4 p-4 rounded-xl bg-amber-50/80 border border-amber-200 flex items-start gap-3">
                             <span class="w-8 h-8 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">
                                 <i class="fa-solid fa-camera-retro"></i>
@@ -452,7 +425,6 @@
                     </div>
                 </div>
 
-                <!-- Reception Event -->
                 <div class="relative pl-8 md:pl-10">
                     <span class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-earth-600 border-4 border-earth-100"></span>
                     <div class="md:absolute md:-left-36 md:top-0 text-base font-bold text-earth-700 mb-1 md:mb-0">
@@ -471,7 +443,6 @@
                     </div>
                 </div>
 
-                <!-- Party Event -->
                 <div class="relative pl-8 md:pl-10">
                     <span class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-earth-600 border-4 border-earth-100"></span>
                     <div class="md:absolute md:-left-36 md:top-0 text-base font-bold text-earth-700 mb-1 md:mb-0">
@@ -484,7 +455,6 @@
                 </div>
             </div>
 
-            <!-- Add to Calendar CTA -->
             <div class="text-center mt-12">
                 <button onclick="openCalendarModal()" class="px-8 py-3.5 rounded-full border-2 border-earth-400 text-earth-900 hover:bg-earth-200 transition-all text-xs sm:text-sm font-bold uppercase tracking-wider inline-flex items-center gap-2 shadow-sm">
                     <i class="fa-regular fa-calendar-plus"></i> Add Event to Calendar
@@ -493,7 +463,6 @@
         </div>
     </section>
 
-    <!-- Wedding Entourage Section -->
     <section id="entourage" class="py-20 px-6 md:px-12 bg-earth-50 border-t border-earth-200">
         <div class="max-w-5xl mx-auto">
             <div class="text-center mb-16">
@@ -502,7 +471,6 @@
                 <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full"></div>
             </div>
 
-            <!-- Parents Grid -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                 <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center space-y-3">
                     <span class="text-xs font-bold uppercase tracking-widest text-earth-500">Parents of the Bride</span>
@@ -519,7 +487,6 @@
                 </div>
             </div>
 
-            <!-- Maid of Honor & Best Man -->
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
                 <div class="bg-earth-100/80 p-6 rounded-2xl border border-earth-300 text-center">
                     <span class="text-xs font-bold uppercase tracking-widest text-earth-600">Maid of Honor</span>
@@ -531,7 +498,6 @@
                 </div>
             </div>
 
-            <!-- Principal Sponsors (Ninongs & Ninangs) -->
             <div class="bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-earth-200 mb-12 text-center">
                 <h3 class="font-serif text-3xl text-earth-900 mb-2">Principal Sponsors</h3>
                 <p class="text-sm text-earth-600 mb-6 font-medium">Standing with us as our witnesses and lifelong mentors</p>
@@ -565,9 +531,7 @@
                 </div>
             </div>
 
-            <!-- Bridesmaids & Groomsmen -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <!-- Bridesmaids Card -->
                 <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center">
                     <div class="flex items-center justify-center gap-2 mb-1">
                         <i class="fa-solid fa-person-dress text-earth-500 text-xl"></i>
@@ -587,7 +551,6 @@
                     </div>
                 </div>
 
-                <!-- Groomsmen Card -->
                 <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center">
                     <div class="flex items-center justify-center gap-2 mb-1">
                         <i class="fa-solid fa-user-tie text-earth-500 text-xl"></i>
@@ -608,10 +571,9 @@
                 </div>
             </div>
 
-            <!-- Secondary Sponsors -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
                 <div class="bg-white p-6 rounded-2xl border border-earth-200 text-center shadow-sm">
-                    <i class="fa-solid fa-candle-holder text-earth-500 text-2xl mb-2"></i>
+                    <i class="fa-solid fa-fire text-earth-500 text-2xl mb-2"></i>
                     <h5 class="font-serif text-xl text-earth-900 font-bold">Candle Sponsors</h5>
                     <p class="text-xs text-earth-600 mt-0.5">To light our path ahead</p>
                     <p class="text-sm text-earth-800 font-semibold mt-3">[Name & Name]</p>
@@ -632,7 +594,6 @@
         </div>
     </section>
 
-    <!-- Photo Gallery Section -->
     <section id="gallery" class="py-20 px-6 md:px-12 bg-earth-50">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16">
@@ -641,13 +602,12 @@
                 <div class="w-16 h-0.5 bg-earth-400 mx-auto mt-4"></div>
             </div>
 
-            <!-- Gallery Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
                 <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('13.jpg')">
                     <img src="13.jpg" 
                          alt="Connie & Eris photo 1" 
                          class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
-                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/c59d7b/ffffff?text=13.jpg+Missing';">
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=600&q=80';">
                     <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
                         <i class="fa-solid fa-magnifying-glass-plus text-2xl"></i>
                     </div>
@@ -657,7 +617,7 @@
                     <img src="14.jpg" 
                          alt="Connie & Eris photo 2" 
                          class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
-                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/a87854/ffffff?text=14.jpg+Missing';">
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80';">
                     <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
                         <i class="fa-solid fa-magnifying-glass-plus text-2xl"></i>
                     </div>
@@ -667,7 +627,7 @@
                     <img src="15.jpg" 
                          alt="Connie & Eris photo 3" 
                          class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
-                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/8c5d3d/ffffff?text=15.jpg+Missing';">
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=600&q=80';">
                     <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
                         <i class="fa-solid fa-magnifying-glass-plus text-2xl"></i>
                     </div>
@@ -677,7 +637,7 @@
                     <img src="16.jpg" 
                          alt="Connie & Eris photo 4" 
                          class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
-                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/6e472e/ffffff?text=16.jpg+Missing';">
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=600&q=80';">
                     <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
                         <i class="fa-solid fa-magnifying-glass-plus text-2xl"></i>
                     </div>
@@ -687,7 +647,7 @@
                     <img src="17.jpg" 
                          alt="Connie & Eris photo 5" 
                          class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
-                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/523423/ffffff?text=17.jpg+Missing';">
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80';">
                     <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
                         <i class="fa-solid fa-magnifying-glass-plus text-2xl"></i>
                     </div>
@@ -697,7 +657,7 @@
                     <img src="18.jpg" 
                          alt="Connie & Eris photo 6" 
                          class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
-                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/382218/ffffff?text=18.jpg+Missing';">
+                         onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=600&q=80';">
                     <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
                         <i class="fa-solid fa-magnifying-glass-plus text-2xl"></i>
                     </div>
@@ -706,7 +666,6 @@
         </div>
     </section>
 
-    <!-- RSVP Section -->
     <section id="rsvp" class="py-20 px-6 md:px-12 bg-earth-100/70 relative">
         <div class="max-w-3xl mx-auto">
             <div class="text-center mb-10">
@@ -715,7 +674,6 @@
                 <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full"></div>
             </div>
 
-            <!-- Prominent Dual-Language RSVP Disclaimer Box -->
             <div class="bg-gradient-to-r from-amber-50 via-earth-100 to-amber-50 border-2 border-earth-400 text-earth-900 p-6 md:p-8 rounded-3xl mb-10 shadow-md">
                 <div class="flex items-center justify-center gap-3 mb-4">
                     <span class="w-10 h-10 rounded-full bg-earth-700 text-earth-50 flex items-center justify-center text-lg shadow-sm flex-shrink-0">
@@ -745,22 +703,18 @@
                 </div>
             </div>
 
-            <!-- RSVP Card Container -->
-            <div class="bg-white rounded-3xl p-8 md:p-12 shadow-md border border-earth-200">
+            <div id="rsvp-card-container" class="bg-white rounded-3xl p-8 md:p-12 shadow-md border border-earth-200">
                 <form id="rsvp-form" onsubmit="handleRSVPSubmit(event)" class="space-y-6">
-                    <!-- Guest Name -->
                     <div>
                         <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">Full Name *</label>
                         <input type="text" id="guest-name" required placeholder="e.g. Juan Dela Cruz" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base">
                     </div>
 
-                    <!-- Email or Contact Number -->
                     <div>
                         <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">Contact Number / Email *</label>
                         <input type="text" id="guest-contact" required placeholder="0917-123-4567 or email@example.com" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base">
                     </div>
 
-                    <!-- Attendance Radio -->
                     <div>
                         <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">Will you be attending? *</label>
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -775,7 +729,6 @@
                         </div>
                     </div>
 
-                    <!-- Offerings / Special Performances -->
                     <div>
                         <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">
                             Offerings & Special Performances <span class="text-earth-500 font-normal">(Optional)</span>
@@ -783,7 +736,6 @@
                         <textarea id="guest-offering" rows="3" placeholder="Would you like to sing a song, give a prayer or toast, or share a special performance for Connie & Eris? Let us know here!" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base"></textarea>
                     </div>
 
-                    <!-- Submit Button -->
                     <button type="submit" class="w-full py-4 rounded-xl bg-earth-700 hover:bg-earth-800 text-earth-50 font-bold tracking-wider uppercase text-xs sm:text-sm shadow-lg transition-all hover:shadow-xl flex items-center justify-center gap-2">
                         <i class="fa-paper-plane fa-solid text-sm"></i> Send RSVP Response
                     </button>
@@ -792,7 +744,7 @@
         </div>
     </section>
 
-    <!-- Registry & Wishing Well -->
+    <!-- Gift Registry & Monetary Blessing Section -->
     <section class="py-16 px-6 md:px-12 bg-earth-50 border-t border-earth-200">
         <div class="max-w-4xl mx-auto text-center">
             <i class="fa-solid fa-gift text-3xl text-earth-500 mb-3"></i>
@@ -802,7 +754,6 @@
             </p>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
-                <!-- GCash Card -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-earth-200 flex flex-col items-center justify-between hover:border-earth-400 transition-colors">
                     <div class="w-full">
                         <div class="flex items-center justify-center gap-2 mb-3">
@@ -812,14 +763,14 @@
                         <img src="19.jpg" 
                              alt="GCash QR Code" 
                              class="w-36 h-36 object-cover rounded-xl border border-blue-200 mx-auto mb-4 p-1 shadow-sm"
-                             onerror="this.onerror=null; this.src='https://placehold.co/400x400/3b82f6/ffffff?text=19.jpg+(GCash+QR)';">
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x400/3b82f6/ffffff?text=GCash+QR';">
                     </div>
                     <div class="text-xs text-earth-800 space-y-1 w-full bg-earth-50 p-3 rounded-xl border border-earth-200">
-                        <p class="font-semibold text-earth-900">Marie Concepcion Relano</p>
+                        <p class="font-semibold text-earth-900">Connie or Eris</p>
+                        <p class="font-mono text-earth-700">09XX-XXX-XXXX</p>
                     </div>
                 </div>
 
-                <!-- Maya Card -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-earth-200 flex flex-col items-center justify-between hover:border-earth-400 transition-colors">
                     <div class="w-full">
                         <div class="flex items-center justify-center gap-2 mb-3">
@@ -829,14 +780,14 @@
                         <img src="20.jpg" 
                              alt="Maya QR Code" 
                              class="w-36 h-36 object-cover rounded-xl border border-emerald-200 mx-auto mb-4 p-1 shadow-sm"
-                             onerror="this.onerror=null; this.src='https://placehold.co/400x400/10b981/ffffff?text=20.jpg+(Maya+QR)';">
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x400/10b981/ffffff?text=Maya+QR';">
                     </div>
                     <div class="text-xs text-earth-800 space-y-1 w-full bg-earth-50 p-3 rounded-xl border border-earth-200">
-                        <p class="font-semibold text-earth-900">Marie Concepcion Relano</p>
+                        <p class="font-semibold text-earth-900">Connie or Eris</p>
+                        <p class="font-mono text-earth-700">09XX-XXX-XXXX</p>
                     </div>
                 </div>
 
-                <!-- Bank Transfer Card -->
                 <div class="bg-white p-6 rounded-2xl shadow-sm border border-earth-200 flex flex-col items-center justify-between hover:border-earth-400 transition-colors">
                     <div class="w-full">
                         <div class="flex items-center justify-center gap-2 mb-3">
@@ -846,17 +797,17 @@
                         <img src="21.jpg" 
                              alt="Bank Transfer QR Code" 
                              class="w-36 h-36 object-cover rounded-xl border border-amber-200 mx-auto mb-4 p-1 shadow-sm"
-                             onerror="this.onerror=null; this.src='https://placehold.co/400x400/d97706/ffffff?text=21.jpg+(Bank+QR)';">
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x400/d97706/ffffff?text=Bank+QR';">
                     </div>
                     <div class="text-xs text-earth-800 space-y-1 w-full bg-earth-50 p-3 rounded-xl border border-earth-200">
-                        <p class="font-semibold text-earth-900">Account: Marie Concepcion Relano</p>
+                        <p class="font-semibold text-earth-900">Account: Connie / Eris</p>
+                        <p class="font-mono text-earth-700">Acc No: XXXX-XXXX-XX</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- FAQ Section -->
     <section id="faq" class="py-20 px-6 md:px-12 bg-earth-100/40">
         <div class="max-w-4xl mx-auto">
             <div class="text-center mb-16">
@@ -865,7 +816,6 @@
                 <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full"></div>
             </div>
 
-            <!-- FAQ Accordion List -->
             <div class="space-y-4">
                 <div class="bg-white rounded-2xl border border-earth-200 overflow-hidden shadow-sm">
                     <button onclick="toggleFAQ(1)" class="w-full px-6 py-5 text-left font-serif text-xl md:text-2xl text-earth-900 flex justify-between items-center focus:outline-none">
@@ -910,7 +860,6 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="bg-earth-900 text-earth-200 py-12 px-6 text-center border-t border-earth-800">
         <div class="max-w-4xl mx-auto space-y-4">
             <p class="font-serif text-4xl text-white">Connie & Eris</p>
@@ -939,7 +888,6 @@
         </div>
     </div>
 
-
     <!-- Add To Calendar Modal -->
     <div id="calendar-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl space-y-4 border border-earth-200">
@@ -954,34 +902,228 @@
     </div>
 
     <script>
-        // Navbar Scroll Styling Effect
-        const navbar = document.getElementById('navbar');
-        window.addEventListener('scroll', () => {
-            if (window.scrollY > 50) {
-                navbar.classList.add('bg-white/90', 'shadow-sm', 'bg-blur');
-                navbar.classList.remove('py-4');
-                navbar.classList.add('py-2');
-            } else {
-                navbar.classList.remove('bg-white/90', 'shadow-sm', 'bg-blur');
-                navbar.classList.remove('py-2');
-                navbar.classList.add('py-4');
+        let rsvpList = JSON.parse(localStorage.getItem('connie_eris_rsvps') || '[]');
+        const DEFAULT_GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXS58CelpvdTqdCV8gICPK6GhWwf31xtH1L6j5p1vwYkqWCWfkKw9Gpzn1640N8Sk3/exec';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAndRenderRSVPState();
+
+            // Mobile Menu Drawer Toggle
+            const menuBtn = document.getElementById('menu-btn');
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (menuBtn && mobileMenu) {
+                menuBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    mobileMenu.classList.toggle('hidden');
+                });
+                document.querySelectorAll('.mobile-link').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
             }
+
+            selectSwatch('camel');
         });
 
-        // Mobile Menu Toggle
-        const menuBtn = document.getElementById('menu-btn');
+        function getStoredUserRSVP() {
+            try {
+                const stored = localStorage.getItem('connie_eris_user_rsvp');
+                return stored ? JSON.parse(stored) : null;
+            } catch(e) {
+                return null;
+            }
+        }
+
+        function checkAndRenderRSVPState() {
+            const userRSVP = getStoredUserRSVP();
+            const container = document.getElementById('rsvp-card-container');
+            if (!container) return;
+
+            if (userRSVP && userRSVP.attendance) {
+                const isAccept = userRSVP.attendance === 'accepts';
+                
+                container.innerHTML = `
+                    <div class="text-center space-y-6 py-4">
+                        <div class="w-16 h-16 ${isAccept ? 'bg-amber-100 text-amber-800' : 'bg-rose-100 text-rose-800'} rounded-full flex items-center justify-center mx-auto text-3xl shadow-sm">
+                            <i class="fa-solid ${isAccept ? 'fa-circle-check' : 'fa-heart'}"></i>
+                        </div>
+                        
+                        <div>
+                            <span class="inline-block px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider ${isAccept ? 'bg-amber-100 text-amber-900 border border-amber-300' : 'bg-rose-100 text-rose-900 border border-rose-300'} mb-3">
+                                ${isAccept ? 'RSVP Confirmed: Attending' : 'RSVP Received: Unable to Attend'}
+                            </span>
+                            <h3 class="font-serif text-3xl md:text-4xl font-bold text-earth-900">
+                                ${isAccept ? `We are looking forward to seeing you, ${userRSVP.name}!` : `It's sad to hear you can't make it, ${userRSVP.name}!`}
+                            </h3>
+                            <p class="text-earth-700 text-base md:text-lg mt-3 max-w-xl mx-auto leading-relaxed font-normal">
+                                ${isAccept 
+                                    ? 'Thank you for confirming your attendance. We have saved your RSVP and cannot wait to celebrate this special day with you!' 
+                                    : 'Thank you so much for letting us know. Although we will miss your presence on our special day, your love and blessing mean the world to us!'}
+                            </p>
+                        </div>
+
+                        <div class="bg-earth-50 rounded-2xl p-6 border border-earth-200 max-w-lg mx-auto text-left space-y-3 shadow-inner">
+                            <div class="flex justify-between items-center text-xs uppercase tracking-wider text-earth-500 font-bold border-b border-earth-200 pb-2">
+                                <span>Submitted RSVP Details</span>
+                                <span class="text-emerald-700 font-semibold"><i class="fa-solid fa-lock"></i> Response Saved</span>
+                            </div>
+                            <div class="text-sm text-earth-800 space-y-1.5">
+                                <p><strong class="text-earth-900">Name:</strong> ${userRSVP.name}</p>
+                                <p><strong class="text-earth-900">Contact:</strong> ${userRSVP.contact}</p>
+                                <p><strong class="text-earth-900">Status:</strong> ${isAccept ? 'Joyfully Accepts' : 'Regretfully Declines'}</p>
+                                ${userRSVP.offering && userRSVP.offering !== 'None' ? `<p><strong class="text-earth-900">Offering / Performance:</strong> ${userRSVP.offering}</p>` : ''}
+                            </div>
+                        </div>
+
+                        <div class="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+                            <button onclick="enableRSVPEdit()" class="px-6 py-2.5 rounded-full border border-earth-400 text-earth-800 hover:bg-earth-100 transition-colors text-xs font-bold uppercase tracking-wider flex items-center gap-2">
+                                <i class="fa-solid fa-pen-to-square"></i> Change or Edit Response
+                            </button>
+                        </div>
+                    </div>
+                `;
+
+                // Update navbar RSVP badge button
+                const navRSVPBtn = document.querySelector('a[href="#rsvp"].px-5');
+                if (navRSVPBtn) {
+                    navRSVPBtn.innerHTML = isAccept ? '<i class="fa-solid fa-check text-xs"></i> Attending' : '<i class="fa-solid fa-check text-xs"></i> RSVP Sent';
+                    navRSVPBtn.classList.remove('bg-earth-700');
+                    navRSVPBtn.classList.add('bg-emerald-700');
+                }
+            }
+        }
+
+        function enableRSVPEdit() {
+            const userRSVP = getStoredUserRSVP() || {};
+            const container = document.getElementById('rsvp-card-container');
+            if (!container) return;
+
+            container.innerHTML = `
+                <form id="rsvp-form" onsubmit="handleRSVPSubmit(event)" class="space-y-6">
+                    <div>
+                        <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">Full Name *</label>
+                        <input type="text" id="guest-name" required value="${userRSVP.name || ''}" placeholder="e.g. Juan Dela Cruz" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">Contact Number / Email *</label>
+                        <input type="text" id="guest-contact" required value="${userRSVP.contact || ''}" placeholder="0917-123-4567 or email@example.com" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base">
+                    </div>
+
+                    <div>
+                        <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">Will you be attending? *</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <label class="flex items-center gap-3 p-4 rounded-xl border-2 border-earth-200 bg-earth-50 cursor-pointer hover:bg-earth-100 transition-colors">
+                                <input type="radio" name="attendance" value="accepts" ${userRSVP.attendance !== 'declines' ? 'checked' : ''} class="w-4 h-4 text-earth-600 focus:ring-earth-500">
+                                <span class="text-base font-semibold text-earth-900">Joyfully Accepts</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-4 rounded-xl border-2 border-earth-200 bg-earth-50 cursor-pointer hover:bg-earth-100 transition-colors">
+                                <input type="radio" name="attendance" value="declines" ${userRSVP.attendance === 'declines' ? 'checked' : ''} class="w-4 h-4 text-earth-600 focus:ring-earth-500">
+                                <span class="text-base font-semibold text-earth-900">Regretfully Declines</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">
+                            Offerings & Special Performances <span class="text-earth-500 font-normal">(Optional)</span>
+                        </label>
+                        <textarea id="guest-offering" rows="3" placeholder="Would you like to sing a song, give a prayer or toast, or share a special performance for Connie & Eris? Let us know here!" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base">${userRSVP.offering && userRSVP.offering !== 'None' ? userRSVP.offering : ''}</textarea>
+                    </div>
+
+                    <button type="submit" class="w-full py-4 rounded-xl bg-earth-700 hover:bg-earth-800 text-earth-50 font-bold tracking-wider uppercase text-xs sm:text-sm shadow-lg transition-all hover:shadow-xl flex items-center justify-center gap-2">
+                        <i class="fa-paper-plane fa-solid text-sm"></i> Update RSVP Response
+                    </button>
+                </form>
+            `;
+        }
+
+        function handleRSVPSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('guest-name').value;
+            const contact = document.getElementById('guest-contact').value;
+            const attendance = document.querySelector('input[name="attendance"]:checked').value;
+            const offering = document.getElementById('guest-offering').value;
+
+            const rsvpEntry = {
+                id: Date.now().toString(),
+                name,
+                contact,
+                attendance,
+                offering,
+                date: new Date().toLocaleDateString()
+            };
+
+            // Save user RSVP state locally to lock form & prevent duplicates
+            localStorage.setItem('connie_eris_user_rsvp', JSON.stringify(rsvpEntry));
+
+            rsvpList.push(rsvpEntry);
+            localStorage.setItem('connie_eris_rsvps', JSON.stringify(rsvpList));
+
+            if (window.saveRSVPToCloud) {
+                window.saveRSVPToCloud(rsvpEntry);
+            }
+
+            sendToGoogleSheets(rsvpEntry);
+
+            const modalText = document.getElementById('rsvp-modal-text');
+            if (attendance === 'accepts') {
+                modalText.innerText = `Thank you, ${name}! We can't wait to celebrate with you in your favorite shade of brown at Sto. Niño Parish Church and Angel's Place Private Resort.`;
+            } else {
+                modalText.innerText = `We will miss you dearly, ${name}! Thank you for letting us know and sending your love to Connie & Eris.`;
+            }
+
+            document.getElementById('rsvp-modal').classList.remove('hidden');
+            document.getElementById('rsvp-modal').classList.add('flex');
+            event.target.reset();
+        }
+
+        function sendToGoogleSheets(data) {
+            const scriptUrl = localStorage.getItem('connie_eris_google_script_url') || DEFAULT_GOOGLE_SCRIPT_URL;
+            if (!scriptUrl) return;
+
+            try {
+                fetch(scriptUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8',
+                    },
+                    body: JSON.stringify(data)
+                }).then(() => {
+                    console.log('Successfully dispatched RSVP to Google Sheets');
+                }).catch(err => console.log('Google Sheets Sync note:', err));
+            } catch(e) {
+                console.log('Sheets Sync error', e);
+            }
+        }
+
+        function closeRSVPModal() {
+            document.getElementById('rsvp-modal').classList.add('hidden');
+            document.getElementById('rsvp-modal').classList.remove('flex');
+            checkAndRenderRSVPState();
+        }
+
         // Target Wedding Date: January 8, 2027 @ 2:00 PM
-        const weddingDate = new Date('January 8, 2027 14:00:00').getTime();
+        const weddingDate = new Date(2027, 0, 8, 14, 0, 0).getTime();
 
         function updateCountdown() {
             const now = new Date().getTime();
             const distance = weddingDate - now;
 
-            if (distance < 0) {
-                document.getElementById('timer-days').innerText = '00';
-                document.getElementById('timer-hours').innerText = '00';
-                document.getElementById('timer-minutes').innerText = '00';
-                document.getElementById('timer-seconds').innerText = '00';
+            const daysElem = document.getElementById('timer-days');
+            const hoursElem = document.getElementById('timer-hours');
+            const minsElem = document.getElementById('timer-minutes');
+            const secsElem = document.getElementById('timer-seconds');
+
+            if (!daysElem || !hoursElem || !minsElem || !secsElem) return;
+
+            if (distance <= 0) {
+                daysElem.innerText = '00';
+                hoursElem.innerText = '00';
+                minsElem.innerText = '00';
+                secsElem.innerText = '00';
                 return;
             }
 
@@ -990,10 +1132,10 @@
             const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            document.getElementById('timer-days').innerText = days < 10 ? '0' + days : days;
-            document.getElementById('timer-hours').innerText = hours < 10 ? '0' + hours : hours;
-            document.getElementById('timer-minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
-            document.getElementById('timer-seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+            daysElem.innerText = String(days).padStart(2, '0');
+            hoursElem.innerText = String(hours).padStart(2, '0');
+            minsElem.innerText = String(minutes).padStart(2, '0');
+            secsElem.innerText = String(seconds).padStart(2, '0');
         }
 
         setInterval(updateCountdown, 1000);
@@ -1054,9 +1196,7 @@
             }
         }
 
-        selectSwatch('camel');
-
-        // Lightbox Functions
+        // Lightbox Modal Functions
         function openLightbox(imgSrc) {
             document.getElementById('lightbox-img').src = imgSrc;
             document.getElementById('lightbox').classList.remove('hidden');
@@ -1081,152 +1221,6 @@
             }
         }
 
-        // RSVP Local Storage & Cloud Store
-        let rsvpList = JSON.parse(localStorage.getItem('connie_eris_rsvps') || '[]');
-
-        function handleRSVPSubmit(event) {
-            event.preventDefault();
-            const name = document.getElementById('guest-name').value;
-            const contact = document.getElementById('guest-contact').value;
-            const attendance = document.querySelector('input[name="attendance"]:checked').value;
-            const offering = document.getElementById('guest-offering').value;
-
-            const rsvpEntry = {
-                id: Date.now().toString(),
-                name,
-                contact,
-                attendance,
-                offering,
-                date: new Date().toLocaleDateString()
-            };
-
-            rsvpList.push(rsvpEntry);
-            localStorage.setItem('connie_eris_rsvps', JSON.stringify(rsvpList));
-
-            if (window.saveRSVPToCloud) {
-                window.saveRSVPToCloud(rsvpEntry);
-            }
-
-            // Sync submission with Google Sheets
-            sendToGoogleSheets(rsvpEntry);
-
-            const modalText = document.getElementById('rsvp-modal-text');
-            if (attendance === 'accepts') {
-                modalText.innerText = `Thank you, ${name}! We can't wait to celebrate with you in your favorite shade of brown at Sto. Niño Parish Church and Angel's Place Private Resort.`;
-            } else {
-                modalText.innerText = `We will miss you dearly, ${name}! Thank you for letting us know and sending your love to Connie & Eris.`;
-            }
-
-            document.getElementById('rsvp-modal').classList.remove('hidden');
-            document.getElementById('rsvp-modal').classList.add('flex');
-            event.target.reset();
-        }
-
-        // Send RSVP data directly to Google Sheets via Apps Script Web App URL
-        const DEFAULT_GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXS58CelpvdTqdCV8gICPK6GhWwf31xtH1L6j5p1vwYkqWCWfkKw9Gpzn1640N8Sk3/exec';
-
-        function sendToGoogleSheets(data) {
-            const scriptUrl = localStorage.getItem('connie_eris_google_script_url') || DEFAULT_GOOGLE_SCRIPT_URL;
-            if (!scriptUrl) return;
-
-            try {
-                fetch(scriptUrl, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: {
-                        'Content-Type': 'text/plain;charset=utf-8',
-                    },
-                    body: JSON.stringify(data)
-                }).catch(err => console.log('Google Sheets Sync note:', err));
-            } catch(e) {
-                console.log('Sheets Sync error', e);
-            }
-        }
-
-        function saveGoogleScriptURL() {
-            const input = document.getElementById('google-script-url-input');
-            const urlToSave = (input && input.value) ? input.value.trim() : DEFAULT_GOOGLE_SCRIPT_URL;
-            localStorage.setItem('connie_eris_google_script_url', urlToSave);
-            alert('Google Sheets Web App URL connected successfully!');
-        }
-
-        function closeRSVPModal() {
-            document.getElementById('rsvp-modal').classList.add('hidden');
-            document.getElementById('rsvp-modal').classList.remove('flex');
-        }
-
-        // Guest List Modal & CSV Export
-        function openGuestListModal() {
-            document.getElementById('guestlist-modal').classList.remove('hidden');
-            document.getElementById('guestlist-modal').classList.add('flex');
-
-            const savedUrl = localStorage.getItem('connie_eris_google_script_url') || DEFAULT_GOOGLE_SCRIPT_URL;
-            const input = document.getElementById('google-script-url-input');
-            if (input) input.value = savedUrl;
-
-            renderGuestList();
-        }
-
-        function closeGuestListModal() {
-            document.getElementById('guestlist-modal').classList.add('hidden');
-            document.getElementById('guestlist-modal').classList.remove('flex');
-        }
-
-        function renderGuestList() {
-            const container = document.getElementById('guestlist-container');
-            const data = (window.currentRSVPs && window.currentRSVPs.length > 0) ? window.currentRSVPs : rsvpList;
-
-            if (data.length === 0) {
-                container.innerHTML = `<div class="text-center py-8 text-earth-500 text-xs">No RSVPs received yet. Be the first to RSVP!</div>`;
-                return;
-            }
-
-            container.innerHTML = data.map((item, idx) => `
-                <div class="bg-earth-50 p-4 rounded-xl border border-earth-200 flex flex-col gap-1 text-xs text-earth-800">
-                    <div class="flex justify-between items-center">
-                        <span class="font-bold text-earth-900 text-sm">${idx + 1}. ${item.name || 'Anonymous'}</span>
-                        <span class="px-2.5 py-1 rounded-full font-semibold ${item.attendance === 'accepts' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
-                            ${item.attendance === 'accepts' ? '✓ Attending' : '✕ Declines'}
-                        </span>
-                    </div>
-                    <div><span class="text-earth-500 font-medium">Contact:</span> ${item.contact || 'N/A'}</div>
-                    ${item.offering ? `<div class="bg-white p-2.5 rounded-lg border border-earth-200 mt-1"><span class="font-semibold text-earth-700">Offering/Performance:</span> ${item.offering}</div>` : ''}
-                </div>
-            `).join('');
-        }
-
-        window.updateGuestListUI = function(cloudData) {
-            if (cloudData && cloudData.length > 0) {
-                rsvpList = cloudData;
-                renderGuestList();
-            }
-        };
-
-        function exportGuestListCSV() {
-            const data = (window.currentRSVPs && window.currentRSVPs.length > 0) ? window.currentRSVPs : rsvpList;
-            if (data.length === 0) {
-                return;
-            }
-
-            let csvContent = "data:text/csv;charset=utf-8,Name,Contact,Attendance,Offerings_Performances,Date\n";
-            data.forEach(item => {
-                const name = `"${(item.name || '').replace(/"/g, '""')}"`;
-                const contact = `"${(item.contact || '').replace(/"/g, '""')}"`;
-                const attendance = `"${(item.attendance || '').replace(/"/g, '""')}"`;
-                const offering = `"${(item.offering || '').replace(/"/g, '""')}"`;
-                const date = `"${(item.date || '').replace(/"/g, '""')}"`;
-                csvContent += `${name},${contact},${attendance},${offering},${date}\n`;
-            });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "Connie_and_Eris_RSVP_List.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-        }
-
         // Calendar Modal
         function openCalendarModal() {
             document.getElementById('calendar-modal').classList.remove('hidden');
@@ -1238,46 +1232,62 @@
             document.getElementById('calendar-modal').classList.remove('flex');
         }
 
-        // Audio Playlist & Autoplay System (5 Songs)
         const playlist = [
-            { title: "Song 1 - Paraluman, src: "song1.mp3" },
-            { title: "Song 2 - Ikaw at ako, src: "song2.mp3" },
-            { title: "Song 3 - Araw-araw", src: "song3.mp3" },
-            { title: "Song 4 - I think they call this love, src: "song4.mp3" },
-            { title: "Song 5 - Museo, src: "song5.mp3" }
+            { title: "Song 1 (Love Theme)", src: "song1.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" },
+            { title: "Song 2 (Acoustic Guitar)", src: "song2.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3" },
+            { title: "Song 3 (Romantic Piano)", src: "song3.mp3", fallback: "https://cdn.pixabay.com/download/audio/2021/11/25/audio_94313f8d3d.mp3" },
+            { title: "Song 4 (Wedding Vows)", src: "song4.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73223.mp3" },
+            { title: "Song 5 (Sweet Serenade)", src: "song5.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f3737d.mp3" }
         ];
 
         let currentTrackIndex = 0;
+        let isPlayingAudio = false;
+
         const bgMusic = document.getElementById('bg-music');
         const audioToggleBtn = document.getElementById('audio-toggle');
         const audioNextBtn = document.getElementById('audio-next');
         const audioIcon = document.getElementById('audio-icon');
         const trackTitleSpan = document.getElementById('audio-track-title');
-        let isPlayingAudio = false;
-        let hasAutoplayTriggered = false;
 
         function loadTrack(index) {
-            if (!playlist[index]) return;
+            if (!playlist[index] || !bgMusic) return;
             bgMusic.src = playlist[index].src;
             if (trackTitleSpan) {
                 trackTitleSpan.innerText = `${index + 1}/5: ${playlist[index].title}`;
             }
         }
 
-        function playMusic() {
-            bgMusic.play().then(() => {
-                isPlayingAudio = true;
-                if (audioToggleBtn) {
-                    audioToggleBtn.classList.remove('bg-earth-800');
-                    audioToggleBtn.classList.add('bg-earth-500', 'ring-4', 'ring-earth-300/50');
+        // Automatic online fallback if local mp3 files are missing
+        if (bgMusic) {
+            bgMusic.onerror = () => {
+                const currentTrack = playlist[currentTrackIndex];
+                if (currentTrack && currentTrack.fallback && bgMusic.src !== currentTrack.fallback) {
+                    bgMusic.src = currentTrack.fallback;
+                    if (isPlayingAudio) bgMusic.play().catch(() => {});
                 }
-                if (audioIcon) audioIcon.className = 'fa-solid fa-pause';
-            }).catch(err => {
-                console.log("Autoplay waiting for user gesture:", err);
-            });
+            };
+        }
+
+        function playMusic() {
+            if (!bgMusic) return;
+            const playPromise = bgMusic.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    isPlayingAudio = true;
+                    if (audioToggleBtn) {
+                        audioToggleBtn.classList.remove('bg-earth-800');
+                        audioToggleBtn.classList.add('bg-earth-500', 'ring-4', 'ring-earth-300/50');
+                    }
+                    if (audioIcon) audioIcon.className = 'fa-solid fa-pause';
+                }).catch(err => {
+                    console.log("Autoplay waiting for direct click/tap gesture:", err);
+                    isPlayingAudio = false;
+                });
+            }
         }
 
         function pauseMusic() {
+            if (!bgMusic) return;
             bgMusic.pause();
             isPlayingAudio = false;
             if (audioToggleBtn) {
@@ -1296,16 +1306,14 @@
         }
 
         if (bgMusic) {
-            bgMusic.volume = 0.35; // Set soft background volume (35%)
+            bgMusic.volume = 0.35;
             loadTrack(currentTrackIndex);
 
-            // Automatically advance to next song when current track ends
             bgMusic.addEventListener('ended', () => {
                 nextTrack();
                 playMusic();
             });
 
-            // Toggle Play/Pause on main button click
             if (audioToggleBtn) {
                 audioToggleBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -1317,7 +1325,6 @@
                 });
             }
 
-            // Skip to Next Track
             if (audioNextBtn) {
                 audioNextBtn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -1326,20 +1333,15 @@
                 });
             }
 
-            // Automatic Play on First User Interaction (Click/Tap/Scroll anywhere)
-            const handleFirstUserGesture = () => {
-                if (!hasAutoplayTriggered && !isPlayingAudio) {
-                    hasAutoplayTriggered = true;
+            const handleUserInteraction = () => {
+                if (!isPlayingAudio) {
                     playMusic();
-                    document.removeEventListener('click', handleFirstUserGesture);
-                    document.removeEventListener('touchstart', handleFirstUserGesture);
-                    document.removeEventListener('scroll', handleFirstUserGesture);
                 }
             };
 
-            document.addEventListener('click', handleFirstUserGesture, { once: true });
-            document.addEventListener('touchstart', handleFirstUserGesture, { once: true });
-            document.addEventListener('scroll', handleFirstUserGesture, { once: true });
+            document.addEventListener('click', handleUserInteraction, { once: false });
+            document.addEventListener('touchstart', handleUserInteraction, { once: false });
+            document.addEventListener('pointerdown', handleUserInteraction, { once: false });
         }
     </script>
 </body>
