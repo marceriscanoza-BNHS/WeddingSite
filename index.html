@@ -1,0 +1,1349 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Connie & Eris — The Wedding</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Firebase SDK Modules for RSVP Storage -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'connie-eris-wedding';
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
+            apiKey: "demo-api-key",
+            authDomain: "demo.firebaseapp.com",
+            projectId: "demo-project",
+            storageBucket: "demo.appspot.com",
+            messagingSenderId: "123456789",
+            appId: "1:123456789:web:123456"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        window.db = db;
+        window.appId = appId;
+        window.rsvpCollectionPath = ['artifacts', appId, 'public', 'data', 'rsvps'];
+
+        async function initAuth() {
+            try {
+                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                    await signInWithCustomToken(auth, __initial_auth_token);
+                } else {
+                    await signInAnonymously(auth);
+                }
+                listenToRSVPs();
+            } catch (err) {
+                console.warn("Auth initialisation note:", err);
+            }
+        }
+
+        function listenToRSVPs() {
+            try {
+                const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'rsvps');
+                onSnapshot(colRef, (snapshot) => {
+                    const rsvps = [];
+                    snapshot.forEach(doc => rsvps.push({ id: doc.id, ...doc.data() }));
+                    window.currentRSVPs = rsvps;
+                    if (window.updateGuestListUI) window.updateGuestListUI(rsvps);
+                }, (err) => console.log("Realtime sync fallback active", err));
+            } catch(e) {
+                console.log("Firestore setup ready");
+            }
+        }
+
+        window.saveRSVPToCloud = async function(data) {
+            try {
+                const colRef = collection(db, 'artifacts', appId, 'public', 'data', 'rsvps');
+                await addDoc(colRef, {
+                    ...data,
+                    timestamp: new Date().toISOString()
+                });
+            } catch(e) {
+                console.log("Saved locally to session");
+            }
+        };
+
+        initAuth();
+    </script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        earth: {
+                            50: '#fdfbf7',
+                            100: '#f7f2ea',
+                            200: '#ebdccb',
+                            300: '#dbc0a6',
+                            400: '#c59d7b',
+                            500: '#a87854',
+                            600: '#8c5d3d',
+                            700: '#6e472e',
+                            800: '#523423',
+                            900: '#382218',
+                        },
+                        latte: '#E6D7C3',
+                        camel: '#C19A6B',
+                        terracotta: '#C86D51',
+                        espresso: '#3B2F2F',
+                        mocha: '#705335',
+                        champagne: '#F3E8D8'
+                    },
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .font-serif-italic { font-style: italic; }
+        .bg-blur { backdrop-filter: blur(8px); }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(219, 192, 166, 0.3);
+        }
+        .dark-glass-card {
+            background: rgba(40, 26, 18, 0.75);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(197, 157, 123, 0.2);
+        }
+        .swatch-active {
+            ring-width: 4px;
+            transform: scale(1.08);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f7f2ea;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #c59d7b;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #a87854;
+        }
+    </style>
+</head>
+<body class="bg-earth-50 text-earth-900 font-sans antialiased selection:bg-earth-300 selection:text-earth-900">
+
+    <!-- Navigation Header -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 px-6 md:px-12">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="#home" class="font-serif text-2xl md:text-3xl font-semibold tracking-wider text-earth-900 flex items-center gap-2">
+                <span>C</span>
+                <span class="text-earth-500 font-serif-italic text-xl">&</span>
+                <span>E</span>
+            </a>
+
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-8 text-sm font-medium tracking-wide uppercase text-earth-800">
+                <a href="#home" class="hover:text-earth-500 transition-colors">Home</a>
+                <a href="#attire" class="hover:text-earth-500 transition-colors">What to Wear</a>
+                <a href="#schedule" class="hover:text-earth-500 transition-colors">Schedule & Map</a>
+                <a href="#entourage" class="hover:text-earth-500 transition-colors">Entourage</a>
+                <a href="#gallery" class="hover:text-earth-500 transition-colors">Gallery</a>
+                <a href="#faq" class="hover:text-earth-500 transition-colors">FAQ</a>
+                <a href="#rsvp" class="px-5 py-2 rounded-full bg-earth-700 text-earth-50 hover:bg-earth-800 transition-all shadow-md">RSVP</a>
+            </div>
+
+            <!-- Mobile Hamburger Button -->
+            <button id="menu-btn" class="md:hidden text-earth-800 text-2xl focus:outline-none" aria-label="Toggle menu">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer Menu -->
+        <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-earth-100 border-b border-earth-200 py-6 px-8 shadow-xl flex flex-col space-y-4 text-center">
+            <a href="#home" class="mobile-link text-earth-800 font-medium tracking-wider uppercase text-sm py-2">Home</a>
+            <a href="#attire" class="mobile-link text-earth-800 font-medium tracking-wider uppercase text-sm py-2">What to Wear</a>
+            <a href="#schedule" class="mobile-link text-earth-800 font-medium tracking-wider uppercase text-sm py-2">Schedule & Map</a>
+            <a href="#entourage" class="mobile-link text-earth-800 font-medium tracking-wider uppercase text-sm py-2">Entourage</a>
+            <a href="#gallery" class="mobile-link text-earth-800 font-medium tracking-wider uppercase text-sm py-2">Gallery</a>
+            <a href="#faq" class="mobile-link text-earth-800 font-medium tracking-wider uppercase text-sm py-2">FAQ</a>
+            <a href="#rsvp" class="mobile-link px-6 py-2.5 rounded-full bg-earth-700 text-earth-50 font-medium uppercase text-sm mx-auto w-max shadow-md">RSVP</a>
+        </div>
+    </nav>
+
+    <!-- Floating Background Music Control -->
+    <div class="fixed bottom-6 right-6 z-40 flex items-center gap-2">
+        <!-- Streaming chunk marker -->
+        <!-- Track Title Badge (Shows current song name) -->
+        <div id="audio-track-badge" class="hidden sm:flex items-center gap-2 bg-earth-900/90 text-earth-100 text-xs py-2 px-3.5 rounded-full shadow-xl border border-earth-400/30 backdrop-blur-md">
+            <i class="fa-solid fa-compact-disc text-earth-400 animate-spin" style="animation-duration: 4s;"></i>
+            <span id="audio-track-title" class="font-medium max-w-[140px] truncate">Song 1 of 5</span>
+        </div>
+
+        <!-- Next Song Button -->
+        <button id="audio-next" class="w-10 h-10 rounded-full bg-earth-900/80 text-earth-100 shadow-xl flex items-center justify-center hover:scale-105 transition-all text-xs border border-earth-300/20" title="Skip to Next Song">
+            <i class="fa-solid fa-forward-step"></i>
+        </button>
+
+        <!-- Main Play/Pause Button -->
+        <button id="audio-toggle" class="w-12 h-12 rounded-full bg-earth-800 text-earth-100 shadow-xl flex items-center justify-center hover:scale-105 transition-all group border border-earth-300/30" title="Play / Pause Background Music">
+            <i id="audio-icon" class="fa-solid fa-music group-hover:animate-bounce"></i>
+        </button>
+
+        <!-- Audio element -->
+        <audio id="bg-music" preload="auto"></audio>
+    </div>
+
+    <!-- Hero / Landing Section -->
+    <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-12 px-4">
+        <!-- Hero Background Image Overlay -->
+        <div class="absolute inset-0 z-0">
+            <img src="1.jpg" 
+                 alt="Connie & Eris Couple Landing Image" 
+                 class="w-full h-full object-cover object-center filter brightness-[0.80] contrast-[0.95]"
+                 onerror="this.onerror=null; this.src='https://placehold.co/1920x1080/6e472e/f7f2ea?text=1.jpg+Missing';">
+            <div class="absolute inset-0 bg-gradient-to-b from-earth-900/60 via-earth-900/40 to-earth-900/85"></div>
+        </div>
+
+        <!-- Hero Content Container -->
+        <div class="relative z-10 text-center text-earth-50 max-w-4xl mx-auto px-4 mt-8">
+            <p class="font-serif italic text-2xl md:text-3xl text-earth-200 tracking-wide mb-3">We are getting married</p>
+            <h1 class="font-serif text-6xl md:text-8xl lg:text-9xl font-normal tracking-wide mb-6 text-white drop-shadow-md">
+                Connie <span class="font-serif-italic text-earth-300">&</span> Eris
+            </h1>
+
+            <div class="flex flex-col md:flex-row items-center justify-center gap-4 text-earth-100 text-base md:text-lg tracking-widest uppercase mb-8 font-medium">
+                <span class="flex items-center gap-2"><i class="fa-regular fa-calendar text-earth-300"></i> January 8, 2027</span>
+                <span class="hidden md:inline text-earth-400">•</span>
+                <span class="flex items-center gap-2"><i class="fa-solid fa-church text-earth-300"></i> Bustos, Bulacan</span>
+            </div>
+
+            <!-- Dynamic Countdown Timer -->
+            <div class="grid grid-cols-4 gap-3 md:gap-6 max-w-lg mx-auto mb-10 dark-glass-card p-4 md:p-6 rounded-2xl shadow-2xl border border-earth-300/20">
+                <div class="flex flex-col items-center">
+                    <span id="timer-days" class="font-serif text-3xl md:text-5xl font-bold text-earth-200">00</span>
+                    <span class="text-xs uppercase tracking-wider text-earth-300 mt-1 font-semibold">Days</span>
+                </div>
+                <div class="flex flex-col items-center border-l border-earth-500/30">
+                    <span id="timer-hours" class="font-serif text-3xl md:text-5xl font-bold text-earth-200">00</span>
+                    <span class="text-xs uppercase tracking-wider text-earth-300 mt-1 font-semibold">Hours</span>
+                </div>
+                <div class="flex flex-col items-center border-l border-earth-500/30">
+                    <span id="timer-minutes" class="font-serif text-3xl md:text-5xl font-bold text-earth-200">00</span>
+                    <span class="text-xs uppercase tracking-wider text-earth-300 mt-1 font-semibold">Mins</span>
+                </div>
+                <div class="flex flex-col items-center border-l border-earth-500/30">
+                    <span id="timer-seconds" class="font-serif text-3xl md:text-5xl font-bold text-earth-200">00</span>
+                    <span class="text-xs uppercase tracking-wider text-earth-300 mt-1 font-semibold">Secs</span>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <a href="#rsvp" class="w-full sm:w-auto px-8 py-4 rounded-full bg-earth-500 text-earth-50 hover:bg-earth-600 transition-all font-semibold tracking-wider uppercase text-xs sm:text-sm shadow-lg hover:shadow-xl hover:-translate-y-0.5">
+                    Confirm Attendance
+                </a>
+                <a href="#schedule" class="w-full sm:w-auto px-8 py-4 rounded-full border-2 border-earth-200 text-earth-100 hover:bg-white/10 transition-all font-semibold tracking-wider uppercase text-xs sm:text-sm backdrop-blur-sm">
+                    View Schedule & Maps
+                </a>
+            </div>
+        </div>
+
+        <!-- Scroll Down Indicator -->
+        <a href="#attire" class="absolute bottom-6 left-1/2 transform -translate-x-1/2 text-earth-200 animate-bounce flex flex-col items-center gap-1 opacity-75 hover:opacity-100">
+            <span class="text-[10px] uppercase tracking-widest font-light">Scroll Down</span>
+            <i class="fa-solid fa-chevron-down text-xs"></i>
+        </a>
+    </section>
+
+    <!-- What to Wear Section (SHADES OF BROWN FEATURE) -->
+    <section id="attire" class="py-20 px-6 md:px-12 bg-earth-50 relative">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <span class="text-xs md:text-sm uppercase tracking-widest text-earth-600 font-bold">Dress Code Guide</span>
+                <h2 class="font-serif text-4xl md:text-6xl text-earth-900 mt-2">What to Wear</h2>
+                <p class="text-earth-800 text-base md:text-lg mt-4 font-normal leading-relaxed">
+                    We invite our beloved guests to celebrate with us dressed in <strong class="font-semibold text-earth-900 underline decoration-earth-400">Any Shade of Brown</strong>. Think warm earthy tones, rich espresso, caramel, soft latte, taupe, and bronze.
+                </p>
+                <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- Color Palette Inspector Widget -->
+            <div class="glass-card p-6 md:p-10 rounded-3xl mb-12 shadow-md border border-earth-300">
+                <h3 class="text-center font-serif text-2xl md:text-3xl text-earth-900 mb-2">Interactive Color Swatch Palette</h3>
+                <p class="text-center text-sm md:text-base text-earth-700 mb-8 font-medium">Click any shade below to inspect sample dress code outfits & styling descriptions</p>
+
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mb-8">
+                    <!-- Swatch 1: Champagne / Cream -->
+                    <button onclick="selectSwatch('champagne')" id="swatch-champagne" class="swatch-btn flex flex-col items-center p-4 rounded-2xl transition-all duration-300 hover:scale-105 border-2 border-earth-200 shadow-sm bg-white">
+                        <span class="w-14 h-14 rounded-full mb-2 border border-black/10 shadow-inner" style="background-color: #F3E8D8;"></span>
+                        <span class="text-xs sm:text-sm font-bold text-earth-900">Champagne</span>
+                        <span class="text-xs text-earth-600">Light Beige</span>
+                    </button>
+
+                    <!-- Swatch 2: Latte -->
+                    <button onclick="selectSwatch('latte')" id="swatch-latte" class="swatch-btn flex flex-col items-center p-4 rounded-2xl transition-all duration-300 hover:scale-105 border-2 border-earth-200 shadow-sm bg-white">
+                        <span class="w-14 h-14 rounded-full mb-2 border border-black/10 shadow-inner" style="background-color: #E6D7C3;"></span>
+                        <span class="text-xs sm:text-sm font-bold text-earth-900">Warm Latte</span>
+                        <span class="text-xs text-earth-600">Nude / Tan</span>
+                    </button>
+
+                    <!-- Swatch 3: Camel -->
+                    <button onclick="selectSwatch('camel')" id="swatch-camel" class="swatch-btn flex flex-col items-center p-4 rounded-2xl transition-all duration-300 hover:scale-105 border-2 border-earth-200 shadow-sm bg-white">
+                        <span class="w-14 h-14 rounded-full mb-2 border border-black/10 shadow-inner" style="background-color: #C19A6B;"></span>
+                        <span class="text-xs sm:text-sm font-bold text-earth-900">Classic Camel</span>
+                        <span class="text-xs text-earth-600">Golden Brown</span>
+                    </button>
+
+                    <!-- Swatch 4: Terracotta / Rust -->
+                    <button onclick="selectSwatch('terracotta')" id="swatch-terracotta" class="swatch-btn flex flex-col items-center p-4 rounded-2xl transition-all duration-300 hover:scale-105 border-2 border-earth-200 shadow-sm bg-white">
+                        <span class="w-14 h-14 rounded-full mb-2 border border-black/10 shadow-inner" style="background-color: #C86D51;"></span>
+                        <span class="text-xs sm:text-sm font-bold text-earth-900">Terracotta</span>
+                        <span class="text-xs text-earth-600">Rust Earth</span>
+                    </button>
+
+                    <!-- Swatch 5: Mocha -->
+                    <button onclick="selectSwatch('mocha')" id="swatch-mocha" class="swatch-btn flex flex-col items-center p-4 rounded-2xl transition-all duration-300 hover:scale-105 border-2 border-earth-200 shadow-sm bg-white">
+                        <span class="w-14 h-14 rounded-full mb-2 border border-black/10 shadow-inner" style="background-color: #705335;"></span>
+                        <span class="text-xs sm:text-sm font-bold text-earth-900">Mocha</span>
+                        <span class="text-xs text-earth-600">Rich Medium</span>
+                    </button>
+
+                    <!-- Swatch 6: Espresso -->
+                    <button onclick="selectSwatch('espresso')" id="swatch-espresso" class="swatch-btn flex flex-col items-center p-4 rounded-2xl transition-all duration-300 hover:scale-105 border-2 border-earth-200 shadow-sm bg-white">
+                        <span class="w-14 h-14 rounded-full mb-2 border border-black/10 shadow-inner" style="background-color: #3B2F2F;"></span>
+                        <span class="text-xs sm:text-sm font-bold text-earth-900">Deep Espresso</span>
+                        <span class="text-xs text-earth-600">Dark Chocolate</span>
+                    </button>
+                </div>
+
+                <!-- Swatch Active Details Banner with Live Sample Outfit Image -->
+                <div id="swatch-detail-box" class="p-6 md:p-8 rounded-2xl bg-earth-100/90 border-2 border-earth-300 text-center transition-all flex flex-col md:flex-row items-center gap-6 shadow-sm">
+                    <img id="swatch-img" src="2.jpg" alt="Sample dress code outfit" class="w-full md:w-48 h-48 object-cover rounded-xl border-2 border-earth-300 shadow-md flex-shrink-0" onerror="this.onerror=null; this.src='https://placehold.co/400x400/c59d7b/ffffff?text=2.jpg+Missing';">
+                    <div class="text-left flex-1">
+                        <span class="text-xs uppercase font-bold tracking-widest text-earth-600">Selected Shade Style Guide</span>
+                        <h4 id="swatch-title" class="font-serif text-2xl md:text-3xl font-bold text-earth-900 mt-1">Select a color swatch above</h4>
+                        <p id="swatch-desc" class="text-base md:text-lg text-earth-800 mt-2 leading-relaxed">Explore outfit suggestions for ladies and gentlemen in this shade.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Moodboard & Style Inspiration Cards (Ladies: Dress / Gentlemen: Long sleeves) -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Ladies Style Card -->
+                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-earth-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4 text-earth-700">
+                            <i class="fa-solid fa-person-dress text-3xl text-earth-500"></i>
+                            <h3 class="font-serif text-3xl text-earth-900">For Ladies: Dress</h3>
+                        </div>
+                        <p class="text-earth-800 text-base md:text-lg leading-relaxed mb-6 font-normal">
+                            Elegant dresses in any shade of brown—from long floor-length gowns, cocktail dresses, to midi dresses. Choose rich silk, chiffon, linen, or satin in tan, mocha, caramel, or deep chocolate tones.
+                        </p>
+
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <img src="9.jpg" 
+                                 alt="Ladies Dress Code Sample 1" 
+                                 class="rounded-xl h-52 w-full object-cover border border-earth-200"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/400x500/c59d7b/ffffff?text=9.jpg+Missing';">
+                            <img src="10.jpg" 
+                                 alt="Ladies Dress Code Sample 2" 
+                                 class="rounded-xl h-52 w-full object-cover border border-earth-200"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/400x500/a87854/ffffff?text=10.jpg+Missing';">
+                        </div>
+                    </div>
+                    <div class="p-4 bg-earth-50 rounded-xl border border-earth-200 text-sm text-earth-800">
+                        <span class="font-bold text-earth-900">Styling Tip:</span> Complement with warm gold accessories, nude heels, or subtle floral accents!
+                    </div>
+                </div>
+
+                <!-- Gentlemen Style Card -->
+                <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-earth-200 flex flex-col justify-between">
+                    <div>
+                        <div class="flex items-center gap-3 mb-4 text-earth-700">
+                            <i class="fa-solid fa-user-tie text-3xl text-earth-500"></i>
+                            <h3 class="font-serif text-3xl text-earth-900">For Gentlemen: Long Sleeves</h3>
+                        </div>
+                        <p class="text-earth-800 text-base md:text-lg leading-relaxed mb-6 font-normal">
+                            Formal long-sleeve dress shirts, Barong Tagalog with warm undertones, or long-sleeve button-downs paired with tailored trousers in beige, camel, mocha, or dark espresso brown.
+                        </p>
+
+                        <div class="grid grid-cols-2 gap-3 mb-4">
+                            <img src="11.jpg" 
+                                 alt="Gentlemen Dress Code Sample 1" 
+                                 class="rounded-xl h-52 w-full object-cover border border-earth-200"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/400x500/8c5d3d/ffffff?text=11.jpg+Missing';">
+                            <img src="12.jpg" 
+                                 alt="Gentlemen Dress Code Sample 2" 
+                                 class="rounded-xl h-52 w-full object-cover border border-earth-200"
+                                 onerror="this.onerror=null; this.src='https://placehold.co/400x500/6e472e/ffffff?text=12.jpg+Missing';">
+                        </div>
+                    </div>
+                    <div class="p-4 bg-earth-50 rounded-xl border border-earth-200 text-sm text-earth-800">
+                        <span class="font-bold text-earth-900">Styling Tip:</span> Dark brown leather shoes, matching belt, and neatly rolled long sleeves or suit jackets!
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dos & Don'ts Quick Note -->
+            <div class="mt-8 bg-earth-100/80 rounded-2xl p-6 border border-earth-200 flex flex-col sm:flex-row gap-6 items-center justify-around text-sm md:text-base text-earth-900">
+                <div class="flex items-center gap-3">
+                    <span class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-base flex-shrink-0">✓</span>
+                    <span><strong>Please Wear:</strong> Any shade of brown, beige, tan, mocha, camel, or terracotta dresses & long-sleeve attire.</span>
+                </div>
+                <div class="flex items-center gap-3">
+                    <span class="w-9 h-9 rounded-full bg-rose-100 text-rose-800 flex items-center justify-center font-bold text-base flex-shrink-0">✕</span>
+                    <span><strong>Please Avoid:</strong> Pure bridal white, neon colors, short sleeves, or casual denim jeans.</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Schedule Section -->
+    <section id="schedule" class="py-20 px-6 md:px-12 bg-earth-100/50">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-xs md:text-sm uppercase tracking-widest text-earth-600 font-bold">Friday, January 8, 2027</span>
+                <h2 class="font-serif text-4xl md:text-6xl text-earth-900 mt-2">Schedule & Venues</h2>
+                <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- Timeline List -->
+            <div class="relative border-l-2 border-earth-300 ml-4 md:ml-32 space-y-12">
+                <!-- Mass Event -->
+                <div class="relative pl-8 md:pl-10">
+                    <span class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-earth-600 border-4 border-earth-100"></span>
+                    <div class="md:absolute md:-left-36 md:top-0 text-base font-bold text-earth-700 mb-1 md:mb-0">
+                        2:00 PM
+                    </div>
+                    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-earth-200 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <h3 class="font-serif text-2xl md:text-3xl text-earth-900">Nuptial Mass</h3>
+                            <a href="https://maps.app.goo.gl/vT6SURWt4wp2s92b9" target="_blank" class="inline-flex items-center gap-2 text-xs md:text-sm text-earth-700 font-bold hover:text-earth-900 bg-earth-100 px-4 py-2 rounded-lg border border-earth-300 w-fit">
+                                <i class="fa-solid fa-map-location-dot text-earth-600"></i> Open Google Maps
+                            </a>
+                        </div>
+                        <p class="text-earth-900 font-semibold text-base md:text-lg">Sto. Niño Parish Church</p>
+                        <p class="text-earth-700 text-sm md:text-base">Poblacion, Bustos, Bulacan</p>
+                        <p class="text-earth-800 text-sm md:text-base italic bg-earth-50 p-3 rounded-lg border border-earth-200">Please arrive at least 15–20 minutes early for holy mass seating.</p>
+
+                        <!-- Unplugged Ceremony Notice -->
+                        <div class="mt-4 p-4 rounded-xl bg-amber-50/80 border border-amber-200 flex items-start gap-3">
+                            <span class="w-8 h-8 rounded-full bg-amber-100 text-amber-800 flex items-center justify-center text-sm font-bold flex-shrink-0 mt-0.5">
+                                <i class="fa-solid fa-camera-retro"></i>
+                            </span>
+                            <div class="text-xs md:text-sm text-earth-900">
+                                <span class="font-bold text-amber-900 uppercase tracking-wider block mb-0.5">Unplugged Ceremony / Paalala sa Misa</span>
+                                We kindly request that all mobile phones and cameras be put away and silenced during the sacred Nuptial Mass. Our official photographer and videographer will capture every special moment!
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reception Event -->
+                <div class="relative pl-8 md:pl-10">
+                    <span class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-earth-600 border-4 border-earth-100"></span>
+                    <div class="md:absolute md:-left-36 md:top-0 text-base font-bold text-earth-700 mb-1 md:mb-0">
+                        4:00 PM
+                    </div>
+                    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-earth-200 space-y-3">
+                        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                            <h3 class="font-serif text-2xl md:text-3xl text-earth-900">Wedding Reception</h3>
+                            <a href="https://maps.app.goo.gl/nbsvFff7ydisGFaJ6" target="_blank" class="inline-flex items-center gap-2 text-xs md:text-sm text-earth-700 font-bold hover:text-earth-900 bg-earth-100 px-4 py-2 rounded-lg border border-earth-300 w-fit">
+                                <i class="fa-solid fa-map-location-dot text-earth-600"></i> Open Google Maps
+                            </a>
+                        </div>
+                        <p class="text-earth-900 font-semibold text-base md:text-lg">Angel's Place Private Resort</p>
+                        <p class="text-earth-700 text-sm md:text-base">Bonga Menor, Bustos, Bulacan</p>
+                        <p class="text-earth-800 text-sm md:text-base bg-earth-50 p-3 rounded-lg border border-earth-200">Welcome drinks, program registration, and guest photo booth.</p>
+                    </div>
+                </div>
+
+                <!-- Party Event -->
+                <div class="relative pl-8 md:pl-10">
+                    <span class="absolute -left-[9px] top-1 w-4 h-4 rounded-full bg-earth-600 border-4 border-earth-100"></span>
+                    <div class="md:absolute md:-left-36 md:top-0 text-base font-bold text-earth-700 mb-1 md:mb-0">
+                        6:00 PM Onwards
+                    </div>
+                    <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-earth-200">
+                        <h3 class="font-serif text-2xl md:text-3xl text-earth-900">Dinner & Party Time! 🎉</h3>
+                        <p class="text-earth-800 text-base md:text-lg mt-2">Feast, speeches, guest offerings, toasts, and dancing under the stars!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add to Calendar CTA -->
+            <div class="text-center mt-12">
+                <button onclick="openCalendarModal()" class="px-8 py-3.5 rounded-full border-2 border-earth-400 text-earth-900 hover:bg-earth-200 transition-all text-xs sm:text-sm font-bold uppercase tracking-wider inline-flex items-center gap-2 shadow-sm">
+                    <i class="fa-regular fa-calendar-plus"></i> Add Event to Calendar
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Wedding Entourage Section -->
+    <section id="entourage" class="py-20 px-6 md:px-12 bg-earth-50 border-t border-earth-200">
+        <div class="max-w-5xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-xs md:text-sm uppercase tracking-widest text-earth-600 font-bold">Our Beloved Family & Friends</span>
+                <h2 class="font-serif text-4xl md:text-6xl text-earth-900 mt-2">Wedding Entourage</h2>
+                <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- Parents Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center space-y-3">
+                    <span class="text-xs font-bold uppercase tracking-widest text-earth-500">Parents of the Bride</span>
+                    <h3 class="font-serif text-2xl text-earth-900">[Bride's Parents Names]</h3>
+                    <div class="w-12 h-0.5 bg-earth-300 mx-auto"></div>
+                    <p class="text-xs md:text-sm text-earth-700 italic">Giving away their daughter in love and faith</p>
+                </div>
+
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center space-y-3">
+                    <span class="text-xs font-bold uppercase tracking-widest text-earth-500">Parents of the Groom</span>
+                    <h3 class="font-serif text-2xl text-earth-900">[Groom's Parents Names]</h3>
+                    <div class="w-12 h-0.5 bg-earth-300 mx-auto"></div>
+                    <p class="text-xs md:text-sm text-earth-700 italic">Guiding their son into this holy union</p>
+                </div>
+            </div>
+
+            <!-- Maid of Honor & Best Man -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
+                <div class="bg-earth-100/80 p-6 rounded-2xl border border-earth-300 text-center">
+                    <span class="text-xs font-bold uppercase tracking-widest text-earth-600">Maid of Honor</span>
+                    <h4 class="font-serif text-2xl text-earth-900 font-bold mt-1">[Maid of Honor Name]</h4>
+                </div>
+                <div class="bg-earth-100/80 p-6 rounded-2xl border border-earth-300 text-center">
+                    <span class="text-xs font-bold uppercase tracking-widest text-earth-600">Best Man</span>
+                    <h4 class="font-serif text-2xl text-earth-900 font-bold mt-1">[Best Man Name]</h4>
+                </div>
+            </div>
+
+            <!-- Principal Sponsors (Ninongs & Ninangs) -->
+            <div class="bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-earth-200 mb-12 text-center">
+                <h3 class="font-serif text-3xl text-earth-900 mb-2">Principal Sponsors</h3>
+                <p class="text-sm text-earth-600 mb-6 font-medium">Standing with us as our witnesses and lifelong mentors</p>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 text-earth-800 text-sm md:text-base font-medium">
+                    <div class="p-3.5 bg-earth-50 rounded-xl border border-earth-200 flex flex-col justify-center">
+                        <span class="text-xs font-bold text-earth-500 uppercase tracking-wider mb-1">Pair 1</span>
+                        <span>Mr. Principal Sponsor 1</span>
+                        <span>Mrs. Principal Sponsor 1</span>
+                    </div>
+                    <div class="p-3.5 bg-earth-50 rounded-xl border border-earth-200 flex flex-col justify-center">
+                        <span class="text-xs font-bold text-earth-500 uppercase tracking-wider mb-1">Pair 2</span>
+                        <span>Mr. Principal Sponsor 2</span>
+                        <span>Mrs. Principal Sponsor 2</span>
+                    </div>
+                    <div class="p-3.5 bg-earth-50 rounded-xl border border-earth-200 flex flex-col justify-center">
+                        <span class="text-xs font-bold text-earth-500 uppercase tracking-wider mb-1">Pair 3</span>
+                        <span>Mr. Principal Sponsor 3</span>
+                        <span>Mrs. Principal Sponsor 3</span>
+                    </div>
+                    <div class="p-3.5 bg-earth-50 rounded-xl border border-earth-200 flex flex-col justify-center">
+                        <span class="text-xs font-bold text-earth-500 uppercase tracking-wider mb-1">Pair 4</span>
+                        <span>Mr. Principal Sponsor 4</span>
+                        <span>Mrs. Principal Sponsor 4</span>
+                    </div>
+                    <div class="p-3.5 bg-earth-50 rounded-xl border border-earth-200 flex flex-col justify-center">
+                        <span class="text-xs font-bold text-earth-500 uppercase tracking-wider mb-1">Pair 5</span>
+                        <span>Mr. Principal Sponsor 5</span>
+                        <span>Mrs. Principal Sponsor 5</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Bridesmaids & Groomsmen -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <!-- Bridesmaids Card -->
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center">
+                    <div class="flex items-center justify-center gap-2 mb-1">
+                        <i class="fa-solid fa-person-dress text-earth-500 text-xl"></i>
+                        <h4 class="font-serif text-2xl text-earth-900">Bridesmaids</h4>
+                    </div>
+                    <p class="text-xs text-earth-600 mb-6 font-medium">Standing by Connie's side</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs md:text-sm text-earth-800 font-medium">
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 1</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 2</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 3</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 4</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 5</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 6</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 7</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 8</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 9</div>
+                    </div>
+                </div>
+
+                <!-- Groomsmen Card -->
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center">
+                    <div class="flex items-center justify-center gap-2 mb-1">
+                        <i class="fa-solid fa-user-tie text-earth-500 text-xl"></i>
+                        <h4 class="font-serif text-2xl text-earth-900">Groomsmen</h4>
+                    </div>
+                    <p class="text-xs text-earth-600 mb-6 font-medium">Standing by Eris's side</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs md:text-sm text-earth-800 font-medium">
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 1</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 2</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 3</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 4</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 5</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 6</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 7</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 8</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 9</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Secondary Sponsors -->
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-earth-200 text-center shadow-sm">
+                    <i class="fa-solid fa-candle-holder text-earth-500 text-2xl mb-2"></i>
+                    <h5 class="font-serif text-xl text-earth-900 font-bold">Candle Sponsors</h5>
+                    <p class="text-xs text-earth-600 mt-0.5">To light our path ahead</p>
+                    <p class="text-sm text-earth-800 font-semibold mt-3">[Name & Name]</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-earth-200 text-center shadow-sm">
+                    <i class="fa-solid fa-scroll text-earth-500 text-2xl mb-2"></i>
+                    <h5 class="font-serif text-xl text-earth-900 font-bold">Veil Sponsors</h5>
+                    <p class="text-xs text-earth-600 mt-0.5">To clothe us in unity</p>
+                    <p class="text-sm text-earth-800 font-semibold mt-3">[Name & Name]</p>
+                </div>
+                <div class="bg-white p-6 rounded-2xl border border-earth-200 text-center shadow-sm">
+                    <i class="fa-solid fa-link text-earth-500 text-2xl mb-2"></i>
+                    <h5 class="font-serif text-xl text-earth-900 font-bold">Cord Sponsors</h5>
+                    <p class="text-xs text-earth-600 mt-0.5">To bind our love together</p>
+                    <p class="text-sm text-earth-800 font-semibold mt-3">[Name & Name]</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Gallery Section -->
+    <section id="gallery" class="py-20 px-6 md:px-12 bg-earth-50">
+        <div class="max-w-6xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-xs uppercase tracking-widest text-earth-500 font-semibold">Captured Moments</span>
+                <h2 class="font-serif text-4xl md:text-5xl text-earth-900 mt-2">Gallery</h2>
+                <div class="w-16 h-0.5 bg-earth-400 mx-auto mt-4"></div>
+            </div>
+
+            <!-- Gallery Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('13.jpg')">
+                    <img src="13.jpg" 
+                         alt="Connie & Eris photo 1" 
+                         class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/c59d7b/ffffff?text=13.jpg+Missing';">
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                        <i class="fa-solid fa-magnifying-glass-plus text-2xl"></i>
+                    </div>
+                </div>
+
+                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('14.jpg')">
+                    <img src="14.jpg" 
+                         alt="Connie & Eris photo 2" 
+                         class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/a87854/ffffff?text=14.jpg+Missing';">
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                        <i class="fa-solid fa-magnifying-glass-plus text-2xl"></i>
+                    </div>
+                </div>
+
+                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('15.jpg')">
+                    <img src="15.jpg" 
+                         alt="Connie & Eris photo 3" 
+                         class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/8c5d3d/ffffff?text=15.jpg+Missing';">
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                        <i class="fa-solid fa-magnifying-glass-plus text-2xl"></i>
+                    </div>
+                </div>
+
+                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('16.jpg')">
+                    <img src="16.jpg" 
+                         alt="Connie & Eris photo 4" 
+                         class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/6e472e/ffffff?text=16.jpg+Missing';">
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                        <i class="fa-solid fa-magnifying-glass-plus text-2xl"></i>
+                    </div>
+                </div>
+
+                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('17.jpg')">
+                    <img src="17.jpg" 
+                         alt="Connie & Eris photo 5" 
+                         class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/523423/ffffff?text=17.jpg+Missing';">
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                        <i class="fa-solid fa-magnifying-glass-plus text-2xl"></i>
+                    </div>
+                </div>
+
+                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('18.jpg')">
+                    <img src="18.jpg" 
+                         alt="Connie & Eris photo 6" 
+                         class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
+                         onerror="this.onerror=null; this.src='https://placehold.co/600x400/382218/ffffff?text=18.jpg+Missing';">
+                    <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
+                        <i class="fa-solid fa-magnifying-glass-plus text-2xl"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- RSVP Section -->
+    <section id="rsvp" class="py-20 px-6 md:px-12 bg-earth-100/70 relative">
+        <div class="max-w-3xl mx-auto">
+            <div class="text-center mb-10">
+                <span class="text-xs md:text-sm uppercase tracking-widest text-earth-600 font-bold">Join Our Celebration</span>
+                <h2 class="font-serif text-4xl md:text-6xl text-earth-900 mt-2">RSVP</h2>
+                <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- Prominent Dual-Language RSVP Disclaimer Box -->
+            <div class="bg-gradient-to-r from-amber-50 via-earth-100 to-amber-50 border-2 border-earth-400 text-earth-900 p-6 md:p-8 rounded-3xl mb-10 shadow-md">
+                <div class="flex items-center justify-center gap-3 mb-4">
+                    <span class="w-10 h-10 rounded-full bg-earth-700 text-earth-50 flex items-center justify-center text-lg shadow-sm flex-shrink-0">
+                        <i class="fa-solid fa-heart"></i>
+                    </span>
+                    <h3 class="font-serif text-2xl md:text-3xl font-bold text-earth-900 text-center">Important Guest Note / Mahalagang Paalala</h3>
+                </div>
+
+                <div class="space-y-4">
+                    <div class="bg-white/90 p-4 md:p-5 rounded-2xl border border-earth-300 shadow-sm">
+                        <p class="font-bold text-xs uppercase tracking-wider text-earth-600 mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-globe"></i> English
+                        </p>
+                        <p class="text-sm md:text-base text-earth-900 font-medium leading-relaxed">
+                            While we truly wish we could celebrate with everyone, due to venue limits and budget constraints, we kindly ask everyone to attend solo if possible (please refrain from bringing plus-ones unless specified on your invitation). Thank you so much for your understanding!
+                        </p>
+                    </div>
+
+                    <div class="bg-white/90 p-4 md:p-5 rounded-2xl border border-earth-300 shadow-sm">
+                        <p class="font-bold text-xs uppercase tracking-wider text-earth-700 mb-1 flex items-center gap-2">
+                            <i class="fa-solid fa-heart text-earth-500"></i> Tagalog
+                        </p>
+                        <p class="text-sm md:text-base text-earth-900 font-medium leading-relaxed">
+                            Bagamat nais naming makasama ang lahat sa aming tanging araw, dahil sa limitasyon ng lugar at badyet, maingat po naming hinihiling na dumalo nang mag-isa kung maaari (pakiusap na huwag munang magsama ng plus-one maliban kung nakasaad sa inyong imbitasyon). Maraming salamat po sa inyong pang-unawa!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RSVP Card Container -->
+            <div class="bg-white rounded-3xl p-8 md:p-12 shadow-md border border-earth-200">
+                <form id="rsvp-form" onsubmit="handleRSVPSubmit(event)" class="space-y-6">
+                    <!-- Guest Name -->
+                    <div>
+                        <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">Full Name *</label>
+                        <input type="text" id="guest-name" required placeholder="e.g. Juan Dela Cruz" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base">
+                    </div>
+
+                    <!-- Email or Contact Number -->
+                    <div>
+                        <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">Contact Number / Email *</label>
+                        <input type="text" id="guest-contact" required placeholder="0917-123-4567 or email@example.com" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base">
+                    </div>
+
+                    <!-- Attendance Radio -->
+                    <div>
+                        <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">Will you be attending? *</label>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                            <label class="flex items-center gap-3 p-4 rounded-xl border-2 border-earth-200 bg-earth-50 cursor-pointer hover:bg-earth-100 transition-colors">
+                                <input type="radio" name="attendance" value="accepts" checked class="w-4 h-4 text-earth-600 focus:ring-earth-500">
+                                <span class="text-base font-semibold text-earth-900">Joyfully Accepts</span>
+                            </label>
+                            <label class="flex items-center gap-3 p-4 rounded-xl border-2 border-earth-200 bg-earth-50 cursor-pointer hover:bg-earth-100 transition-colors">
+                                <input type="radio" name="attendance" value="declines" class="w-4 h-4 text-earth-600 focus:ring-earth-500">
+                                <span class="text-base font-semibold text-earth-900">Regretfully Declines</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Offerings / Special Performances -->
+                    <div>
+                        <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">
+                            Offerings & Special Performances <span class="text-earth-500 font-normal">(Optional)</span>
+                        </label>
+                        <textarea id="guest-offering" rows="3" placeholder="Would you like to sing a song, give a prayer or toast, or share a special performance for Connie & Eris? Let us know here!" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="w-full py-4 rounded-xl bg-earth-700 hover:bg-earth-800 text-earth-50 font-bold tracking-wider uppercase text-xs sm:text-sm shadow-lg transition-all hover:shadow-xl flex items-center justify-center gap-2">
+                        <i class="fa-paper-plane fa-solid text-sm"></i> Send RSVP Response
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Registry & Wishing Well -->
+    <section class="py-16 px-6 md:px-12 bg-earth-50 border-t border-earth-200">
+        <div class="max-w-4xl mx-auto text-center">
+            <i class="fa-solid fa-gift text-3xl text-earth-500 mb-3"></i>
+            <h2 class="font-serif text-3xl md:text-4xl text-earth-900">Registry & Monetary Blessing</h2>
+            <p class="text-earth-700 text-sm md:text-base mt-3 max-w-2xl mx-auto leading-relaxed">
+                Your presence on our special day is the greatest gift of all! However, if you wish to honor us with a gift, a monetary blessing towards our new home and future together would be deeply appreciated.
+            </p>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-10">
+                <!-- GCash Card -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-earth-200 flex flex-col items-center justify-between hover:border-earth-400 transition-colors">
+                    <div class="w-full">
+                        <div class="flex items-center justify-center gap-2 mb-3">
+                            <span class="w-3 h-3 rounded-full bg-blue-500"></span>
+                            <span class="font-bold text-earth-900 text-base uppercase tracking-wider">GCash</span>
+                        </div>
+                        <img src="19.jpg" 
+                             alt="GCash QR Code" 
+                             class="w-36 h-36 object-cover rounded-xl border border-blue-200 mx-auto mb-4 p-1 shadow-sm"
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x400/3b82f6/ffffff?text=19.jpg+(GCash+QR)';">
+                    </div>
+                    <div class="text-xs text-earth-800 space-y-1 w-full bg-earth-50 p-3 rounded-xl border border-earth-200">
+                        <p class="font-semibold text-earth-900">Connie or Eris</p>
+                        <p class="font-mono text-earth-700">09XX-XXX-XXXX</p>
+                    </div>
+                </div>
+
+                <!-- Maya Card -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-earth-200 flex flex-col items-center justify-between hover:border-earth-400 transition-colors">
+                    <div class="w-full">
+                        <div class="flex items-center justify-center gap-2 mb-3">
+                            <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
+                            <span class="font-bold text-earth-900 text-base uppercase tracking-wider">Maya</span>
+                        </div>
+                        <img src="20.jpg" 
+                             alt="Maya QR Code" 
+                             class="w-36 h-36 object-cover rounded-xl border border-emerald-200 mx-auto mb-4 p-1 shadow-sm"
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x400/10b981/ffffff?text=20.jpg+(Maya+QR)';">
+                    </div>
+                    <div class="text-xs text-earth-800 space-y-1 w-full bg-earth-50 p-3 rounded-xl border border-earth-200">
+                        <p class="font-semibold text-earth-900">Connie or Eris</p>
+                        <p class="font-mono text-earth-700">09XX-XXX-XXXX</p>
+                    </div>
+                </div>
+
+                <!-- Bank Transfer Card -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-earth-200 flex flex-col items-center justify-between hover:border-earth-400 transition-colors">
+                    <div class="w-full">
+                        <div class="flex items-center justify-center gap-2 mb-3">
+                            <span class="w-3 h-3 rounded-full bg-amber-600"></span>
+                            <span class="font-bold text-earth-900 text-base uppercase tracking-wider">Bank Transfer</span>
+                        </div>
+                        <img src="21.jpg" 
+                             alt="Bank Transfer QR Code" 
+                             class="w-36 h-36 object-cover rounded-xl border border-amber-200 mx-auto mb-4 p-1 shadow-sm"
+                             onerror="this.onerror=null; this.src='https://placehold.co/400x400/d97706/ffffff?text=21.jpg+(Bank+QR)';">
+                    </div>
+                    <div class="text-xs text-earth-800 space-y-1 w-full bg-earth-50 p-3 rounded-xl border border-earth-200">
+                        <p class="font-semibold text-earth-900">Account: Connie / Eris</p>
+                        <p class="font-mono text-earth-700">Acc No: XXXX-XXXX-XX</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-20 px-6 md:px-12 bg-earth-100/40">
+        <div class="max-w-4xl mx-auto">
+            <div class="text-center mb-16">
+                <span class="text-xs md:text-sm uppercase tracking-widest text-earth-600 font-bold">Good to Know</span>
+                <h2 class="font-serif text-4xl md:text-6xl text-earth-900 mt-2">Frequently Asked Questions</h2>
+                <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full"></div>
+            </div>
+
+            <!-- FAQ Accordion List -->
+            <div class="space-y-4">
+                <div class="bg-white rounded-2xl border border-earth-200 overflow-hidden shadow-sm">
+                    <button onclick="toggleFAQ(1)" class="w-full px-6 py-5 text-left font-serif text-xl md:text-2xl text-earth-900 flex justify-between items-center focus:outline-none">
+                        <span>Can I bring a +1 or extra guest?</span>
+                        <i id="faq-icon-1" class="fa-solid fa-chevron-down text-earth-600 text-base transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-content-1" class="hidden px-6 pb-5 text-earth-800 text-base md:text-lg leading-relaxed border-t border-earth-100 pt-4">
+                        Due to strict venue limits and budget constraints, we kindly ask our guests to attend solo unless a plus-one is explicitly indicated on your invitation. We appreciate your loving understanding!
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-earth-200 overflow-hidden shadow-sm">
+                    <button onclick="toggleFAQ(2)" class="w-full px-6 py-5 text-left font-serif text-xl md:text-2xl text-earth-900 flex justify-between items-center focus:outline-none">
+                        <span>Where is the church mass and reception?</span>
+                        <i id="faq-icon-2" class="fa-solid fa-chevron-down text-earth-600 text-base transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-content-2" class="hidden px-6 pb-5 text-earth-800 text-base md:text-lg leading-relaxed border-t border-earth-100 pt-4">
+                        The nuptial mass starts at 2:00 PM at <strong>Sto. Niño Parish Church (Poblacion, Bustos, Bulacan)</strong>. The reception follows at 4:00 PM at <strong>Angel's Place Private Resort (Bonga Menor, Bustos, Bulacan)</strong>. Clickable Google Map links are provided in the schedule section!
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-earth-200 overflow-hidden shadow-sm">
+                    <button onclick="toggleFAQ(3)" class="w-full px-6 py-5 text-left font-serif text-xl md:text-2xl text-earth-900 flex justify-between items-center focus:outline-none">
+                        <span>What is the dress code?</span>
+                        <i id="faq-icon-3" class="fa-solid fa-chevron-down text-earth-600 text-base transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-content-3" class="hidden px-6 pb-5 text-earth-800 text-base md:text-lg leading-relaxed border-t border-earth-100 pt-4">
+                        Any shade of brown! For ladies, please wear a formal dress. For gentlemen, please wear long sleeves (Barong or formal button-down) with trousers.
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-2xl border border-earth-200 overflow-hidden shadow-sm">
+                    <button onclick="toggleFAQ(4)" class="w-full px-6 py-5 text-left font-serif text-xl md:text-2xl text-earth-900 flex justify-between items-center focus:outline-none">
+                        <span>Can I offer a song or special toast?</span>
+                        <i id="faq-icon-4" class="fa-solid fa-chevron-down text-earth-600 text-base transition-transform duration-300"></i>
+                    </button>
+                    <div id="faq-content-4" class="hidden px-6 pb-5 text-earth-800 text-base md:text-lg leading-relaxed border-t border-earth-100 pt-4">
+                        Yes! We would love that. Please let us know in the RSVP form under "Offerings & Special Performances" so we can include you in our reception program.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-earth-900 text-earth-200 py-12 px-6 text-center border-t border-earth-800">
+        <div class="max-w-4xl mx-auto space-y-4">
+            <p class="font-serif text-4xl text-white">Connie & Eris</p>
+            <p class="text-sm uppercase tracking-widest text-earth-400 font-semibold">#ConnieAndEris2027</p>
+            <p class="text-sm text-earth-400">Thank you for celebrating this sacred day with us!</p>
+        </div>
+    </footer>
+
+    <!-- Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 z-50 bg-black/90 hidden items-center justify-center p-4" onclick="closeLightbox()">
+        <button class="absolute top-6 right-6 text-white text-3xl focus:outline-none" onclick="closeLightbox()">&times;</button>
+        <img id="lightbox-img" src="" alt="Full view" class="max-w-full max-h-[90vh] rounded-xl shadow-2xl object-contain">
+    </div>
+
+    <!-- RSVP Modal Confirmation -->
+    <div id="rsvp-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full text-center shadow-2xl space-y-4 border border-earth-200">
+            <div class="w-16 h-16 bg-earth-100 text-earth-700 rounded-full flex items-center justify-center mx-auto text-2xl">
+                <i class="fa-solid fa-heart"></i>
+            </div>
+            <h3 class="font-serif text-3xl text-earth-900">RSVP Submitted!</h3>
+            <p id="rsvp-modal-text" class="text-earth-700 text-sm">Thank you so much! We are thrilled to celebrate with you in your finest brown outfit.</p>
+            <button onclick="closeRSVPModal()" class="px-8 py-3 bg-earth-700 text-white rounded-full text-xs font-semibold uppercase tracking-wider shadow hover:bg-earth-800 transition-colors">
+                Close
+            </button>
+        </div>
+    </div>
+
+
+    <!-- Add To Calendar Modal -->
+    <div id="calendar-modal" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-sm w-full text-center shadow-2xl space-y-4 border border-earth-200">
+            <h3 class="font-serif text-2xl text-earth-900">Add to Calendar</h3>
+            <p class="text-earth-700 text-sm">Save January 8, 2027 to your personal calendar:</p>
+            <div class="space-y-2">
+                <a href="https://calendar.google.com" target="_blank" class="block w-full py-3 rounded-xl bg-earth-100 text-earth-900 hover:bg-earth-200 text-sm font-semibold transition-colors">Google Calendar</a>
+                <a href="#" onclick="closeCalendarModal(); return false;" class="block w-full py-3 rounded-xl bg-earth-100 text-earth-900 hover:bg-earth-200 text-sm font-semibold transition-colors">Apple Calendar / iCal</a>
+            </div>
+            <button onclick="closeCalendarModal()" class="text-sm text-earth-600 underline pt-2">Cancel</button>
+        </div>
+    </div>
+
+    <script>
+        // Navbar Scroll Styling Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 50) {
+                navbar.classList.add('bg-white/90', 'shadow-sm', 'bg-blur');
+                navbar.classList.remove('py-4');
+                navbar.classList.add('py-2');
+            } else {
+                navbar.classList.remove('bg-white/90', 'shadow-sm', 'bg-blur');
+                navbar.classList.remove('py-2');
+                navbar.classList.add('py-4');
+            }
+        });
+
+        // Mobile Menu Toggle
+        const menuBtn = document.getElementById('menu-btn');
+        // Target Wedding Date: January 8, 2027 @ 2:00 PM
+        const weddingDate = new Date('January 8, 2027 14:00:00').getTime();
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const distance = weddingDate - now;
+
+            if (distance < 0) {
+                document.getElementById('timer-days').innerText = '00';
+                document.getElementById('timer-hours').innerText = '00';
+                document.getElementById('timer-minutes').innerText = '00';
+                document.getElementById('timer-seconds').innerText = '00';
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById('timer-days').innerText = days < 10 ? '0' + days : days;
+            document.getElementById('timer-hours').innerText = hours < 10 ? '0' + hours : hours;
+            document.getElementById('timer-minutes').innerText = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('timer-seconds').innerText = seconds < 10 ? '0' + seconds : seconds;
+        }
+
+        setInterval(updateCountdown, 1000);
+        updateCountdown();
+
+        const swatchData = {
+            champagne: {
+                title: "Champagne & Soft Ivory Tan",
+                desc: "A delicate, airy shade perfect for romantic dresses and long-sleeve beige attire.",
+                img: "3.jpg"
+            },
+            latte: {
+                title: "Warm Latte & Nude Sand",
+                desc: "Subtle neutral beige tones that blend beautifully in resort garden settings.",
+                img: "4.jpg"
+            },
+            camel: {
+                title: "Classic Camel & Warm Amber",
+                desc: "Rich golden-tinted brown that provides a vibrant yet elegant warm aesthetic.",
+                img: "5.jpg"
+            },
+            terracotta: {
+                title: "Terracotta & Warm Rust",
+                desc: "Earthy reddish-brown tones bringing warmth and elegant depth.",
+                img: "6.jpg"
+            },
+            mocha: {
+                title: "Rich Mocha & Warm Hazelnut",
+                desc: "Sophisticated medium-dark brown hue suitable for both elegant dresses and long sleeves.",
+                img: "7.jpg"
+            },
+            espresso: {
+                title: "Deep Espresso & Dark Chocolate",
+                desc: "Deep, rich dark brown offering high contrast, timeless formality, and classic elegance.",
+                img: "8.jpg"
+            }
+        };
+
+        function selectSwatch(swatchKey) {
+            document.querySelectorAll('.swatch-btn').forEach(btn => {
+                btn.classList.remove('swatch-active', 'border-earth-600', 'ring-2', 'ring-earth-400');
+            });
+
+            const activeBtn = document.getElementById('swatch-' + swatchKey);
+            if (activeBtn) {
+                activeBtn.classList.add('swatch-active', 'border-earth-600', 'ring-2', 'ring-earth-400');
+            }
+
+            const info = swatchData[swatchKey];
+            if (info) {
+                document.getElementById('swatch-title').innerText = info.title;
+                document.getElementById('swatch-desc').innerText = info.desc;
+                const swatchImg = document.getElementById('swatch-img');
+                if (swatchImg) {
+                    swatchImg.src = info.img;
+                    swatchImg.alt = info.title + " sample outfit";
+                }
+            }
+        }
+
+        selectSwatch('camel');
+
+        // Lightbox Functions
+        function openLightbox(imgSrc) {
+            document.getElementById('lightbox-img').src = imgSrc;
+            document.getElementById('lightbox').classList.remove('hidden');
+            document.getElementById('lightbox').classList.add('flex');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.add('hidden');
+            document.getElementById('lightbox').classList.remove('flex');
+        }
+
+        // FAQ Toggle
+        function toggleFAQ(num) {
+            const content = document.getElementById(`faq-content-${num}`);
+            const icon = document.getElementById(`faq-icon-${num}`);
+            if (content.classList.contains('hidden')) {
+                content.classList.remove('hidden');
+                icon.classList.add('rotate-180');
+            } else {
+                content.classList.add('hidden');
+                icon.classList.remove('rotate-180');
+            }
+        }
+
+        // RSVP Local Storage & Cloud Store
+        let rsvpList = JSON.parse(localStorage.getItem('connie_eris_rsvps') || '[]');
+
+        function handleRSVPSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('guest-name').value;
+            const contact = document.getElementById('guest-contact').value;
+            const attendance = document.querySelector('input[name="attendance"]:checked').value;
+            const offering = document.getElementById('guest-offering').value;
+
+            const rsvpEntry = {
+                id: Date.now().toString(),
+                name,
+                contact,
+                attendance,
+                offering,
+                date: new Date().toLocaleDateString()
+            };
+
+            rsvpList.push(rsvpEntry);
+            localStorage.setItem('connie_eris_rsvps', JSON.stringify(rsvpList));
+
+            if (window.saveRSVPToCloud) {
+                window.saveRSVPToCloud(rsvpEntry);
+            }
+
+            // Sync submission with Google Sheets
+            sendToGoogleSheets(rsvpEntry);
+
+            const modalText = document.getElementById('rsvp-modal-text');
+            if (attendance === 'accepts') {
+                modalText.innerText = `Thank you, ${name}! We can't wait to celebrate with you in your favorite shade of brown at Sto. Niño Parish Church and Angel's Place Private Resort.`;
+            } else {
+                modalText.innerText = `We will miss you dearly, ${name}! Thank you for letting us know and sending your love to Connie & Eris.`;
+            }
+
+            document.getElementById('rsvp-modal').classList.remove('hidden');
+            document.getElementById('rsvp-modal').classList.add('flex');
+            event.target.reset();
+        }
+
+        // Send RSVP data directly to Google Sheets via Apps Script Web App URL
+        const DEFAULT_GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXS58CelpvdTqdCV8gICPK6GhWwf31xtH1L6j5p1vwYkqWCWfkKw9Gpzn1640N8Sk3/exec';
+
+        function sendToGoogleSheets(data) {
+            const scriptUrl = localStorage.getItem('connie_eris_google_script_url') || DEFAULT_GOOGLE_SCRIPT_URL;
+            if (!scriptUrl) return;
+
+            try {
+                fetch(scriptUrl, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8',
+                    },
+                    body: JSON.stringify(data)
+                }).catch(err => console.log('Google Sheets Sync note:', err));
+            } catch(e) {
+                console.log('Sheets Sync error', e);
+            }
+        }
+
+        function saveGoogleScriptURL() {
+            const input = document.getElementById('google-script-url-input');
+            const urlToSave = (input && input.value) ? input.value.trim() : DEFAULT_GOOGLE_SCRIPT_URL;
+            localStorage.setItem('connie_eris_google_script_url', urlToSave);
+            alert('Google Sheets Web App URL connected successfully!');
+        }
+
+        function closeRSVPModal() {
+            document.getElementById('rsvp-modal').classList.add('hidden');
+            document.getElementById('rsvp-modal').classList.remove('flex');
+        }
+
+        // Guest List Modal & CSV Export
+        function openGuestListModal() {
+            document.getElementById('guestlist-modal').classList.remove('hidden');
+            document.getElementById('guestlist-modal').classList.add('flex');
+
+            const savedUrl = localStorage.getItem('connie_eris_google_script_url') || DEFAULT_GOOGLE_SCRIPT_URL;
+            const input = document.getElementById('google-script-url-input');
+            if (input) input.value = savedUrl;
+
+            renderGuestList();
+        }
+
+        function closeGuestListModal() {
+            document.getElementById('guestlist-modal').classList.add('hidden');
+            document.getElementById('guestlist-modal').classList.remove('flex');
+        }
+
+        function renderGuestList() {
+            const container = document.getElementById('guestlist-container');
+            const data = (window.currentRSVPs && window.currentRSVPs.length > 0) ? window.currentRSVPs : rsvpList;
+
+            if (data.length === 0) {
+                container.innerHTML = `<div class="text-center py-8 text-earth-500 text-xs">No RSVPs received yet. Be the first to RSVP!</div>`;
+                return;
+            }
+
+            container.innerHTML = data.map((item, idx) => `
+                <div class="bg-earth-50 p-4 rounded-xl border border-earth-200 flex flex-col gap-1 text-xs text-earth-800">
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold text-earth-900 text-sm">${idx + 1}. ${item.name || 'Anonymous'}</span>
+                        <span class="px-2.5 py-1 rounded-full font-semibold ${item.attendance === 'accepts' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'}">
+                            ${item.attendance === 'accepts' ? '✓ Attending' : '✕ Declines'}
+                        </span>
+                    </div>
+                    <div><span class="text-earth-500 font-medium">Contact:</span> ${item.contact || 'N/A'}</div>
+                    ${item.offering ? `<div class="bg-white p-2.5 rounded-lg border border-earth-200 mt-1"><span class="font-semibold text-earth-700">Offering/Performance:</span> ${item.offering}</div>` : ''}
+                </div>
+            `).join('');
+        }
+
+        window.updateGuestListUI = function(cloudData) {
+            if (cloudData && cloudData.length > 0) {
+                rsvpList = cloudData;
+                renderGuestList();
+            }
+        };
+
+        function exportGuestListCSV() {
+            const data = (window.currentRSVPs && window.currentRSVPs.length > 0) ? window.currentRSVPs : rsvpList;
+            if (data.length === 0) {
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,Name,Contact,Attendance,Offerings_Performances,Date\n";
+            data.forEach(item => {
+                const name = `"${(item.name || '').replace(/"/g, '""')}"`;
+                const contact = `"${(item.contact || '').replace(/"/g, '""')}"`;
+                const attendance = `"${(item.attendance || '').replace(/"/g, '""')}"`;
+                const offering = `"${(item.offering || '').replace(/"/g, '""')}"`;
+                const date = `"${(item.date || '').replace(/"/g, '""')}"`;
+                csvContent += `${name},${contact},${attendance},${offering},${date}\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "Connie_and_Eris_RSVP_List.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        // Calendar Modal
+        function openCalendarModal() {
+            document.getElementById('calendar-modal').classList.remove('hidden');
+            document.getElementById('calendar-modal').classList.add('flex');
+        }
+
+        function closeCalendarModal() {
+            document.getElementById('calendar-modal').classList.add('hidden');
+            document.getElementById('calendar-modal').classList.remove('flex');
+        }
+
+        // Audio Playlist & Autoplay System (5 Songs)
+        const playlist = [
+            { title: "Song 1 (Background)", src: "song1.mp3" },
+            { title: "Song 2 (Acoustic)", src: "song2.mp3" },
+            { title: "Song 3 (Instrumental)", src: "song3.mp3" },
+            { title: "Song 4 (Romantic)", src: "song4.mp3" },
+            { title: "Song 5 (Love Theme)", src: "song5.mp3" }
+        ];
+
+        let currentTrackIndex = 0;
+        const bgMusic = document.getElementById('bg-music');
+        const audioToggleBtn = document.getElementById('audio-toggle');
+        const audioNextBtn = document.getElementById('audio-next');
+        const audioIcon = document.getElementById('audio-icon');
+        const trackTitleSpan = document.getElementById('audio-track-title');
+        let isPlayingAudio = false;
+        let hasAutoplayTriggered = false;
+
+        function loadTrack(index) {
+            if (!playlist[index]) return;
+            bgMusic.src = playlist[index].src;
+            if (trackTitleSpan) {
+                trackTitleSpan.innerText = `${index + 1}/5: ${playlist[index].title}`;
+            }
+        }
+
+        function playMusic() {
+            bgMusic.play().then(() => {
+                isPlayingAudio = true;
+                if (audioToggleBtn) {
+                    audioToggleBtn.classList.remove('bg-earth-800');
+                    audioToggleBtn.classList.add('bg-earth-500', 'ring-4', 'ring-earth-300/50');
+                }
+                if (audioIcon) audioIcon.className = 'fa-solid fa-pause';
+            }).catch(err => {
+                console.log("Autoplay waiting for user gesture:", err);
+            });
+        }
+
+        function pauseMusic() {
+            bgMusic.pause();
+            isPlayingAudio = false;
+            if (audioToggleBtn) {
+                audioToggleBtn.classList.remove('bg-earth-500', 'ring-4', 'ring-earth-300/50');
+                audioToggleBtn.classList.add('bg-earth-800');
+            }
+            if (audioIcon) audioIcon.className = 'fa-solid fa-music group-hover:animate-bounce';
+        }
+
+        function nextTrack() {
+            currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+            loadTrack(currentTrackIndex);
+            if (isPlayingAudio) {
+                playMusic();
+            }
+        }
+
+        if (bgMusic) {
+            bgMusic.volume = 0.35; // Set soft background volume (35%)
+            loadTrack(currentTrackIndex);
+
+            // Automatically advance to next song when current track ends
+            bgMusic.addEventListener('ended', () => {
+                nextTrack();
+                playMusic();
+            });
+
+            // Toggle Play/Pause on main button click
+            if (audioToggleBtn) {
+                audioToggleBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    if (isPlayingAudio) {
+                        pauseMusic();
+                    } else {
+                        playMusic();
+                    }
+                });
+            }
+
+            // Skip to Next Track
+            if (audioNextBtn) {
+                audioNextBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    nextTrack();
+                    playMusic();
+                });
+            }
+
+            // Automatic Play on First User Interaction (Click/Tap/Scroll anywhere)
+            const handleFirstUserGesture = () => {
+                if (!hasAutoplayTriggered && !isPlayingAudio) {
+                    hasAutoplayTriggered = true;
+                    playMusic();
+                    document.removeEventListener('click', handleFirstUserGesture);
+                    document.removeEventListener('touchstart', handleFirstUserGesture);
+                    document.removeEventListener('scroll', handleFirstUserGesture);
+                }
+            };
+
+            document.addEventListener('click', handleFirstUserGesture, { once: true });
+            document.addEventListener('touchstart', handleFirstUserGesture, { once: true });
+            document.addEventListener('scroll', handleFirstUserGesture, { once: true });
+        }
+    </script>
+</body>
+</html>
