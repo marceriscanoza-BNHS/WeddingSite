@@ -141,10 +141,91 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #a87854;
         }
+        /* Envelope opening animation styles */
+.envelope-perspective {
+    perspective: 1000px;
+}
+.envelope-flap {
+    transform-origin: top;
+    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+    transform-style: preserve-3d;
+}
+.envelope-flap.open {
+    transform: rotateX(180deg);
+    z-index: 5 !important;
+}
+.envelope-card {
+    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.envelope-card.slide-out {
+    transform: translateY(-80px) scale(1.05);
+}
+@keyframes pulse-subtle {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.06); }
+}
+.pulse-seal {
+    animation: pulse-subtle 2s infinite ease-in-out;
+}
     </style>
 </head>
 <body class="bg-earth-50 text-earth-900 font-sans antialiased selection:bg-earth-300 selection:text-earth-900">
+<!-- Envelope Opening Overlay -->
+<div id="envelope-overlay" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#241710] bg-gradient-to-b from-[#2e1d15] via-[#1f120a] to-[#120a06] transition-opacity duration-1000 px-4">
+    
+    <!-- Ambient background pattern -->
+    <div class="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(#c59d7b_1px,transparent_1px)] [background-size:24px_24px]"></div>
 
+    <div class="text-center text-earth-200 mb-8 z-10 animate-fade-in">
+        <span class="text-xs uppercase tracking-[0.3em] font-medium text-earth-400 block mb-2">You Are Cordially Invited</span>
+        <p class="font-serif italic text-2xl md:text-3xl text-earth-200">The Wedding Ceremony Of</p>
+        <h1 class="font-serif text-3xl md:text-4xl text-white font-normal tracking-wide mt-1">Connie <span class="font-serif-italic text-earth-400">&</span> Eris</h1>
+    </div>
+
+    <!-- Envelope Container -->
+    <div onclick="openEnvelope()" class="envelope-perspective relative w-[310px] sm:w-[380px] h-[220px] sm:h-[260px] cursor-pointer group select-none transition-transform duration-300 hover:scale-105 z-10">
+        
+        <!-- Envelope Pocket (Back) -->
+        <div class="absolute inset-0 bg-[#e8dacb] rounded-2xl shadow-2xl border border-earth-300/40"></div>
+
+        <!-- Invitation Card Peeking Inside -->
+        <div id="envelope-card" class="envelope-card absolute inset-x-4 top-3 bottom-3 bg-earth-50 rounded-xl p-5 shadow-inner border border-earth-200 flex flex-col justify-between text-center border-dashed border-earth-300">
+            <div class="border-b border-earth-200 pb-2">
+                <p class="text-[10px] uppercase tracking-widest text-earth-500 font-bold">January 8, 2027</p>
+                <p class="font-serif text-xl font-bold text-earth-900 mt-0.5">Connie & Eris</p>
+            </div>
+            <div class="py-2">
+                <p class="font-serif italic text-sm text-earth-700">"Together is a beautiful place to be"</p>
+            </div>
+            <div class="text-[10px] text-earth-500 uppercase tracking-wider font-semibold border-t border-earth-200 pt-2">
+                Bustos, Bulacan
+            </div>
+        </div>
+
+        <!-- Envelope Pocket Overlays -->
+        <div class="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none z-10">
+            <div class="absolute bottom-0 left-0 w-0 h-0 border-y-[110px] sm:border-y-[130px] border-y-transparent border-l-[155px] sm:border-l-[190px] border-l-[#d2beab]/95"></div>
+            <div class="absolute bottom-0 right-0 w-0 h-0 border-y-[110px] sm:border-y-[130px] border-y-transparent border-r-[155px] sm:border-r-[190px] border-r-[#dfcdbc]/95"></div>
+            <div class="absolute bottom-0 left-0 right-0 h-0 border-b-[120px] sm:border-b-[140px] border-b-[#c4b09c] border-x-[155px] sm:border-x-[190px] border-x-transparent"></div>
+        </div>
+
+        <!-- Top Flap (3D Folding) -->
+        <div id="envelope-flap" class="envelope-flap absolute top-0 left-0 right-0 h-0 border-t-[125px] sm:border-t-[145px] border-t-[#ebdccb] border-x-[155px] sm:border-x-[190px] border-x-transparent z-20 drop-shadow-md"></div>
+
+        <!-- Wax Seal Monogram -->
+        <div id="wax-seal" class="pulse-seal absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-earth-600 via-earth-800 to-earth-900 shadow-2xl border-2 border-earth-300/60 flex items-center justify-center text-earth-100 transition-transform duration-300 group-hover:scale-110">
+            <div class="w-13 h-13 sm:w-16 sm:h-16 rounded-full border border-earth-400/40 flex flex-col items-center justify-center p-1 text-center bg-earth-900/40 backdrop-blur-xs">
+                <span class="font-serif font-bold text-xs sm:text-sm text-earth-200 tracking-wider">C <span class="text-earth-400 font-serif-italic">&</span> E</span>
+                <i class="fa-solid fa-heart text-[10px] text-earth-400 mt-0.5"></i>
+            </div>
+        </div>
+    </div>
+
+    <button onclick="openEnvelope()" class="mt-10 px-6 py-3 rounded-full bg-earth-800/80 hover:bg-earth-700 text-earth-200 border border-earth-400/30 text-xs uppercase tracking-widest font-semibold backdrop-blur-md shadow-lg transition-all flex items-center gap-2.5 z-10 group">
+        <span>Click Envelope to Open</span>
+        <i class="fa-solid fa-envelope-open text-earth-400 group-hover:translate-x-0.5 transition-transform"></i>
+    </button>
+</div>
     <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 bg-earth-50/90 backdrop-blur-md border-b border-earth-200/50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a href="#home" class="font-serif text-2xl md:text-3xl font-semibold tracking-wider text-earth-900 flex items-center gap-2">
@@ -270,7 +351,7 @@
 
             <div class="glass-card p-6 md:p-10 rounded-3xl mb-12 shadow-md border border-earth-300">
                 <h3 class="text-center font-serif text-2xl md:text-3xl text-earth-900 mb-2">Interactive Color Swatch Palette</h3>
-                <p class="text-center text-sm md:text-base text-earth-700 mb-8 font-medium">Click any shade below to inspect sample dress code outfits & styling descriptions(These are for Guest)</p>
+                <p class="text-center text-sm md:text-base text-earth-700 mb-8 font-medium">To our dear guests, click any shade below to inspect sample dress code outfits & styling descriptions.</p>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mb-8">
                     <button onclick="selectSwatch('champagne')" id="swatch-champagne" class="swatch-btn flex flex-col items-center p-4 rounded-2xl transition-all duration-300 hover:scale-105 border-2 border-earth-200 shadow-sm bg-white">
@@ -904,6 +985,52 @@
     </div>
 
     <script>
+        let envelopeOpened = false;
+
+function openEnvelope() {
+    if (envelopeOpened) return;
+    envelopeOpened = true;
+
+    const flap = document.getElementById('envelope-flap');
+    const card = document.getElementById('envelope-card');
+    const seal = document.getElementById('wax-seal');
+    const overlay = document.getElementById('envelope-overlay');
+
+    // 1. Unfold top flap
+    if (flap) flap.classList.add('open');
+    
+    // 2. Hide wax seal
+    if (seal) {
+        seal.style.opacity = '0';
+        seal.style.transform = 'translate(-50%, -50%) scale(0.5)';
+        seal.style.transition = 'all 0.4s ease';
+    }
+
+    // 3. Slide card out
+    setTimeout(() => {
+        if (card) card.classList.add('slide-out');
+    }, 300);
+
+    // 4. Trigger audio playback
+    setTimeout(() => {
+        if (typeof playMusic === 'function') {
+            playMusic();
+        }
+    }, 500);
+
+    // 5. Fade out overlay and restore background scrolling
+    setTimeout(() => {
+        if (overlay) {
+            overlay.classList.add('opacity-0', 'pointer-events-none');
+        }
+        document.body.classList.remove('overflow-hidden');
+    }, 1000);
+
+    // 6. Remove overlay element from layout
+    setTimeout(() => {
+        if (overlay) overlay.style.display = 'none';
+    }, 2100);
+}
         let rsvpList = JSON.parse(localStorage.getItem('connie_eris_rsvps') || '[]');
         const DEFAULT_GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXS58CelpvdTqdCV8gICPK6GhWwf31xtH1L6j5p1vwYkqWCWfkKw9Gpzn1640N8Sk3/exec';
 
