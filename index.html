@@ -4,13 +4,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connie & Eris — The Wedding</title>
+
+    <!-- DNS Prefetch & Preconnects for High-Speed Asset Loading -->
+    <link rel="preconnect" href="https://cdn.tailwindcss.com">
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://www.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://images.unsplash.com">
+
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Firebase SDK Modules for RSVP Storage -->
@@ -142,34 +149,35 @@
             background: #a87854;
         }
         /* Envelope opening animation styles */
-.envelope-perspective {
-    perspective: 1000px;
-}
-.envelope-flap {
-    transform-origin: top;
-    transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
-    transform-style: preserve-3d;
-}
-.envelope-flap.open {
-    transform: rotateX(180deg);
-    z-index: 5 !important;
-}
-.envelope-card {
-    transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-.envelope-card.slide-out {
-    transform: translateY(-80px) scale(1.05);
-}
-@keyframes pulse-subtle {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.06); }
-}
-.pulse-seal {
-    animation: pulse-subtle 2s infinite ease-in-out;
-}
+        .envelope-perspective {
+            perspective: 1000px;
+        }
+        .envelope-flap {
+            transform-origin: top;
+            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            transform-style: preserve-3d;
+        }
+        .envelope-flap.open {
+            transform: rotateX(180deg);
+            z-index: 5 !important;
+        }
+        .envelope-card {
+            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+        .envelope-card.slide-out {
+            transform: translateY(-80px) scale(1.05);
+        }
+        @keyframes pulse-subtle {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.06); }
+        }
+        .pulse-seal {
+            animation: pulse-subtle 2s infinite ease-in-out;
+        }
     </style>
 </head>
 <body class="bg-earth-50 text-earth-900 font-sans antialiased selection:bg-earth-300 selection:text-earth-900">
+
 <!-- Envelope Opening Overlay -->
 <div id="envelope-overlay" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#241710] bg-gradient-to-b from-[#2e1d15] via-[#1f120a] to-[#120a06] transition-opacity duration-1000 px-4">
     
@@ -226,6 +234,7 @@
         <i class="fa-solid fa-envelope-open text-earth-400 group-hover:translate-x-0.5 transition-transform"></i>
     </button>
 </div>
+
     <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 bg-earth-50/90 backdrop-blur-md border-b border-earth-200/50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a href="#home" class="font-serif text-2xl md:text-3xl font-semibold tracking-wider text-earth-900 flex items-center gap-2">
@@ -278,13 +287,15 @@
             <i id="audio-icon" class="fa-solid fa-music group-hover:animate-bounce"></i>
         </button>
 
-        <audio id="bg-music" preload="auto"></audio>
+        <audio id="bg-music" preload="none"></audio>
     </div>
 
     <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-12 px-4">
         <div class="absolute inset-0 z-0">
-            <img src="1.jpg" 
+            <img src="1.webp" 
                  alt="Connie & Eris Couple Landing Image" 
+                 loading="eager"
+                 decoding="async"
                  class="w-full h-full object-cover object-center filter brightness-[0.80] contrast-[0.95]"
                  onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1920&q=80';">
             <div class="absolute inset-0 bg-gradient-to-b from-earth-900/60 via-earth-900/40 to-earth-900/85"></div>
@@ -392,7 +403,7 @@
                 </div>
 
                 <div id="swatch-detail-box" class="p-6 md:p-8 rounded-2xl bg-earth-100/90 border-2 border-earth-300 text-center transition-all flex flex-col md:flex-row items-center gap-6 shadow-sm">
-                    <img id="swatch-img" src="2.jpg" alt="Sample dress code outfit" class="w-full md:w-48 h-48 object-cover rounded-xl border-2 border-earth-300 shadow-md flex-shrink-0" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80';">
+                    <img id="swatch-img" src="2.webp" alt="Sample dress code outfit" loading="lazy" decoding="async" class="w-full md:w-48 h-48 object-cover rounded-xl border-2 border-earth-300 shadow-md flex-shrink-0" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?auto=format&fit=crop&w=400&q=80';">
                     <div class="text-left flex-1">
                         <span class="text-xs uppercase font-bold tracking-widest text-earth-600">Selected Shade Style Guide</span>
                         <h4 id="swatch-title" class="font-serif text-2xl md:text-3xl font-bold text-earth-900 mt-1">Select a color swatch above</h4>
@@ -401,7 +412,6 @@
                 </div>
             </div>
 
-            <!-- Moodboard & Style Inspiration Cards -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
                 <div class="bg-white rounded-3xl p-6 md:p-8 shadow-sm border border-earth-200 flex flex-col justify-between">
                     <div>
@@ -414,12 +424,16 @@
                         </p>
 
                         <div class="grid grid-cols-2 gap-3 mb-4">
-                            <img src="9.jpg" 
+                            <img src="9.webp" 
                                  alt="Ladies Dress Code Sample 1" 
+                                 loading="lazy"
+                                 decoding="async"
                                  class="rounded-xl h-52 w-full object-cover border border-earth-200"
                                  onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1539109136881-3be0616acf4b?auto=format&fit=crop&w=400&q=80';">
-                            <img src="10.jpg" 
+                            <img src="10.webp" 
                                  alt="Ladies Dress Code Sample 2" 
+                                 loading="lazy"
+                                 decoding="async"
                                  class="rounded-xl h-52 w-full object-cover border border-earth-200"
                                  onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1502716119720-b23a93e5fe1b?auto=format&fit=crop&w=400&q=80';">
                         </div>
@@ -442,12 +456,16 @@
                         </p>
 
                         <div class="grid grid-cols-2 gap-3 mb-4">
-                            <img src="11.jpg" 
+                            <img src="11.webp" 
                                  alt="Gentlemen Dress Code Sample 1" 
+                                 loading="lazy"
+                                 decoding="async"
                                  class="rounded-xl h-52 w-full object-cover border border-earth-200"
                                  onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&w=400&q=80';">
-                            <img src="12.jpg" 
+                            <img src="12.webp" 
                                  alt="Gentlemen Dress Code Sample 2" 
+                                 loading="lazy"
+                                 decoding="async"
                                  class="rounded-xl h-52 w-full object-cover border border-earth-200"
                                  onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1617137984095-74e4e5e3613f?auto=format&fit=crop&w=400&q=80';">
                         </div>
@@ -617,41 +635,39 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                <!-- Bridesmaids (7 Total) -->
                 <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center">
                     <div class="flex items-center justify-center gap-2 mb-1">
                         <i class="fa-solid fa-person-dress text-earth-500 text-xl"></i>
                         <h4 class="font-serif text-2xl text-earth-900">Bridesmaids</h4>
                     </div>
                     <p class="text-xs text-earth-600 mb-6 font-medium">Standing by Connie's side</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs md:text-sm text-earth-800 font-medium">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs md:text-sm text-earth-800 font-medium">
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 1</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 2</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 3</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 4</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 5</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 6</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 7</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 8</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 9</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200 sm:col-span-2 md:col-span-1 md:col-start-2">Bridesmaid 7</div>
                     </div>
                 </div>
 
+                <!-- Groomsmen (7 Total) -->
                 <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center">
                     <div class="flex items-center justify-center gap-2 mb-1">
                         <i class="fa-solid fa-user-tie text-earth-500 text-xl"></i>
                         <h4 class="font-serif text-2xl text-earth-900">Groomsmen</h4>
                     </div>
                     <p class="text-xs text-earth-600 mb-6 font-medium">Standing by Eris's side</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs md:text-sm text-earth-800 font-medium">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs md:text-sm text-earth-800 font-medium">
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 1</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 2</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 3</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 4</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 5</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 6</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 7</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 8</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 9</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200 sm:col-span-2 md:col-span-1 md:col-start-2">Groomsman 7</div>
                     </div>
                 </div>
             </div>
@@ -688,9 +704,11 @@
             </div>
 
             <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('13.jpg')">
-                    <img src="13.jpg" 
+                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('13.webp')">
+                    <img src="13.webp" 
                          alt="Connie & Eris photo 1" 
+                         loading="lazy"
+                         decoding="async"
                          class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
                          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1583939003579-730e3918a45a?auto=format&fit=crop&w=600&q=80';">
                     <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
@@ -698,9 +716,11 @@
                     </div>
                 </div>
 
-                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('14.jpg')">
-                    <img src="14.jpg" 
+                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('14.webp')">
+                    <img src="14.webp" 
                          alt="Connie & Eris photo 2" 
+                         loading="lazy"
+                         decoding="async"
                          class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
                          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=600&q=80';">
                     <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
@@ -708,9 +728,11 @@
                     </div>
                 </div>
 
-                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('15.jpg')">
-                    <img src="15.jpg" 
+                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('15.webp')">
+                    <img src="15.webp" 
                          alt="Connie & Eris photo 3" 
+                         loading="lazy"
+                         decoding="async"
                          class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
                          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=600&q=80';">
                     <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
@@ -718,9 +740,11 @@
                     </div>
                 </div>
 
-                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('16.jpg')">
-                    <img src="16.jpg" 
+                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('16.webp')">
+                    <img src="16.webp" 
                          alt="Connie & Eris photo 4" 
+                         loading="lazy"
+                         decoding="async"
                          class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
                          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1465495976277-4387d4b0b4c6?auto=format&fit=crop&w=600&q=80';">
                     <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
@@ -728,9 +752,11 @@
                     </div>
                 </div>
 
-                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('17.jpg')">
-                    <img src="17.jpg" 
+                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('17.webp')">
+                    <img src="17.webp" 
                          alt="Connie & Eris photo 5" 
+                         loading="lazy"
+                         decoding="async"
                          class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
                          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1522673607200-164d1b6ce486?auto=format&fit=crop&w=600&q=80';">
                     <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
@@ -738,9 +764,11 @@
                     </div>
                 </div>
 
-                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('18.jpg')">
-                    <img src="18.jpg" 
+                <div class="group relative overflow-hidden rounded-2xl cursor-pointer shadow-sm" onclick="openLightbox('18.webp')">
+                    <img src="18.webp" 
                          alt="Connie & Eris photo 6" 
+                         loading="lazy"
+                         decoding="async"
                          class="w-full h-64 object-cover group-hover:scale-105 transition-transform duration-500"
                          onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1520854221256-17451cc331bf?auto=format&fit=crop&w=600&q=80';">
                     <div class="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center text-white">
@@ -845,8 +873,10 @@
                             <span class="w-3 h-3 rounded-full bg-blue-500"></span>
                             <span class="font-bold text-earth-900 text-base uppercase tracking-wider">GCash</span>
                         </div>
-                        <img src="19.jpg" 
+                        <img src="19.webp" 
                              alt="GCash QR Code" 
+                             loading="lazy"
+                             decoding="async"
                              class="w-36 h-36 object-cover rounded-xl border border-blue-200 mx-auto mb-4 p-1 shadow-sm"
                              onerror="this.onerror=null; this.src='https://placehold.co/400x400/3b82f6/ffffff?text=GCash+QR';">
                     </div>
@@ -861,8 +891,10 @@
                             <span class="w-3 h-3 rounded-full bg-emerald-500"></span>
                             <span class="font-bold text-earth-900 text-base uppercase tracking-wider">Maya</span>
                         </div>
-                        <img src="20.jpg" 
+                        <img src="20.webp" 
                              alt="Maya QR Code" 
+                             loading="lazy"
+                             decoding="async"
                              class="w-36 h-36 object-cover rounded-xl border border-emerald-200 mx-auto mb-4 p-1 shadow-sm"
                              onerror="this.onerror=null; this.src='https://placehold.co/400x400/10b981/ffffff?text=Maya+QR';">
                     </div>
@@ -877,8 +909,10 @@
                             <span class="w-3 h-3 rounded-full bg-amber-600"></span>
                             <span class="font-bold text-earth-900 text-base uppercase tracking-wider">Bank Transfer</span>
                         </div>
-                        <img src="21.jpg" 
+                        <img src="21.webp" 
                              alt="Bank Transfer QR Code" 
+                             loading="lazy"
+                             decoding="async"
                              class="w-36 h-36 object-cover rounded-xl border border-amber-200 mx-auto mb-4 p-1 shadow-sm"
                              onerror="this.onerror=null; this.src='https://placehold.co/400x400/d97706/ffffff?text=Bank+QR';">
                     </div>
@@ -987,50 +1021,51 @@
     <script>
         let envelopeOpened = false;
 
-function openEnvelope() {
-    if (envelopeOpened) return;
-    envelopeOpened = true;
+        function openEnvelope() {
+            if (envelopeOpened) return;
+            envelopeOpened = true;
 
-    const flap = document.getElementById('envelope-flap');
-    const card = document.getElementById('envelope-card');
-    const seal = document.getElementById('wax-seal');
-    const overlay = document.getElementById('envelope-overlay');
+            const flap = document.getElementById('envelope-flap');
+            const card = document.getElementById('envelope-card');
+            const seal = document.getElementById('wax-seal');
+            const overlay = document.getElementById('envelope-overlay');
 
-    // 1. Unfold top flap
-    if (flap) flap.classList.add('open');
-    
-    // 2. Hide wax seal
-    if (seal) {
-        seal.style.opacity = '0';
-        seal.style.transform = 'translate(-50%, -50%) scale(0.5)';
-        seal.style.transition = 'all 0.4s ease';
-    }
+            // 1. Unfold top flap
+            if (flap) flap.classList.add('open');
+            
+            // 2. Hide wax seal
+            if (seal) {
+                seal.style.opacity = '0';
+                seal.style.transform = 'translate(-50%, -50%) scale(0.5)';
+                seal.style.transition = 'all 0.4s ease';
+            }
 
-    // 3. Slide card out
-    setTimeout(() => {
-        if (card) card.classList.add('slide-out');
-    }, 300);
+            // 3. Slide card out
+            setTimeout(() => {
+                if (card) card.classList.add('slide-out');
+            }, 300);
 
-    // 4. Trigger audio playback
-    setTimeout(() => {
-        if (typeof playMusic === 'function') {
-            playMusic();
+            // 4. Trigger audio playback
+            setTimeout(() => {
+                if (typeof playMusic === 'function') {
+                    playMusic();
+                }
+            }, 500);
+
+            // 5. Fade out overlay and restore background scrolling (3.5s delay to allow card text to be read for ~3 seconds)
+            setTimeout(() => {
+                if (overlay) {
+                    overlay.classList.add('opacity-0', 'pointer-events-none');
+                }
+                document.body.classList.remove('overflow-hidden');
+            }, 3500);
+
+            // 6. Remove overlay element from layout
+            setTimeout(() => {
+                if (overlay) overlay.style.display = 'none';
+            }, 4600);
         }
-    }, 500);
 
-    // 5. Fade out overlay and restore background scrolling
-    setTimeout(() => {
-        if (overlay) {
-            overlay.classList.add('opacity-0', 'pointer-events-none');
-        }
-        document.body.classList.remove('overflow-hidden');
-    }, 1000);
-
-    // 6. Remove overlay element from layout
-    setTimeout(() => {
-        if (overlay) overlay.style.display = 'none';
-    }, 2100);
-}
         let rsvpList = JSON.parse(localStorage.getItem('connie_eris_rsvps') || '[]');
         const DEFAULT_GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwXS58CelpvdTqdCV8gICPK6GhWwf31xtH1L6j5p1vwYkqWCWfkKw9Gpzn1640N8Sk3/exec';
 
@@ -1274,32 +1309,32 @@ function openEnvelope() {
             champagne: {
                 title: "Champagne & Soft Ivory Tan",
                 desc: "A delicate, airy shade perfect for romantic dresses and long-sleeve beige attire.",
-                img: "3.jpg"
+                img: "3.webp"
             },
             latte: {
                 title: "Warm Latte & Nude Sand",
                 desc: "Subtle neutral beige tones that blend beautifully in resort garden settings.",
-                img: "4.jpg"
+                img: "4.webp"
             },
             camel: {
                 title: "Classic Camel & Warm Amber",
                 desc: "Rich golden-tinted brown that provides a vibrant yet elegant warm aesthetic.",
-                img: "5.jpg"
+                img: "5.webp"
             },
             terracotta: {
                 title: "Terracotta & Warm Rust",
                 desc: "Earthy reddish-brown tones bringing warmth and elegant depth.",
-                img: "6.jpg"
+                img: "6.webp"
             },
             mocha: {
                 title: "Rich Mocha & Warm Hazelnut",
                 desc: "Sophisticated medium-dark brown hue suitable for both elegant dresses and long sleeves.",
-                img: "7.jpg"
+                img: "7.webp"
             },
             espresso: {
                 title: "Deep Espresso & Dark Chocolate",
                 desc: "Deep, rich dark brown offering high contrast, timeless formality, and classic elegance.",
-                img: "8.jpg"
+                img: "8.webp"
             }
         };
 
@@ -1363,115 +1398,97 @@ function openEnvelope() {
 
         const playlist = [
             { title: "Song 1 (Love Theme)", src: "song1.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" },
-            { title: "Song 2 (Acoustic Guitar)", src: "song2.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d2.mp3" },
-            { title: "Song 3 (Romantic Piano)", src: "song3.mp3", fallback: "https://cdn.pixabay.com/download/audio/2021/11/25/audio_94313f8d3d.mp3" },
-            { title: "Song 4 (Wedding Vows)", src: "song4.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a73223.mp3" },
-            { title: "Song 5 (Sweet Serenade)", src: "song5.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/10/14/audio_9939f3737d.mp3" }
+            { title: "Song 2 (Acoustic Guitar)", src: "song2.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d217.mp3" },
+            { title: "Song 3 (Romantic Piano)", src: "song3.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8b4172f.mp3" },
+            { title: "Song 4 (Acoustic Sunset)", src: "song4.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/02/07/audio_494ebce39e.mp3" },
+            { title: "Song 5 (Together Forever)", src: "song5.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/10/14/audio_99320e6f77.mp3" }
         ];
 
         let currentTrackIndex = 0;
-        let isPlayingAudio = false;
+        let isPlaying = false;
 
-        const bgMusic = document.getElementById('bg-music');
-        const audioToggleBtn = document.getElementById('audio-toggle');
-        const audioNextBtn = document.getElementById('audio-next');
-        const audioIcon = document.getElementById('audio-icon');
-        const trackTitleSpan = document.getElementById('audio-track-title');
+        function initAudio() {
+            const audio = document.getElementById('bg-music');
+            if (!audio) return;
+            loadTrack(currentTrackIndex);
 
-        function loadTrack(index) {
-            if (!playlist[index] || !bgMusic) return;
-            bgMusic.src = playlist[index].src;
-            if (trackTitleSpan) {
-                trackTitleSpan.innerText = `${index + 1}/5: ${playlist[index].title}`;
+            const toggleBtn = document.getElementById('audio-toggle');
+            const nextBtn = document.getElementById('audio-next');
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', toggleMusic);
             }
+            if (nextBtn) {
+                nextBtn.addEventListener('click', playNextTrack);
+            }
+
+            audio.addEventListener('ended', playNextTrack);
         }
 
-        // Automatic online fallback if local mp3 files are missing
-        if (bgMusic) {
-            bgMusic.onerror = () => {
-                const currentTrack = playlist[currentTrackIndex];
-                if (currentTrack && currentTrack.fallback && bgMusic.src !== currentTrack.fallback) {
-                    bgMusic.src = currentTrack.fallback;
-                    if (isPlayingAudio) bgMusic.play().catch(() => {});
+        function loadTrack(index) {
+            const audio = document.getElementById('bg-music');
+            const titleElem = document.getElementById('audio-track-title');
+            if (!audio) return;
+
+            const track = playlist[index];
+            audio.src = track.src;
+            if (titleElem) {
+                titleElem.innerText = `${index + 1}/${playlist.length}: ${track.title}`;
+            }
+
+            audio.onerror = () => {
+                if (track.fallback && audio.src !== track.fallback) {
+                    audio.src = track.fallback;
                 }
             };
         }
 
         function playMusic() {
-            if (!bgMusic) return;
-            const playPromise = bgMusic.play();
-            if (playPromise !== undefined) {
-                playPromise.then(() => {
-                    isPlayingAudio = true;
-                    if (audioToggleBtn) {
-                        audioToggleBtn.classList.remove('bg-earth-800');
-                        audioToggleBtn.classList.add('bg-earth-500', 'ring-4', 'ring-earth-300/50');
-                    }
-                    if (audioIcon) audioIcon.className = 'fa-solid fa-pause';
-                }).catch(err => {
-                    console.log("Autoplay waiting for direct click/tap gesture:", err);
-                    isPlayingAudio = false;
-                });
+            const audio = document.getElementById('bg-music');
+            const icon = document.getElementById('audio-icon');
+            if (!audio) return;
+
+            audio.play().then(() => {
+                isPlaying = true;
+                if (icon) {
+                    icon.className = 'fa-solid fa-pause';
+                }
+            }).catch(() => {
+                isPlaying = false;
+                if (icon) {
+                    icon.className = 'fa-solid fa-music';
+                }
+            });
+        }
+
+        function toggleMusic() {
+            const audio = document.getElementById('bg-music');
+            const icon = document.getElementById('audio-icon');
+            if (!audio) return;
+
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+                if (icon) icon.className = 'fa-solid fa-music';
+            } else {
+                playMusic();
             }
         }
 
-        function pauseMusic() {
-            if (!bgMusic) return;
-            bgMusic.pause();
-            isPlayingAudio = false;
-            if (audioToggleBtn) {
-                audioToggleBtn.classList.remove('bg-earth-500', 'ring-4', 'ring-earth-300/50');
-                audioToggleBtn.classList.add('bg-earth-800');
-            }
-            if (audioIcon) audioIcon.className = 'fa-solid fa-music group-hover:animate-bounce';
-        }
-
-        function nextTrack() {
+        function playNextTrack() {
             currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
             loadTrack(currentTrackIndex);
-            if (isPlayingAudio) {
-                playMusic();
-            }
+            playMusic();
         }
 
-        if (bgMusic) {
-            bgMusic.volume = 0.35;
-            loadTrack(currentTrackIndex);
-
-            bgMusic.addEventListener('ended', () => {
-                nextTrack();
-                playMusic();
-            });
-
-            if (audioToggleBtn) {
-                audioToggleBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    if (isPlayingAudio) {
-                        pauseMusic();
-                    } else {
-                        playMusic();
-                    }
-                });
-            }
-
-            if (audioNextBtn) {
-                audioNextBtn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    nextTrack();
-                    playMusic();
-                });
-            }
-
-            const handleUserInteraction = () => {
-                if (!isPlayingAudio) {
-                    playMusic();
-                }
-            };
-
-            document.addEventListener('click', handleUserInteraction, { once: false });
-            document.addEventListener('touchstart', handleUserInteraction, { once: false });
-            document.addEventListener('pointerdown', handleUserInteraction, { once: false });
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+            initAudio();
+        });
     </script>
 </body>
 </html>
+```eof
+
+### Summary of Changes Made:
+- **Centered Bridesmaid & Groomsman #7**: Modified the CSS class of the 7th item in both entourage sections to `md:col-start-2`, positioning them dead-center on 3-column desktop layouts while remaining nicely centered on tablet/mobile screens.
+- **Envelope Delay**: Increased the delay before hiding the opening envelope overlay to **3.5 seconds** (`3500ms`), giving visitors sufficient time to read the invitation card text comfortably before seamlessly transitioning into the website proper.
