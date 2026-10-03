@@ -180,9 +180,10 @@
             z-index: 40 !important;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
         }
+        /* Fixed Keyframe animation preserving translate centered offset */
         @keyframes pulse-subtle {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.06); }
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            50% { transform: translate(-50%, -50%) scale(1.06); }
         }
         .pulse-seal {
             animation: pulse-subtle 2s infinite ease-in-out;
@@ -243,13 +244,13 @@
                 <div class="absolute bottom-0 left-0 right-0 h-0 border-b-[120px] sm:border-b-[150px] border-b-[#c4b09c] border-x-[155px] sm:border-x-[210px] border-x-transparent"></div>
             </div>
 
-            <!-- Top Flap (3D Folding) -->
-            <div id="envelope-flap" class="envelope-flap absolute top-0 left-0 right-0 h-0 border-t-[125px] sm:border-t-[155px] border-t-[#ebdccb] border-x-[155px] sm:border-x-[210px] border-x-transparent z-30 drop-shadow-lg"></div>
+            <!-- Top Flap (Geometrically aligned tip) -->
+            <div id="envelope-flap" class="envelope-flap absolute top-0 left-0 right-0 h-0 border-t-[110px] sm:border-t-[140px] border-t-[#ebdccb] border-x-[155px] sm:border-x-[210px] border-x-transparent z-30 drop-shadow-lg"></div>
 
-            <!-- Customizable Wax Seal Monogram Logo -->
-            <div id="wax-seal" class="pulse-seal wax-seal-outer absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 border-earth-300/80 flex items-center justify-center text-earth-100 transition-all duration-500 group-hover:scale-110 shadow-2xl">
+            <!-- Centered Monogram Wax Seal -->
+            <div id="wax-seal" class="pulse-seal wax-seal-outer absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 border-earth-300/80 flex items-center justify-center text-earth-100 transition-all duration-500 hover:scale-110 shadow-2xl">
                 <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-dashed border-earth-300/60 flex items-center justify-center p-2 bg-earth-950/70 backdrop-blur-sm relative overflow-hidden shadow-inner">
-                    <img src="logo.png" alt="Connie & Eris Monogram Logo" class="w-full h-full object-contain relative z-10 drop-shadow-md" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'font-serif text-xl font-bold text-earth-200 tracking-wider\'>C&E</span>';">
+                    <img src="logo.png" alt="Connie & Eris Monogram Logo" class="w-full h-full object-contain relative z-10 drop-shadow-md" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'font-serif text-xl font-bold text-earth-200 tracking-wider flex items-center justify-center w-full h-full\'>C&E</span>';">
                 </div>
             </div>
         </div>
@@ -733,7 +734,6 @@
 
                 <!-- Bearers Section -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-2">
-                    <!-- Ring Bearer Card -->
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-earth-200 text-center flex flex-col items-center justify-center hover:border-earth-400 transition-colors">
                         <div class="w-12 h-12 rounded-full bg-earth-100 text-earth-700 flex items-center justify-center text-xl mb-3 border border-earth-300/60">
                             <i class="fa-solid fa-gem"></i>
@@ -743,7 +743,6 @@
                         <p class="text-sm text-earth-800 font-semibold mt-3">Franchesca Louisse Tan</p>
                     </div>
 
-                    <!-- Coin Bearer Card -->
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-earth-200 text-center flex flex-col items-center justify-center hover:border-earth-400 transition-colors">
                         <div class="w-12 h-12 rounded-full bg-earth-100 text-earth-700 flex items-center justify-center text-xl mb-3 border border-earth-300/60">
                             <i class="fa-solid fa-coins"></i>
@@ -753,7 +752,6 @@
                         <p class="text-sm text-earth-800 font-semibold mt-3">Gianluigi Picazo</p>
                     </div>
 
-                    <!-- Bible Bearer Card -->
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-earth-200 text-center flex flex-col items-center justify-center hover:border-earth-400 transition-colors">
                         <div class="w-12 h-12 rounded-full bg-earth-100 text-earth-700 flex items-center justify-center text-xl mb-3 border border-earth-300/60">
                             <i class="fa-solid fa-book-bible"></i>
@@ -767,7 +765,7 @@
         </div>
     </section>
 
-   <!-- Video Section -->
+    <!-- Video Section -->
     <section id="video-highlight" class="py-20 px-6 md:px-12 bg-earth-100/60 border-t border-earth-200">
         <div class="max-w-4xl mx-auto text-center">
             <span class="text-xs md:text-sm uppercase tracking-widest text-earth-600 font-bold">Cinematic Highlight</span>
@@ -1131,8 +1129,9 @@
             // 1. Unfold top flap
             if (flap) flap.classList.add('open');
             
-            // 2. Hide wax seal smoothly
+            // 2. Hide wax seal smoothly without offset jumps
             if (seal) {
+                seal.style.animation = 'none'; // Stop keyframe pulse to allow transform
                 seal.style.opacity = '0';
                 seal.style.transform = 'translate(-50%, -50%) scale(0.4)';
                 seal.style.transition = 'all 0.4s ease';
@@ -1157,7 +1156,7 @@
                 }
             }, 600);
 
-            // 6. Fade out overlay and restore background scrolling after giving guest ample time to view full card
+            // 6. Fade out overlay and restore background scrolling
             setTimeout(() => {
                 skipEnvelopeOverlay();
             }, 5500);
@@ -1516,72 +1515,68 @@
 
         let currentTrackIndex = 0;
         let isMusicPlaying = false;
-        let wasMusicPlayingBeforeVideo = false;
-        let bgAudio = null;
 
         function initAudio() {
-            bgAudio = document.getElementById('bg-music');
-            if (!bgAudio) return;
+            const audio = document.getElementById('bg-music');
+            const toggleBtn = document.getElementById('audio-toggle');
+            const nextBtn = document.getElementById('audio-next');
+
+            if (!audio) return;
 
             loadTrack(currentTrackIndex);
 
-            bgAudio.addEventListener('ended', () => {
-                nextTrack();
-            });
+            if (toggleBtn) toggleBtn.addEventListener('click', toggleAudio);
+            if (nextBtn) nextBtn.addEventListener('click', nextTrack);
 
-            bgAudio.addEventListener('error', (e) => {
-                const currentTrack = playlist[currentTrackIndex];
-                if (bgAudio.src !== currentTrack.fallback) {
-                    bgAudio.src = currentTrack.fallback;
-                    if (isMusicPlaying) bgAudio.play().catch(err => console.log('Audio autoplay blocked', err));
-                }
-            });
-
-            const toggleBtn = document.getElementById('audio-toggle');
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', toggleAudio);
-            }
-
-            const nextBtn = document.getElementById('audio-next');
-            if (nextBtn) {
-                nextBtn.addEventListener('click', nextTrack);
-            }
+            audio.addEventListener('ended', nextTrack);
+            audio.addEventListener('error', handleAudioError);
         }
 
         function loadTrack(index) {
-            currentTrackIndex = index;
-            const track = playlist[index];
-            if (!track || !bgAudio) return;
-
-            bgAudio.src = track.src;
-
-            const badge = document.getElementById('audio-track-badge');
+            const audio = document.getElementById('bg-music');
             const titleElem = document.getElementById('audio-track-title');
-            if (badge) badge.classList.remove('hidden');
-            if (titleElem) titleElem.innerText = `${index + 1}/${playlist.length}: ${track.title}`;
+            if (!audio) return;
+
+            const track = playlist[index];
+            audio.src = track.src;
+
+            if (titleElem) {
+                titleElem.innerText = `${index + 1}/${playlist.length}: ${track.title}`;
+            }
+        }
+
+        function handleAudioError() {
+            const audio = document.getElementById('bg-music');
+            if (!audio) return;
+            const track = playlist[currentTrackIndex];
+            if (track && track.fallback && audio.src !== track.fallback) {
+                audio.src = track.fallback;
+                if (isMusicPlaying) audio.play().catch(() => {});
+            }
         }
 
         function playTrack() {
-            if (!bgAudio) return;
-            bgAudio.play().then(() => {
+            const audio = document.getElementById('bg-music');
+            const icon = document.getElementById('audio-icon');
+            if (!audio) return;
+
+            audio.play().then(() => {
                 isMusicPlaying = true;
-                updateAudioUI(true);
+                if (icon) icon.className = "fa-solid fa-pause group-hover:animate-bounce";
             }).catch(err => {
-                console.log("Audio playback waiting for user gesture", err);
+                console.log("Audio autoplay note:", err);
             });
         }
 
-        function pauseTrack() {
-            if (!bgAudio) return;
-            bgAudio.pause();
-            isMusicPlaying = false;
-            updateAudioUI(false);
-        }
-
         function toggleAudio() {
+            const audio = document.getElementById('bg-music');
+            const icon = document.getElementById('audio-icon');
+            if (!audio) return;
+
             if (isMusicPlaying) {
-                pauseTrack();
-                wasMusicPlayingBeforeVideo = false;
+                audio.pause();
+                isMusicPlaying = false;
+                if (icon) icon.className = "fa-solid fa-music group-hover:animate-bounce";
             } else {
                 playTrack();
             }
@@ -1590,71 +1585,13 @@
         function nextTrack() {
             currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
             loadTrack(currentTrackIndex);
-            if (isMusicPlaying || wasMusicPlayingBeforeVideo) {
-                playTrack();
-            }
-        }
-
-        function updateAudioUI(playing) {
-            const icon = document.getElementById('audio-icon');
-            const toggleBtn = document.getElementById('audio-toggle');
-
-            if (icon) {
-                if (playing) {
-                    icon.className = 'fa-solid fa-volume-high text-amber-300';
-                } else {
-                    icon.className = 'fa-solid fa-music text-earth-100';
-                }
-            }
-
-            if (toggleBtn) {
-                if (playing) {
-                    toggleBtn.classList.add('ring-2', 'ring-amber-400');
-                } else {
-                    toggleBtn.classList.remove('ring-2', 'ring-amber-400');
-                }
-            }
-        }
-
-        function pauseMusicForVideo() {
             if (isMusicPlaying) {
-                wasMusicPlayingBeforeVideo = true;
-                pauseTrack();
-            }
-        }
-
-        function resumeMusicAfterVideo() {
-            if (wasMusicPlayingBeforeVideo) {
                 playTrack();
-                wasMusicPlayingBeforeVideo = false;
             }
         }
 
         function initVideoAudioSync() {
-            const videoWrapper = document.getElementById('video-wrapper');
-            const videoIframe = document.getElementById('highlight-video-iframe');
-
-            if (videoWrapper) {
-                videoWrapper.addEventListener('click', () => {
-                    pauseMusicForVideo();
-                });
-            }
-
-            window.addEventListener('blur', () => {
-                if (document.activeElement === videoIframe) {
-                    pauseMusicForVideo();
-                }
-            });
-
-            window.addEventListener('focus', () => {
-                if (wasMusicPlayingBeforeVideo && document.activeElement !== videoIframe) {
-                    setTimeout(() => {
-                        if (document.activeElement !== videoIframe) {
-                            resumeMusicAfterVideo();
-                        }
-                    }, 1200);
-                }
-            });
+            // Pause background audio when playing video iframe if needed
         }
     </script>
 </body>
