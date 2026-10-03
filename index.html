@@ -257,7 +257,7 @@
             <i class="fa-solid fa-envelope-open text-earth-400 group-hover:translate-x-0.5 transition-transform"></i>
         </button>
         
-        <button id="skip-overlay-btn" onclick="skipEnvelopeOverlay()" class="hidden px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 text-earth-200 border border-white/20 text-xs uppercase tracking-widest font-semibold backdrop-blur-md transition-all">
+        <button id="skip-overlay-btn" onclick="skipEnvelopeOverlay()" class="px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 text-earth-200 border border-white/20 text-xs uppercase tracking-widest font-semibold backdrop-blur-md transition-all">
             Enter Website <i class="fa-solid fa-arrow-right ml-1"></i>
         </button>
     </div>
@@ -790,10 +790,6 @@
             <h2 class="font-serif text-4xl md:text-6xl text-earth-900 mt-2">Our Love Story Video</h2>
             <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full mb-8"></div>
 
-            <p class="text-earth-700 text-base md:text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
-                Watch our pre-wedding highlights and special moments! Background music automatically pauses when you start playing the video to avoid simultaneous playback.
-            </p>
-
             <div id="video-wrapper" class="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-earth-300 bg-earth-900 aspect-video group">
                 <!-- Video Play Overlay Banner -->
                 <div id="video-play-banner" class="absolute inset-0 z-20 bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center cursor-pointer transition-opacity duration-300 hover:bg-black/20" onclick="startVideoAndPauseMusic()">
@@ -1143,8 +1139,7 @@
         /* ==========================================
          * 1. GOOGLE SHEETS & FIREBASE RSVP CONFIG
          * ========================================== */
-        // Google Apps Script Web App Deployment URL for RSVP storage
-        const GOOGLE_SHEETS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwXS58CelpvdTqdCV8gICPK6GhWwf31xtH1L6j5p1vwYkqWCWfkKw9Gpzn1640N8Sk3/exec";
+        const DEFAULT_GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwXS58CelpvdTqdCV8gICPK6GhWwf31xtH1L6j5p1vwYkqWCWfkKw9Gpzn1640N8Sk3/exec";
 
         let envelopeOpened = false;
 
@@ -1201,6 +1196,20 @@
 
         document.addEventListener('DOMContentLoaded', () => {
             checkAndRenderRSVPState();
+
+            // Make RSVP navigation reliable
+            document.querySelectorAll('a[href="#rsvp"]').forEach(link => {
+                link.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    skipEnvelopeOverlay();
+                    const mobileMenuNow = document.getElementById('mobile-menu');
+                    if (mobileMenuNow) mobileMenuNow.classList.add('hidden');
+                    setTimeout(() => {
+                        const rsvpSection = document.getElementById('rsvp');
+                        if (rsvpSection) rsvpSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }, 80);
+                });
+            });
 
             const menuBtn = document.getElementById('menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
@@ -1294,16 +1303,20 @@
             const container = document.getElementById('rsvp-card-container');
             if (!container) return;
 
+            const safeName = (userRSVP.name || '').replace(/"/g, '&quot;');
+            const safeContact = (userRSVP.contact || '').replace(/"/g, '&quot;');
+            const safeOffering = (userRSVP.offering && userRSVP.offering !== 'None') ? userRSVP.offering.replace(/</g, '&lt;').replace(/>/g, '&gt;') : '';
+
             container.innerHTML = `
                 <form id="rsvp-form" onsubmit="handleRSVPSubmit(event)" class="space-y-6">
                     <div>
                         <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">Full Name *</label>
-                        <input type="text" id="guest-name" required value="${userRSVP.name || ''}" placeholder="e.g. Juan Dela Cruz" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base">
+                        <input type="text" id="guest-name" required value="${safeName}" placeholder="e.g. Juan Dela Cruz" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base">
                     </div>
 
                     <div>
                         <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">Contact Number / Email *</label>
-                        <input type="text" id="guest-contact" required value="${userRSVP.contact || ''}" placeholder="0917-123-4567 or email@example.com" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base">
+                        <input type="text" id="guest-contact" required value="${safeContact}" placeholder="0917-123-4567 or email@example.com" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base">
                     </div>
 
                     <div>
@@ -1324,7 +1337,7 @@
                         <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">
                             Offerings &amp; Special Performances <span class="text-earth-500 font-normal">(Optional)</span>
                         </label>
-                        <textarea id="guest-offering" rows="3" placeholder="Would you like to sing a song, give a prayer or toast, or share a special performance for Connie &amp; Eris? Let us know here!" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base">${userRSVP.offering && userRSVP.offering !== 'None' ? userRSVP.offering : ''}</textarea>
+                        <textarea id="guest-offering" rows="3" placeholder="Would you like to sing a song, give a prayer or toast, or share a special performance for Connie &amp; Eris? Let us know here!" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base">${safeOffering}</textarea>
                     </div>
 
                     <button type="submit" id="rsvp-submit-btn" class="w-full py-4 rounded-xl bg-earth-700 hover:bg-earth-800 text-earth-50 font-bold tracking-wider uppercase text-xs sm:text-sm shadow-lg transition-all hover:shadow-xl flex items-center justify-center gap-2">
@@ -1334,20 +1347,21 @@
             `;
         }
 
-        async function handleRSVPSubmit(e) {
-            e.preventDefault();
-            const submitBtn = document.getElementById('rsvp-submit-btn');
-            if (submitBtn) {
-                submitBtn.disabled = true;
-                submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Submitting...`;
+        async function handleRSVPSubmit(event) {
+            event.preventDefault();
+
+            const btn = document.getElementById('rsvp-submit-btn');
+            if (btn) {
+                btn.disabled = true;
+                btn.innerHTML = '<i class="fa-solid fa-spinner animate-spin"></i> Saving Response...';
             }
 
-            const name = document.getElementById('guest-name').value.trim();
-            const contact = document.getElementById('guest-contact').value.trim();
-            const attendance = document.querySelector('input[name="attendance"]:checked').value;
-            const offering = document.getElementById('guest-offering').value.trim() || 'None';
+            const name = document.getElementById('guest-name')?.value.trim() || '';
+            const contact = document.getElementById('guest-contact')?.value.trim() || '';
+            const attendance = document.querySelector('input[name="attendance"]:checked')?.value || 'accepts';
+            const offering = document.getElementById('guest-offering')?.value.trim() || 'None';
 
-            const payload = {
+            const rsvpData = {
                 name,
                 contact,
                 attendance,
@@ -1355,129 +1369,224 @@
                 timestamp: new Date().toISOString()
             };
 
-            // 1. Save locally to localStorage
+            // Save locally
             try {
-                localStorage.setItem('connie_eris_user_rsvp', JSON.stringify(payload));
-            } catch(err) {
-                console.log("Local storage error:", err);
+                localStorage.setItem('connie_eris_user_rsvp', JSON.stringify(rsvpData));
+            } catch(e) {
+                console.warn("LocalStorage error:", e);
             }
 
-            // 2. Submit to Google Sheets API / Apps Script
-            try {
-                const formData = new URLSearchParams();
-                formData.append('name', name);
-                formData.append('contact', contact);
-                formData.append('attendance', attendance);
-                formData.append('offering', offering);
-                formData.append('timestamp', payload.timestamp);
-
-                fetch(GOOGLE_SHEETS_SCRIPT_URL, {
-                    method: 'POST',
-                    mode: 'no-cors',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: formData.toString()
-                }).then(() => console.log('RSVP sent to Google Sheets'))
-                  .catch(err => console.log('Google Sheets submit note:', err));
-            } catch(err) {
-                console.log('Google Sheets post attempt:', err);
+            // Sync to Firebase Cloud
+            if (window.saveRSVPToCloud) {
+                window.saveRSVPToCloud(rsvpData);
             }
 
-            // 3. Save to Firebase Firestore cloud database
-            try {
-                if (window.saveRSVPToCloud) {
-                    await window.saveRSVPToCloud(payload);
+            // Sync to Google Script Web App
+            if (DEFAULT_GOOGLE_SCRIPT_URL) {
+                try {
+                    fetch(DEFAULT_GOOGLE_SCRIPT_URL, {
+                        method: 'POST',
+                        mode: 'no-cors',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(rsvpData)
+                    }).catch(err => console.log('Google Script note:', err));
+                } catch(e) {
+                    console.log('Google Script fetch note:', e);
                 }
-            } catch(err) {
-                console.log("RSVP cloud save note:", err);
             }
 
+            // Update UI
+            checkAndRenderRSVPState();
+
+            // Show confirmation popup
             const modalText = document.getElementById('rsvp-modal-text');
             if (modalText) {
                 modalText.innerText = attendance === 'accepts' 
-                    ? `Thank you so much ${name}! We are thrilled to celebrate with you in your finest brown outfit.` 
-                    : `Thank you ${name} for letting us know. We will miss you on our special day!`;
+                    ? `Thank you so much, ${name}! We are thrilled to celebrate with you in your finest brown outfit.` 
+                    : `Thank you for letting us know, ${name}. We will miss you on our special day!`;
             }
-
-            const modal = document.getElementById('rsvp-modal');
-            if (modal) modal.classList.remove('hidden'), modal.classList.add('flex');
-
-            checkAndRenderRSVPState();
+            openRSVPModal();
         }
 
-        function closeRSVPModal() {
-            const modal = document.getElementById('rsvp-modal');
-            if (modal) modal.classList.add('hidden');
-        }
-
+        /* Swatches */
         const swatchData = {
             champagne: {
                 title: "Champagne / Light Beige",
-                desc: "Ladies: Light beige or champagne silk/chiffon gown or dress. Gentlemen: Light beige Barong or light cream long-sleeve polo with brown trousers.",
-                img: "3.webp"
+                desc: "Ladies: Light beige or champagne gown/midi dress in flowy fabric. Gentlemen: Off-white or cream Barong or light beige dress shirt with neutral trousers.",
+                img: "2.webp"
             },
             latte: {
                 title: "Warm Latte / Nude Tan",
-                desc: "Ladies: Warm latte or soft nude dress with delicate accessories. Gentlemen: Warm beige or nude long-sleeve button-down shirt with dark pants.",
-                img: "4.webp"
+                desc: "Ladies: Elegant nude or light tan dress. Gentlemen: Latte-colored button-down shirt paired with tailored slacks.",
+                img: "3.webp"
             },
             camel: {
                 title: "Classic Camel / Golden Brown",
-                desc: "Ladies: Rich camel dress, midi length or full gown. Gentlemen: Camel tailored long-sleeve dress shirt or coat with dark trousers.",
-                img: "2.webp"
+                desc: "Ladies: Warm camel or golden brown dress or ensemble. Gentlemen: Camel brown dress shirt or linen suit jacket.",
+                img: "4.webp"
             },
             terracotta: {
                 title: "Terracotta / Rust Earth",
-                desc: "Ladies: Deep terracotta or rust-toned dress. Gentlemen: Terracotta accent long-sleeve shirt or warm earth Barong paired with dark trousers.",
+                desc: "Ladies: Terracotta or warm burnt earth tone dress. Gentlemen: Rust/terracotta tone long-sleeve shirt or accent tie.",
                 img: "5.webp"
             },
             mocha: {
-                title: "Mocha / Rich Medium Brown",
-                desc: "Ladies: Medium mocha brown silk or satin dress. Gentlemen: Mocha brown long-sleeve dress shirt with beige or dark pants.",
+                title: "Rich Mocha / Medium Brown",
+                desc: "Ladies: Rich mocha or medium chocolate brown dress. Gentlemen: Mocha dress shirt with dark trousers.",
                 img: "6.webp"
             },
             espresso: {
                 title: "Deep Espresso / Dark Chocolate",
-                desc: "Ladies: Elegant dark chocolate brown formal dress. Gentlemen: Espresso brown suit jacket or dark long-sleeve dress shirt with tailored trousers.",
+                desc: "Ladies: Deep dark chocolate gown or cocktail dress. Gentlemen: Espresso dark brown shirt or formal jacket with trousers.",
                 img: "7.webp"
             }
         };
 
         function selectSwatch(shade) {
-            document.querySelectorAll('.swatch-btn').forEach(btn => {
-                btn.classList.remove('swatch-active', 'ring-2', 'ring-earth-600');
-            });
+            document.querySelectorAll('.swatch-btn').forEach(btn => btn.classList.remove('swatch-active', 'ring-4', 'ring-earth-500'));
+            const btn = document.getElementById(`swatch-${shade}`);
+            if (btn) btn.classList.add('swatch-active', 'ring-4', 'ring-earth-500');
 
-            const activeBtn = document.getElementById(`swatch-${shade}`);
-            if (activeBtn) activeBtn.classList.add('swatch-active', 'ring-2', 'ring-earth-600');
+            const data = swatchData[shade] || swatchData.camel;
+            const title = document.getElementById('swatch-title');
+            const desc = document.getElementById('swatch-desc');
+            const img = document.getElementById('swatch-img');
 
-            const info = swatchData[shade];
-            if (info) {
-                const titleEl = document.getElementById('swatch-title');
-                const descEl = document.getElementById('swatch-desc');
-                const imgEl = document.getElementById('swatch-img');
+            if (title) title.innerText = data.title;
+            if (desc) desc.innerText = data.desc;
+            if (img) img.src = data.img;
+        }
 
-                if (titleEl) titleEl.innerText = info.title;
-                if (descEl) descEl.innerText = info.desc;
-                if (imgEl) {
-                    imgEl.src = info.img;
-                    imgEl.style.opacity = '1';
-                }
+        /* Audio Player & Playlist */
+        const playlist = [
+            { title: "Paraluman", src: "song1.mp3" },
+            { title: "Ikaw at ako" , src: "song2.mp3" },
+            { title: "Araw-araw", src: "song3.mp3" },
+            { title: "I think they call this love", src: "song4.mp3" },
+            { title: "Museo", src: "song5.mp3" }
+        ];
+        let currentTrackIndex = 0;
+        let isPlaying = false;
+
+        function initAudio() {
+            const audio = document.getElementById('bg-music');
+            const toggleBtn = document.getElementById('audio-toggle');
+            const nextBtn = document.getElementById('audio-next');
+
+            if (audio) {
+                audio.src = playlist[currentTrackIndex].src;
+                audio.addEventListener('ended', playNextTrack);
+            }
+
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', toggleAudio);
+            }
+            if (nextBtn) {
+                nextBtn.addEventListener('click', playNextTrack);
+            }
+
+            renderPlaylistDrawer();
+            updateTrackBadge();
+        }
+
+        function updateTrackBadge() {
+            const titleEl = document.getElementById('audio-track-title');
+            if (titleEl && playlist[currentTrackIndex]) {
+                titleEl.innerText = `${currentTrackIndex + 1}/${playlist.length}: ${playlist[currentTrackIndex].title}`;
+            }
+        }
+
+        function playTrack(index = currentTrackIndex) {
+            const audio = document.getElementById('bg-music');
+            const icon = document.getElementById('audio-icon');
+            const badge = document.getElementById('audio-track-badge');
+            if (!audio) return;
+
+            currentTrackIndex = index;
+            audio.src = playlist[currentTrackIndex].src;
+            audio.play().then(() => {
+                isPlaying = true;
+                if (icon) icon.className = "fa-solid fa-pause";
+                if (badge) badge.classList.remove('hidden');
+                updateTrackBadge();
+                renderPlaylistDrawer();
+            }).catch(err => console.log("Autoplay check:", err));
+        }
+
+        function toggleAudio() {
+            const audio = document.getElementById('bg-music');
+            const icon = document.getElementById('audio-icon');
+            const badge = document.getElementById('audio-track-badge');
+            if (!audio) return;
+
+            if (isPlaying) {
+                audio.pause();
+                isPlaying = false;
+                if (icon) icon.className = "fa-solid fa-music group-hover:animate-bounce";
+            } else {
+                audio.play().then(() => {
+                    isPlaying = true;
+                    if (icon) icon.className = "fa-solid fa-pause";
+                    if (badge) badge.classList.remove('hidden');
+                }).catch(err => console.log(err));
+            }
+        }
+
+        function playNextTrack() {
+            currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
+            playTrack(currentTrackIndex);
+        }
+
+        function playPreviousTrack() {
+            currentTrackIndex = (currentTrackIndex - 1 + playlist.length) % playlist.length;
+            playTrack(currentTrackIndex);
+        }
+
+        function togglePlaylistDrawer() {
+            const drawer = document.getElementById('playlist-drawer');
+            if (drawer) drawer.classList.toggle('hidden');
+        }
+
+        function renderPlaylistDrawer() {
+            const container = document.getElementById('playlist-items-container');
+            if (!container) return;
+
+            container.innerHTML = playlist.map((track, idx) => `
+                <button onclick="playTrack(${idx})" class="w-full text-left p-2 rounded-lg text-xs flex items-center justify-between transition-colors ${idx === currentTrackIndex ? 'bg-earth-700 text-white font-bold' : 'hover:bg-earth-800/60 text-earth-200'}">
+                    <span class="truncate pr-2">${idx + 1}. ${track.title}</span>
+                    ${idx === currentTrackIndex && isPlaying ? '<i class="fa-solid fa-volume-high text-earth-300 text-xs"></i>' : ''}
+                </button>
+            `).join('');
+        }
+
+        function initVideoAudioSync() {}
+
+        function startVideoAndPauseMusic() {
+            const banner = document.getElementById('video-play-banner');
+            if (banner) banner.classList.add('opacity-0', 'pointer-events-none');
+            
+            const audio = document.getElementById('bg-music');
+            const icon = document.getElementById('audio-icon');
+            if (audio && !audio.paused) {
+                audio.pause();
+                isPlaying = false;
+                if (icon) icon.className = "fa-solid fa-music group-hover:animate-bounce";
             }
         }
 
         /* Countdown Timer */
         function startCountdown() {
-            const weddingDate = new Date('January 8, 2027 14:00:00').getTime();
+            const weddingDate = new Date("January 8, 2027 14:00:00").getTime();
 
             function update() {
                 const now = new Date().getTime();
                 const distance = weddingDate - now;
 
                 if (distance < 0) {
-                    document.getElementById('timer-days').innerText = '00';
-                    document.getElementById('timer-hours').innerText = '00';
-                    document.getElementById('timer-minutes').innerText = '00';
-                    document.getElementById('timer-seconds').innerText = '00';
+                    document.getElementById("timer-days").innerText = "00";
+                    document.getElementById("timer-hours").innerText = "00";
+                    document.getElementById("timer-minutes").innerText = "00";
+                    document.getElementById("timer-seconds").innerText = "00";
                     return;
                 }
 
@@ -1486,213 +1595,77 @@
                 const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
                 const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-                document.getElementById('timer-days').innerText = String(days).padStart(2, '0');
-                document.getElementById('timer-hours').innerText = String(hours).padStart(2, '0');
-                document.getElementById('timer-minutes').innerText = String(minutes).padStart(2, '0');
-                document.getElementById('timer-seconds').innerText = String(seconds).padStart(2, '0');
+                const dEl = document.getElementById("timer-days");
+                const hEl = document.getElementById("timer-hours");
+                const mEl = document.getElementById("timer-minutes");
+                const sEl = document.getElementById("timer-seconds");
+
+                if (dEl) dEl.innerText = String(days).padStart(2, '0');
+                if (hEl) hEl.innerText = String(hours).padStart(2, '0');
+                if (mEl) mEl.innerText = String(minutes).padStart(2, '0');
+                if (sEl) sEl.innerText = String(seconds).padStart(2, '0');
             }
 
             update();
             setInterval(update, 1000);
         }
 
-        /* Audio Playlist Management: Strictly local path folder files 1.mp3 to 5.mp3 */
-        const playlist = [
-            { id: 1, title: "Paraluman", src: "song1.mp3" },
-            { id: 2, title: "Ikaw at ako", src: "song2.mp3" },
-            { id: 3, title: "Araw-araw", src: "song3.mp3" },
-            { id: 4, title: "I think they call this love", src: "song4.mp3" },
-            { id: 5, title: "Museo", src: "song5.mp3" }
-        ];
-
-        let currentTrackIdx = 0;
-        let isAudioPlaying = false;
-        let audioEl;
-        let failedTracksCount = 0;
-
-        function initAudio() {
-            audioEl = document.getElementById('bg-music');
-            const toggleBtn = document.getElementById('audio-toggle');
-            const nextBtn = document.getElementById('audio-next');
-
-            if (!audioEl) return;
-
-            renderPlaylistDrawerItems();
-            loadTrack(currentTrackIdx);
-
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', () => {
-                    if (isAudioPlaying) {
-                        pauseTrack();
-                    } else {
-                        playTrack();
-                    }
-                });
-            }
-
-            if (nextBtn) {
-                nextBtn.addEventListener('click', () => {
-                    playNextTrack();
-                });
-            }
-
-            // Audio End Listener: Auto Advance to Next Local Track
-            audioEl.addEventListener('ended', () => {
-                failedTracksCount = 0;
-                playNextTrack();
-            });
-
-            // Audio Error Handling: If local 1.mp3-5.mp3 file doesn't exist, automatically skip to next song
-            audioEl.addEventListener('error', (e) => {
-                console.warn(`Local audio track ${playlist[currentTrackIdx].src} not found or failed to load. Attempting next track...`);
-                failedTracksCount++;
-                if (failedTracksCount < playlist.length) {
-                    currentTrackIdx = (currentTrackIdx + 1) % playlist.length;
-                    loadTrack(currentTrackIdx);
-                    if (isAudioPlaying) {
-                        playTrack();
-                    }
-                } else {
-                    console.log("No recognized local audio files (1.mp3 - 5.mp3) available in the folder path.");
-                    pauseTrack();
-                }
-            });
-        }
-
-        function renderPlaylistDrawerItems() {
-            const container = document.getElementById('playlist-items-container');
-            if (!container) return;
-
-            container.innerHTML = playlist.map((item, idx) => `
-                <button onclick="selectPlayTrack(${idx})" id="playlist-item-${idx}" class="w-full text-left p-2.5 rounded-lg text-xs font-medium flex items-center justify-between transition-colors hover:bg-earth-800 ${idx === currentTrackIdx ? 'bg-earth-800 text-earth-300 font-bold' : 'text-earth-200'}">
-                    <span class="flex items-center gap-2">
-                        <i class="fa-solid ${idx === currentTrackIdx ? 'fa-volume-high text-earth-400' : 'fa-music text-earth-600'}"></i>
-                        <span>Song ${item.id} (${item.src})</span>
-                    </span>
-                    <span class="text-[10px] text-earth-400 font-mono">${idx === currentTrackIdx ? 'PLAYING' : ''}</span>
-                </button>
-            `).join('');
-        }
-
-        function loadTrack(idx) {
-            if (!audioEl || !playlist[idx]) return;
-            audioEl.src = playlist[idx].src;
-            const titleEl = document.getElementById('audio-track-title');
-            if (titleEl) {
-                titleEl.innerText = `${idx + 1}/5: ${playlist[idx].src}`;
-            }
-            renderPlaylistDrawerItems();
-        }
-
-        function playTrack() {
-            if (!audioEl) return;
-            audioEl.play().then(() => {
-                isAudioPlaying = true;
-                failedTracksCount = 0;
-                const icon = document.getElementById('audio-icon');
-                if (icon) {
-                    icon.className = 'fa-solid fa-pause';
-                }
-                const badge = document.getElementById('audio-track-badge');
-                if (badge) badge.classList.remove('hidden');
-            }).catch(e => {
-                console.log("Audio play deferred until user interaction", e);
-            });
-        }
-
-        function pauseTrack() {
-            if (!audioEl) return;
-            audioEl.pause();
-            isAudioPlaying = false;
-            const icon = document.getElementById('audio-icon');
-            if (icon) {
-                icon.className = 'fa-solid fa-music group-hover:animate-bounce';
+        /* Modals & Helpers */
+        function openRSVPModal() {
+            const modal = document.getElementById('rsvp-modal');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
             }
         }
 
-        function playNextTrack() {
-            currentTrackIdx = (currentTrackIdx + 1) % playlist.length;
-            loadTrack(currentTrackIdx);
-            playTrack();
-        }
-
-        function playPreviousTrack() {
-            currentTrackIdx = (currentTrackIdx - 1 + playlist.length) % playlist.length;
-            loadTrack(currentTrackIdx);
-            playTrack();
-        }
-
-        function selectPlayTrack(idx) {
-            currentTrackIdx = idx;
-            loadTrack(currentTrackIdx);
-            playTrack();
-            const drawer = document.getElementById('playlist-drawer');
-            if (drawer) drawer.classList.add('hidden');
-        }
-
-        function togglePlaylistDrawer() {
-            const drawer = document.getElementById('playlist-drawer');
-            if (drawer) drawer.classList.toggle('hidden');
-        }
-
-        function initVideoAudioSync() {
-            const videoWrapper = document.getElementById('video-wrapper');
-            
-            if (videoWrapper) {
-                videoWrapper.addEventListener('pointerdown', () => {
-                    pauseTrack();
-                });
-            }
-
-            window.addEventListener('blur', () => {
-                if (document.activeElement && document.activeElement.tagName === 'IFRAME') {
-                    pauseTrack();
-                }
-            });
-        }
-
-        function startVideoAndPauseMusic() {
-            pauseTrack();
-            const banner = document.getElementById('video-play-banner');
-            if (banner) {
-                banner.classList.add('opacity-0', 'pointer-events-none');
-            }
-        }
-
-        function toggleFAQ(num) {
-            const content = document.getElementById(`faq-content-${num}`);
-            const icon = document.getElementById(`faq-icon-${num}`);
-            if (content && icon) {
-                content.classList.toggle('hidden');
-                icon.classList.toggle('rotate-180');
-            }
-        }
-
-        function openLightbox(src) {
-            const lightbox = document.getElementById('lightbox');
-            const img = document.getElementById('lightbox-img');
-            if (lightbox && img) {
-                img.src = src;
-                lightbox.classList.remove('hidden');
-                lightbox.classList.add('flex');
-            }
-        }
-
-        function closeLightbox() {
-            const lightbox = document.getElementById('lightbox');
-            if (lightbox) {
-                lightbox.classList.add('hidden');
+        function closeRSVPModal() {
+            const modal = document.getElementById('rsvp-modal');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
             }
         }
 
         function openCalendarModal() {
             const modal = document.getElementById('calendar-modal');
-            if (modal) modal.classList.remove('hidden'), modal.classList.add('flex');
+            if (modal) {
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
         }
 
         function closeCalendarModal() {
             const modal = document.getElementById('calendar-modal');
-            if (modal) modal.classList.add('hidden');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
+        }
+
+        function toggleFAQ(index) {
+            const content = document.getElementById(`faq-content-${index}`);
+            const icon = document.getElementById(`faq-icon-${index}`);
+            if (content) content.classList.toggle('hidden');
+            if (icon) icon.classList.toggle('rotate-180');
+        }
+
+        function openLightbox(src) {
+            const modal = document.getElementById('lightbox');
+            const img = document.getElementById('lightbox-img');
+            if (modal && img) {
+                img.src = src;
+                modal.classList.remove('hidden');
+                modal.classList.add('flex');
+            }
+        }
+
+        function closeLightbox() {
+            const modal = document.getElementById('lightbox');
+            if (modal) {
+                modal.classList.add('hidden');
+                modal.classList.remove('flex');
+            }
         }
     </script>
 </body>
