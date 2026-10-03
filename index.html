@@ -18,7 +18,7 @@
     <!-- Font Awesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
     
     <!-- Firebase SDK Modules for RSVP Storage -->
     <script type="module">
@@ -113,6 +113,7 @@
                     fontFamily: {
                         serif: ['"Cormorant Garamond"', 'serif'],
                         sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        cinzel: ['"Cinzel"', 'serif']
                     }
                 }
             }
@@ -148,13 +149,21 @@
         ::-webkit-scrollbar-thumb:hover {
             background: #a87854;
         }
-        /* Envelope opening animation styles */
+        
+        /* Interactive Full Envelope Opening Animations */
         .envelope-perspective {
-            perspective: 1000px;
+            perspective: 1200px;
+        }
+        .envelope-wrapper {
+            position: relative;
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .envelope-wrapper.expanded {
+            transform: translateY(60px) scale(1.08);
         }
         .envelope-flap {
             transform-origin: top;
-            transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1), z-index 0.2s ease;
             transform-style: preserve-3d;
         }
         .envelope-flap.open {
@@ -162,10 +171,13 @@
             z-index: 5 !important;
         }
         .envelope-card {
-            transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transition: transform 0.9s cubic-bezier(0.34, 1.3, 0.64, 1), opacity 0.5s ease;
+            transform-style: preserve-3d;
         }
         .envelope-card.slide-out {
-            transform: translateY(-80px) scale(1.05);
+            transform: translateY(-160px) scale(1.12);
+            z-index: 40 !important;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
         }
         @keyframes pulse-subtle {
             0%, 100% { transform: scale(1); }
@@ -174,72 +186,104 @@
         .pulse-seal {
             animation: pulse-subtle 2s infinite ease-in-out;
         }
+
+        /* Customizable Monogram Wax Seal Styles */
+        .wax-seal-outer {
+            background: radial-gradient(circle at 35% 35%, #a87854 0%, #6e472e 50%, #382218 100%);
+            box-shadow: 0 10px 25px -3px rgba(0,0,0,0.6), inset 0 2px 4px rgba(255,255,255,0.3), inset 0 -3px 6px rgba(0,0,0,0.5);
+        }
     </style>
 </head>
 <body class="bg-earth-50 text-earth-900 font-sans antialiased selection:bg-earth-300 selection:text-earth-900">
 
 <!-- Envelope Opening Overlay -->
-<div id="envelope-overlay" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#241710] bg-gradient-to-b from-[#2e1d15] via-[#1f120a] to-[#120a06] transition-opacity duration-1000 px-4">
+<div id="envelope-overlay" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#241710] bg-gradient-to-b from-[#2e1d15] via-[#1f120a] to-[#120a06] transition-opacity duration-1000 px-4 overflow-y-auto py-10">
     
     <!-- Ambient background pattern -->
     <div class="absolute inset-0 opacity-20 pointer-events-none bg-[radial-gradient(#c59d7b_1px,transparent_1px)] [background-size:24px_24px]"></div>
 
-    <div class="text-center text-earth-200 mb-8 z-10 animate-fade-in">
+    <div class="text-center text-earth-200 mb-6 sm:mb-8 z-10 animate-fade-in max-w-lg">
         <span class="text-xs uppercase tracking-[0.3em] font-medium text-earth-400 block mb-2">You Are Cordially Invited</span>
         <p class="font-serif italic text-2xl md:text-3xl text-earth-200">The Wedding Ceremony Of</p>
         <h1 class="font-serif text-3xl md:text-4xl text-white font-normal tracking-wide mt-1">Connie <span class="font-serif-italic text-earth-400">&</span> Eris</h1>
     </div>
 
     <!-- Envelope Container -->
-    <div onclick="openEnvelope()" class="envelope-perspective relative w-[310px] sm:w-[380px] h-[220px] sm:h-[260px] cursor-pointer group select-none transition-transform duration-300 hover:scale-105 z-10">
+    <div id="envelope-wrapper" class="envelope-perspective envelope-wrapper relative w-[310px] sm:w-[420px] h-[220px] sm:h-[280px] cursor-pointer group select-none z-10 my-6" onclick="openEnvelope()">
         
-        <!-- Envelope Pocket (Back) -->
-        <div class="absolute inset-0 bg-[#e8dacb] rounded-2xl shadow-2xl border border-earth-300/40"></div>
+        <!-- Envelope Pocket (Back Interior) -->
+        <div class="absolute inset-0 bg-[#3a271c] rounded-2xl shadow-2xl border border-earth-400/30 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/20"></div>
+        </div>
 
-        <!-- Invitation Card Peeking Inside -->
-        <div id="envelope-card" class="envelope-card absolute inset-x-4 top-3 bottom-3 bg-earth-50 rounded-xl p-5 shadow-inner border border-earth-200 flex flex-col justify-between text-center border-dashed border-earth-300">
-            <div class="border-b border-earth-200 pb-2">
-                <p class="text-[10px] uppercase tracking-widest text-earth-500 font-bold">January 8, 2027</p>
-                <p class="font-serif text-xl font-bold text-earth-900 mt-0.5">Connie & Eris</p>
+        <!-- Invitation Card Peeking Inside & Sliding Fully Out -->
+        <div id="envelope-card" class="envelope-card absolute inset-x-3 sm:inset-x-5 top-3 bottom-3 bg-[#fdfbf7] rounded-xl p-5 sm:p-7 shadow-2xl border-2 border-earth-300 flex flex-col justify-between text-center z-15">
+            <div class="border-b-2 border-earth-200 pb-3">
+                <span class="text-[10px] sm:text-xs uppercase tracking-[0.25em] text-earth-500 font-bold block">Save The Date</span>
+                <p class="font-serif text-2xl sm:text-3xl font-bold text-earth-900 mt-1">Connie & Eris</p>
             </div>
-            <div class="py-2">
-                <p class="font-serif italic text-sm text-earth-700">"Together is a beautiful place to be"</p>
+            <div class="py-3">
+                <p class="font-serif italic text-base sm:text-lg text-earth-800">"Together is a beautiful place to be"</p>
+                <div class="mt-2 text-xs sm:text-sm font-semibold text-earth-700 uppercase tracking-widest">
+                    <span>Friday • 2:00 PM</span>
+                    <p class="text-earth-900 font-serif text-lg font-bold mt-0.5">January 8, 2027</p>
+                </div>
             </div>
-            <div class="text-[10px] text-earth-500 uppercase tracking-wider font-semibold border-t border-earth-200 pt-2">
-                Bustos, Bulacan
+            <div class="text-[11px] sm:text-xs text-earth-600 uppercase tracking-wider font-semibold border-t-2 border-earth-200 pt-3 flex justify-between items-center px-2">
+                <span>Sto. Niño Parish</span>
+                <span class="text-earth-400">•</span>
+                <span>Bustos, Bulacan</span>
             </div>
         </div>
 
-        <!-- Envelope Pocket Overlays -->
-        <div class="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none z-10">
-            <div class="absolute bottom-0 left-0 w-0 h-0 border-y-[110px] sm:border-y-[130px] border-y-transparent border-l-[155px] sm:border-l-[190px] border-l-[#d2beab]/95"></div>
-            <div class="absolute bottom-0 right-0 w-0 h-0 border-y-[110px] sm:border-y-[130px] border-y-transparent border-r-[155px] sm:border-r-[190px] border-r-[#dfcdbc]/95"></div>
-            <div class="absolute bottom-0 left-0 right-0 h-0 border-b-[120px] sm:border-b-[140px] border-b-[#c4b09c] border-x-[155px] sm:border-x-[190px] border-x-transparent"></div>
+        <!-- Envelope Pocket Overlays (Left, Right, Bottom flaps) -->
+        <div class="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none z-20">
+            <!-- Left Fold -->
+            <div class="absolute bottom-0 left-0 w-0 h-0 border-y-[110px] sm:border-y-[140px] border-y-transparent border-l-[155px] sm:border-l-[210px] border-l-[#d2beab]"></div>
+            <!-- Right Fold -->
+            <div class="absolute bottom-0 right-0 w-0 h-0 border-y-[110px] sm:border-y-[140px] border-y-transparent border-r-[155px] sm:border-r-[210px] border-r-[#dfcdbc]"></div>
+            <!-- Bottom Fold -->
+            <div class="absolute bottom-0 left-0 right-0 h-0 border-b-[120px] sm:border-b-[150px] border-b-[#c4b09c] border-x-[155px] sm:border-x-[210px] border-x-transparent"></div>
         </div>
 
         <!-- Top Flap (3D Folding) -->
-        <div id="envelope-flap" class="envelope-flap absolute top-0 left-0 right-0 h-0 border-t-[125px] sm:border-t-[145px] border-t-[#ebdccb] border-x-[155px] sm:border-x-[190px] border-x-transparent z-20 drop-shadow-md"></div>
+        <div id="envelope-flap" class="envelope-flap absolute top-0 left-0 right-0 h-0 border-t-[125px] sm:border-t-[155px] border-t-[#ebdccb] border-x-[155px] sm:border-x-[210px] border-x-transparent z-30 drop-shadow-lg"></div>
 
-        <!-- Wax Seal Monogram -->
-        <div id="wax-seal" class="pulse-seal absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-30 w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-earth-600 via-earth-800 to-earth-900 shadow-2xl border-2 border-earth-300/60 flex items-center justify-center text-earth-100 transition-transform duration-300 group-hover:scale-110">
-            <div class="w-13 h-13 sm:w-16 sm:h-16 rounded-full border border-earth-400/40 flex flex-col items-center justify-center p-1 text-center bg-earth-900/40 backdrop-blur-xs">
-                <span class="font-serif font-bold text-xs sm:text-sm text-earth-200 tracking-wider">C <span class="text-earth-400 font-serif-italic">&</span> E</span>
-                <i class="fa-solid fa-heart text-[10px] text-earth-400 mt-0.5"></i>
+        <!-- Customizable Wax Seal Monogram Logo -->
+        <div id="wax-seal" class="pulse-seal wax-seal-outer absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 w-18 h-18 sm:w-22 sm:h-22 rounded-full border-2 border-earth-300/80 flex items-center justify-center text-earth-100 transition-all duration-500 group-hover:scale-110 shadow-2xl">
+            <div class="w-15 h-15 sm:w-18 sm:h-18 rounded-full border-2 border-dashed border-earth-300/60 flex flex-col items-center justify-center p-1 text-center bg-earth-950/60 backdrop-blur-sm relative">
+                <!-- Outer Ring Floral Accent -->
+                <div class="absolute inset-0.5 rounded-full border border-earth-400/30"></div>
+                <!-- Custom Monogram Initials -->
+<div id="wax-seal" class="pulse-seal wax-seal-outer absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 w-18 h-18 sm:w-22 sm:h-22 rounded-full border-2 border-earth-300/80 flex items-center justify-center text-earth-100 transition-all duration-500 group-hover:scale-110 shadow-2xl">
+    <div class="w-15 h-15 sm:w-18 sm:h-18 rounded-full border-2 border-dashed border-earth-300/60 flex items-center justify-center p-2 bg-earth-950/60 backdrop-blur-sm relative overflow-hidden">
+        <img src="logo.png" alt="Monogram Logo" class="w-full h-full object-contain relative z-10">
+    </div>
+</div>
+                <!-- Subtle Crest Icon -->
+                <i class="fa-solid fa-crown text-[9px] sm:text-[10px] text-earth-300 mt-0.5 opacity-90 z-10"></i>
             </div>
         </div>
     </div>
 
-    <button onclick="openEnvelope()" class="mt-10 px-6 py-3 rounded-full bg-earth-800/80 hover:bg-earth-700 text-earth-200 border border-earth-400/30 text-xs uppercase tracking-widest font-semibold backdrop-blur-md shadow-lg transition-all flex items-center gap-2.5 z-10 group">
-        <span>Click Envelope to Open</span>
-        <i class="fa-solid fa-envelope-open text-earth-400 group-hover:translate-x-0.5 transition-transform"></i>
-    </button>
+    <div class="flex flex-col sm:flex-row items-center gap-3 z-10 mt-6">
+        <button id="open-envelope-btn" onclick="openEnvelope()" class="px-7 py-3 rounded-full bg-earth-800/90 hover:bg-earth-700 text-earth-100 border border-earth-400/40 text-xs uppercase tracking-widest font-semibold backdrop-blur-md shadow-xl transition-all flex items-center gap-2.5 group">
+            <span id="btn-text">Click Envelope to Open</span>
+            <i class="fa-solid fa-envelope-open text-earth-400 group-hover:translate-x-0.5 transition-transform"></i>
+        </button>
+        
+        <button id="skip-overlay-btn" onclick="skipEnvelopeOverlay()" class="hidden px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 text-earth-200 border border-white/20 text-xs uppercase tracking-widest font-semibold backdrop-blur-md transition-all">
+            Enter Website <i class="fa-solid fa-arrow-right ml-1"></i>
+        </button>
+    </div>
 </div>
 
+    <!-- Navigation Header -->
     <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 bg-earth-50/90 backdrop-blur-md border-b border-earth-200/50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a href="#home" class="font-serif text-2xl md:text-3xl font-semibold tracking-wider text-earth-900 flex items-center gap-2">
                 <span>C</span>
-                <span class="text-earth-500 font-serif-italic text-xl">&</span>
+                <span class="text-earth-500 font-serif-italic text-xl">&amp;</span>
                 <span>E</span>
             </a>
 
@@ -249,6 +293,7 @@
                 <a href="#attire" class="hover:text-earth-500 transition-colors">What to Wear</a>
                 <a href="#schedule" class="hover:text-earth-500 transition-colors">Schedule & Map</a>
                 <a href="#entourage" class="hover:text-earth-500 transition-colors">Entourage</a>
+                <a href="#video-highlight" class="hover:text-earth-500 transition-colors">Video</a>
                 <a href="#gallery" class="hover:text-earth-500 transition-colors">Gallery</a>
                 <a href="#faq" class="hover:text-earth-500 transition-colors">FAQ</a>
                 <a href="#rsvp" class="px-5 py-2 rounded-full bg-earth-700 text-earth-50 hover:bg-earth-800 transition-all shadow-md">RSVP</a>
@@ -266,6 +311,7 @@
             <a href="#attire" class="mobile-link text-earth-800 font-medium tracking-wider uppercase text-sm py-2">What to Wear</a>
             <a href="#schedule" class="mobile-link text-earth-800 font-medium tracking-wider uppercase text-sm py-2">Schedule & Map</a>
             <a href="#entourage" class="mobile-link text-earth-800 font-medium tracking-wider uppercase text-sm py-2">Entourage</a>
+            <a href="#video-highlight" class="mobile-link text-earth-800 font-medium tracking-wider uppercase text-sm py-2">Video Highlight</a>
             <a href="#gallery" class="mobile-link text-earth-800 font-medium tracking-wider uppercase text-sm py-2">Gallery</a>
             <a href="#faq" class="mobile-link text-earth-800 font-medium tracking-wider uppercase text-sm py-2">FAQ</a>
             <a href="#rsvp" class="mobile-link px-6 py-2.5 rounded-full bg-earth-700 text-earth-50 font-medium uppercase text-sm mx-auto w-max shadow-md">RSVP</a>
@@ -304,7 +350,7 @@
         <div class="relative z-10 text-center text-earth-50 max-w-4xl mx-auto px-4 mt-8">
             <p class="font-serif italic text-2xl md:text-3xl text-earth-200 tracking-wide mb-3">We are getting married</p>
             <h1 class="font-serif text-6xl md:text-8xl lg:text-9xl font-normal tracking-wide mb-6 text-white drop-shadow-md">
-                Connie <span class="font-serif-italic text-earth-300">&</span> Eris
+                Connie <span class="font-serif-italic text-earth-300">&amp;</span> Eris
             </h1>
 
             <div class="flex flex-col md:flex-row items-center justify-center gap-4 text-earth-100 text-base md:text-lg tracking-widest uppercase mb-8 font-medium">
@@ -338,7 +384,7 @@
                     Confirm Attendance
                 </a>
                 <a href="#schedule" class="w-full sm:w-auto px-8 py-4 rounded-full border-2 border-earth-200 text-earth-100 hover:bg-white/10 transition-all font-semibold tracking-wider uppercase text-xs sm:text-sm backdrop-blur-sm">
-                    View Schedule & Maps
+                    View Schedule &amp; Maps
                 </a>
             </div>
         </div>
@@ -362,7 +408,7 @@
 
             <div class="glass-card p-6 md:p-10 rounded-3xl mb-12 shadow-md border border-earth-300">
                 <h3 class="text-center font-serif text-2xl md:text-3xl text-earth-900 mb-2">Interactive Color Swatch Palette</h3>
-                <p class="text-center text-sm md:text-base text-earth-700 mb-8 font-medium">To our dear guests, click any shade below to inspect sample dress code outfits & styling descriptions.</p>
+                <p class="text-center text-sm md:text-base text-earth-700 mb-8 font-medium">To our dear guests, click any shade below to inspect sample dress code outfits &amp; styling descriptions.</p>
 
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mb-8">
                     <button onclick="selectSwatch('champagne')" id="swatch-champagne" class="swatch-btn flex flex-col items-center p-4 rounded-2xl transition-all duration-300 hover:scale-105 border-2 border-earth-200 shadow-sm bg-white">
@@ -439,9 +485,9 @@
                         </div>
                     </div>
                     <div class="p-4 bg-earth-50 rounded-xl border border-earth-200 text-sm text-earth-800">
-                       <span class="block text-center font-bold text-earth-900">
-    IMAGE ABOVE IS FOR BRIDESMAID ONLY
-</span>
+                       <span class="block text-center font-bold text-earth-900 uppercase text-xs sm:text-sm tracking-wider">
+                           IMAGE ABOVE IS FOR BRIDESMAID ONLY
+                       </span>
                     </div>
                 </div>
 
@@ -471,9 +517,9 @@
                         </div>
                     </div>
                     <div class="p-4 bg-earth-50 rounded-xl border border-earth-200 text-sm text-earth-800">
-                       <span class="block text-center font-bold text-earth-900">
-    IMAGE ABOVE IS FOR GROOMSMEN ONLY
-</span>
+                       <span class="block text-center font-bold text-earth-900 uppercase text-xs sm:text-sm tracking-wider">
+                           IMAGE ABOVE IS FOR GROOMSMEN ONLY
+                       </span>
                     </div>
                 </div>
             </div>
@@ -481,7 +527,7 @@
             <div class="mt-8 bg-earth-100/80 rounded-2xl p-6 border border-earth-200 flex flex-col sm:flex-row gap-6 items-center justify-around text-sm md:text-base text-earth-900">
                 <div class="flex items-center gap-3">
                     <span class="w-9 h-9 rounded-full bg-emerald-100 text-emerald-800 flex items-center justify-center font-bold text-base flex-shrink-0">✓</span>
-                    <span><strong>Please Wear:</strong> Any shade of brown, beige, tan, mocha, camel, or terracotta dresses & long-sleeve attire.</span>
+                    <span><strong>Please Wear:</strong> Any shade of brown, beige, tan, mocha, camel, or terracotta dresses &amp; long-sleeve attire.</span>
                 </div>
                 <div class="flex items-center gap-3">
                     <span class="w-9 h-9 rounded-full bg-rose-100 text-rose-800 flex items-center justify-center font-bold text-base flex-shrink-0">✕</span>
@@ -495,7 +541,7 @@
         <div class="max-w-4xl mx-auto">
             <div class="text-center mb-16">
                 <span class="text-xs md:text-sm uppercase tracking-widest text-earth-600 font-bold">Friday, January 8, 2027</span>
-                <h2 class="font-serif text-4xl md:text-6xl text-earth-900 mt-2">Schedule & Venues</h2>
+                <h2 class="font-serif text-4xl md:text-6xl text-earth-900 mt-2">Schedule &amp; Venues</h2>
                 <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full"></div>
             </div>
 
@@ -552,7 +598,7 @@
                         6:00 PM Onwards
                     </div>
                     <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-earth-200">
-                        <h3 class="font-serif text-2xl md:text-3xl text-earth-900">Dinner & Party Time! 🎉</h3>
+                        <h3 class="font-serif text-2xl md:text-3xl text-earth-900">Dinner &amp; Party Time! 🎉</h3>
                         <p class="text-earth-800 text-base md:text-lg mt-2">Feast, speeches, guest offerings, toasts, and dancing under the stars!</p>
                     </div>
                 </div>
@@ -569,7 +615,7 @@
     <section id="entourage" class="py-20 px-6 md:px-12 bg-earth-50 border-t border-earth-200">
         <div class="max-w-5xl mx-auto">
             <div class="text-center mb-16">
-                <span class="text-xs md:text-sm uppercase tracking-widest text-earth-600 font-bold">Our Beloved Family & Friends</span>
+                <span class="text-xs md:text-sm uppercase tracking-widest text-earth-600 font-bold">Our Beloved Family &amp; Friends</span>
                 <h2 class="font-serif text-4xl md:text-6xl text-earth-900 mt-2">Wedding Entourage</h2>
                 <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full"></div>
             </div>
@@ -577,14 +623,14 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
                 <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center space-y-3">
                     <span class="text-xs font-bold uppercase tracking-widest text-earth-500">Parents of the Bride</span>
-                    <h3 class="font-serif text-2xl text-earth-900">Francisco(+) & Leonila Relano</h3>
+                    <h3 class="font-serif text-2xl text-earth-900">Francisco(+) &amp; Leonila Relano</h3>
                     <div class="w-12 h-0.5 bg-earth-300 mx-auto"></div>
                     <p class="text-xs md:text-sm text-earth-700 italic">Giving away their daughter in love and faith</p>
                 </div>
 
                 <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center space-y-3">
                     <span class="text-xs font-bold uppercase tracking-widest text-earth-500">Parents of the Groom</span>
-                    <h3 class="font-serif text-2xl text-earth-900">Enrico & Herminia Canoza</h3>
+                    <h3 class="font-serif text-2xl text-earth-900">Enrico &amp; Herminia Canoza</h3>
                     <div class="w-12 h-0.5 bg-earth-300 mx-auto"></div>
                     <p class="text-xs md:text-sm text-earth-700 italic">Guiding their son into this holy union</p>
                 </div>
@@ -635,87 +681,126 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <!-- Bridesmaids (7 Total) -->
+                <!-- Bridesmaids (6 Total) -->
                 <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center">
                     <div class="flex items-center justify-center gap-2 mb-1">
                         <i class="fa-solid fa-person-dress text-earth-500 text-xl"></i>
                         <h4 class="font-serif text-2xl text-earth-900">Bridesmaids</h4>
                     </div>
                     <p class="text-xs text-earth-600 mb-6 font-medium">Standing by Connie's side</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs md:text-sm text-earth-800 font-medium">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs md:text-sm text-earth-800 font-medium">
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 1</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 2</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 3</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 4</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 5</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 6</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200 sm:col-span-2 md:col-span-1 md:col-start-2">Bridesmaid 7</div>
                     </div>
                 </div>
 
-                <!-- Groomsmen (7 Total) -->
+                <!-- Groomsmen (6 Total) -->
                 <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center">
                     <div class="flex items-center justify-center gap-2 mb-1">
                         <i class="fa-solid fa-user-tie text-earth-500 text-xl"></i>
                         <h4 class="font-serif text-2xl text-earth-900">Groomsmen</h4>
                     </div>
                     <p class="text-xs text-earth-600 mb-6 font-medium">Standing by Eris's side</p>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-xs md:text-sm text-earth-800 font-medium">
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs md:text-sm text-earth-800 font-medium">
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 1</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 2</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 3</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 4</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 5</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 6</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200 sm:col-span-2 md:col-span-1 md:col-start-2">Groomsman 7</div>
                     </div>
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-                <div class="bg-white p-6 rounded-2xl border border-earth-200 text-center shadow-sm">
-                    <i class="fa-solid fa-fire text-earth-500 text-2xl mb-2"></i>
-                    <h5 class="font-serif text-xl text-earth-900 font-bold">Candle Sponsors</h5>
-                    <p class="text-xs text-earth-600 mt-0.5">To light our path ahead</p>
-                    <p class="text-sm text-earth-800 font-semibold mt-3">[Name & Name]</p>
+            <!-- Secondary Sponsors & Bearers Cards -->
+            <div class="space-y-6">
+                <!-- Secondary Sponsors -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+                    <div class="bg-white p-6 rounded-2xl border border-earth-200 text-center shadow-sm">
+                        <i class="fa-solid fa-fire text-earth-500 text-2xl mb-2"></i>
+                        <h5 class="font-serif text-xl text-earth-900 font-bold">Candle Sponsors</h5>
+                        <p class="text-xs text-earth-600 mt-0.5">To light our path ahead</p>
+                        <p class="text-sm text-earth-800 font-semibold mt-3">[Name &amp; Name]</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-earth-200 text-center shadow-sm">
+                        <i class="fa-solid fa-scroll text-earth-500 text-2xl mb-2"></i>
+                        <h5 class="font-serif text-xl text-earth-900 font-bold">Veil Sponsors</h5>
+                        <p class="text-xs text-earth-600 mt-0.5">To clothe us in unity</p>
+                        <p class="text-sm text-earth-800 font-semibold mt-3">[Name &amp; Name]</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-2xl border border-earth-200 text-center shadow-sm">
+                        <i class="fa-solid fa-link text-earth-500 text-2xl mb-2"></i>
+                        <h5 class="font-serif text-xl text-earth-900 font-bold">Cord Sponsors</h5>
+                        <p class="text-xs text-earth-600 mt-0.5">To bind our love together</p>
+                        <p class="text-sm text-earth-800 font-semibold mt-3">[Name &amp; Name]</p>
+                    </div>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border border-earth-200 text-center shadow-sm">
-                    <i class="fa-solid fa-scroll text-earth-500 text-2xl mb-2"></i>
-                    <h5 class="font-serif text-xl text-earth-900 font-bold">Veil Sponsors</h5>
-                    <p class="text-xs text-earth-600 mt-0.5">To clothe us in unity</p>
-                    <p class="text-sm text-earth-800 font-semibold mt-3">[Name & Name]</p>
+
+                <!-- Bearers Section (Fixed display with icons and labels) -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-2">
+                    <!-- Ring Bearer Card -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-earth-200 text-center flex flex-col items-center justify-center hover:border-earth-400 transition-colors">
+                        <div class="w-12 h-12 rounded-full bg-earth-100 text-earth-700 flex items-center justify-center text-xl mb-3 border border-earth-300/60">
+                            <i class="fa-solid fa-gem"></i>
+                        </div>
+                        <h5 class="font-serif text-xl text-earth-900 font-bold">Ring Bearer</h5>
+                        <p class="text-xs text-earth-600 mt-0.5">Carrying our holy symbols of eternal love</p>
+                        <p class="text-sm text-earth-800 font-semibold mt-3">[Ring Bearer Name]</p>
+                    </div>
+
+                    <!-- Coin Bearer Card -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-earth-200 text-center flex flex-col items-center justify-center hover:border-earth-400 transition-colors">
+                        <div class="w-12 h-12 rounded-full bg-earth-100 text-earth-700 flex items-center justify-center text-xl mb-3 border border-earth-300/60">
+                            <i class="fa-solid fa-coins"></i>
+                        </div>
+                        <h5 class="font-serif text-xl text-earth-900 font-bold">Coin Bearer</h5>
+                        <p class="text-xs text-earth-600 mt-0.5">Carrying our promise of mutual stewardship</p>
+                        <p class="text-sm text-earth-800 font-semibold mt-3">[Coin Bearer Name]</p>
+                    </div>
+
+                    <!-- Bible Bearer Card -->
+                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-earth-200 text-center flex flex-col items-center justify-center hover:border-earth-400 transition-colors">
+                        <div class="w-12 h-12 rounded-full bg-earth-100 text-earth-700 flex items-center justify-center text-xl mb-3 border border-earth-300/60">
+                            <i class="fa-solid fa-book-bible"></i>
+                        </div>
+                        <h5 class="font-serif text-xl text-earth-900 font-bold">Bible Bearer</h5>
+                        <p class="text-xs text-earth-600 mt-0.5">Carrying God's word as our guidance</p>
+                        <p class="text-sm text-earth-800 font-semibold mt-3">[Bible Bearer Name]</p>
+                    </div>
                 </div>
-                <div class="bg-white p-6 rounded-2xl border border-earth-200 text-center shadow-sm">
-                    <i class="fa-solid fa-link text-earth-500 text-2xl mb-2"></i>
-                    <h5 class="font-serif text-xl text-earth-900 font-bold">Cord Sponsors</h5>
-                    <p class="text-xs text-earth-600 mt-0.5">To bind our love together</p>
-                    <p class="text-sm text-earth-800 font-semibold mt-3">[Name & Name]</p>
-                </div>
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-    <!-- Existing Maid of Honor / Best Man cards -->
-    <!-- Existing Bridesmaids / Groomsmen cards -->
-
-    <!-- PASTE BEARER CARDS HERE -->
-    <!-- Ring Bearer -->
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-earth-100 text-center flex flex-col items-center">
-        ...
-    </div>
-
-    <!-- Coin Bearer -->
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-earth-100 text-center flex flex-col items-center">
-        ...
-    </div>
-
-    <!-- Bible Bearer -->
-    <div class="bg-white p-6 rounded-2xl shadow-sm border border-earth-100 text-center flex flex-col items-center">
-        ...
-    </div>
-</div>
             </div>
         </div>
     </section>
 
- <section id="gallery" class="py-20 px-6 md:px-12 bg-earth-50">
+    <!-- Video Section (Placeholder before Gallery for 1.mp4) -->
+    <section id="video-highlight" class="py-20 px-6 md:px-12 bg-earth-100/60 border-t border-earth-200">
+        <div class="max-w-4xl mx-auto text-center">
+            <span class="text-xs md:text-sm uppercase tracking-widest text-earth-600 font-bold">Cinematic Highlight</span>
+            <h2 class="font-serif text-4xl md:text-6xl text-earth-900 mt-2">Our Love Story Video</h2>
+            <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full mb-8"></div>
+
+            <p class="text-earth-700 text-base md:text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
+                Watch our pre-wedding highlights and special moments before browsing our photo gallery!
+            </p>
+
+            <div class="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-earth-300 bg-earth-900 aspect-video group">
+                <video id="wedding-highlight-video" controls poster="1.webp" class="w-full h-full object-cover">
+                    <source src="1.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            
+            <p class="text-xs text-earth-600 italic mt-3">
+                <i class="fa-solid fa-circle-info mr-1"></i> Video file linked to <strong>1.mp4</strong>
+            </p>
+        </div>
+    </section>
+
+    <section id="gallery" class="py-20 px-6 md:px-12 bg-earth-50">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-16">
                 <span class="text-xs uppercase tracking-widest text-earth-500 font-semibold">Captured Moments</span>
@@ -865,9 +950,9 @@
 
                     <div>
                         <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">
-                            Offerings & Special Performances <span class="text-earth-500 font-normal">(Optional)</span>
+                            Offerings &amp; Special Performances <span class="text-earth-500 font-normal">(Optional)</span>
                         </label>
-                        <textarea id="guest-offering" rows="3" placeholder="Would you like to sing a song, give a prayer or toast, or share a special performance for Connie & Eris? Let us know here!" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base"></textarea>
+                        <textarea id="guest-offering" rows="3" placeholder="Would you like to sing a song, give a prayer or toast, or share a special performance for Connie &amp; Eris? Let us know here!" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base"></textarea>
                     </div>
 
                     <button type="submit" class="w-full py-4 rounded-xl bg-earth-700 hover:bg-earth-800 text-earth-50 font-bold tracking-wider uppercase text-xs sm:text-sm shadow-lg transition-all hover:shadow-xl flex items-center justify-center gap-2">
@@ -882,7 +967,7 @@
     <section class="py-16 px-6 md:px-12 bg-earth-50 border-t border-earth-200">
         <div class="max-w-4xl mx-auto text-center">
             <i class="fa-solid fa-gift text-3xl text-earth-500 mb-3"></i>
-            <h2 class="font-serif text-3xl md:text-4xl text-earth-900">Registry & Monetary Blessing</h2>
+            <h2 class="font-serif text-3xl md:text-4xl text-earth-900">Registry &amp; Monetary Blessing</h2>
             <p class="text-earth-700 text-sm md:text-base mt-3 max-w-2xl mx-auto leading-relaxed">
                 Your presence on our special day is the greatest gift of all! However, if you wish to honor us with a gift, a monetary blessing towards our new home and future together would be deeply appreciated.
             </p>
@@ -991,7 +1076,7 @@
                         <i id="faq-icon-4" class="fa-solid fa-chevron-down text-earth-600 text-base transition-transform duration-300"></i>
                     </button>
                     <div id="faq-content-4" class="hidden px-6 pb-5 text-earth-800 text-base md:text-lg leading-relaxed border-t border-earth-100 pt-4">
-                        Yes! We would love that. Please let us know in the RSVP form under "Offerings & Special Performances" so we can include you in our reception program.
+                        Yes! We would love that. Please let us know in the RSVP form under "Offerings &amp; Special Performances" so we can include you in our reception program.
                     </div>
                 </div>
             </div>
@@ -1000,7 +1085,7 @@
 
     <footer class="bg-earth-900 text-earth-200 py-12 px-6 text-center border-t border-earth-800">
         <div class="max-w-4xl mx-auto space-y-4">
-            <p class="font-serif text-4xl text-white">Connie & Eris</p>
+            <p class="font-serif text-4xl text-white">Connie &amp; Eris</p>
             <p class="text-sm uppercase tracking-widest text-earth-400 font-semibold">#ConnieAndEris2027</p>
             <p class="text-sm text-earth-400">Thank you for celebrating this sacred day with us!</p>
         </div>
@@ -1049,42 +1134,54 @@
             const flap = document.getElementById('envelope-flap');
             const card = document.getElementById('envelope-card');
             const seal = document.getElementById('wax-seal');
-            const overlay = document.getElementById('envelope-overlay');
+            const wrapper = document.getElementById('envelope-wrapper');
+            const btnText = document.getElementById('btn-text');
+            const skipBtn = document.getElementById('skip-overlay-btn');
 
             // 1. Unfold top flap
             if (flap) flap.classList.add('open');
             
-            // 2. Hide wax seal
+            // 2. Hide wax seal smoothly
             if (seal) {
                 seal.style.opacity = '0';
-                seal.style.transform = 'translate(-50%, -50%) scale(0.5)';
+                seal.style.transform = 'translate(-50%, -50%) scale(0.4)';
                 seal.style.transition = 'all 0.4s ease';
             }
 
-            // 3. Slide card out
+            // 3. Expand envelope container down slightly for layout clearance
+            if (wrapper) wrapper.classList.add('expanded');
+
+            // 4. Slide card fully out so all details are visible
             setTimeout(() => {
                 if (card) card.classList.add('slide-out');
             }, 300);
 
-            // 4. Trigger audio playback
-            setTimeout(() => {
-                if (typeof playMusic === 'function') {
-                    playMusic();
-                }
-            }, 500);
+            // Update button label
+            if (btnText) btnText.innerText = "Opening Invitation...";
+            if (skipBtn) skipBtn.classList.remove('hidden');
 
-            // 5. Fade out overlay and restore background scrolling (3.5s delay to allow card text to be read for ~3 seconds)
+            // 5. Trigger audio playback
             setTimeout(() => {
-                if (overlay) {
-                    overlay.classList.add('opacity-0', 'pointer-events-none');
+                if (typeof playTrack === 'function') {
+                    playTrack();
                 }
-                document.body.classList.remove('overflow-hidden');
-            }, 3500);
+            }, 600);
 
-            // 6. Remove overlay element from layout
+            // 6. Fade out overlay and restore background scrolling after giving guest ample time to view full card
             setTimeout(() => {
-                if (overlay) overlay.style.display = 'none';
-            }, 4600);
+                skipEnvelopeOverlay();
+            }, 5500);
+        }
+
+        function skipEnvelopeOverlay() {
+            const overlay = document.getElementById('envelope-overlay');
+            if (overlay) {
+                overlay.classList.add('opacity-0', 'pointer-events-none');
+                setTimeout(() => {
+                    overlay.style.display = 'none';
+                }, 1000);
+            }
+            document.body.classList.remove('overflow-hidden');
         }
 
         let rsvpList = JSON.parse(localStorage.getItem('connie_eris_rsvps') || '[]');
@@ -1109,6 +1206,7 @@
             }
 
             selectSwatch('camel');
+            initAudio();
         });
 
         function getStoredUserRSVP() {
@@ -1212,9 +1310,9 @@
 
                     <div>
                         <label class="block text-xs md:text-sm uppercase tracking-wider font-bold text-earth-800 mb-2">
-                            Offerings & Special Performances <span class="text-earth-500 font-normal">(Optional)</span>
+                            Offerings &amp; Special Performances <span class="text-earth-500 font-normal">(Optional)</span>
                         </label>
-                        <textarea id="guest-offering" rows="3" placeholder="Would you like to sing a song, give a prayer or toast, or share a special performance for Connie & Eris? Let us know here!" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base">${userRSVP.offering && userRSVP.offering !== 'None' ? userRSVP.offering : ''}</textarea>
+                        <textarea id="guest-offering" rows="3" placeholder="Would you like to sing a song, give a prayer or toast, or share a special performance for Connie &amp; Eris? Let us know here!" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base">${userRSVP.offering && userRSVP.offering !== 'None' ? userRSVP.offering : ''}</textarea>
                     </div>
 
                     <button type="submit" class="w-full py-4 rounded-xl bg-earth-700 hover:bg-earth-800 text-earth-50 font-bold tracking-wider uppercase text-xs sm:text-sm shadow-lg transition-all hover:shadow-xl flex items-center justify-center gap-2">
@@ -1430,20 +1528,32 @@
 
         function initAudio() {
             const audio = document.getElementById('bg-music');
-            if (!audio) return;
-            loadTrack(currentTrackIndex);
-
             const toggleBtn = document.getElementById('audio-toggle');
             const nextBtn = document.getElementById('audio-next');
 
+            if (!audio) return;
+
+            loadTrack(currentTrackIndex);
+
             if (toggleBtn) {
-                toggleBtn.addEventListener('click', toggleMusic);
-            }
-            if (nextBtn) {
-                nextBtn.addEventListener('click', playNextTrack);
+                toggleBtn.addEventListener('click', () => {
+                    if (isPlaying) {
+                        pauseTrack();
+                    } else {
+                        playTrack();
+                    }
+                });
             }
 
-            audio.addEventListener('ended', playNextTrack);
+            if (nextBtn) {
+                nextBtn.addEventListener('click', () => {
+                    nextTrack();
+                });
+            }
+
+            audio.addEventListener('ended', () => {
+                nextTrack();
+            });
         }
 
         function loadTrack(index) {
@@ -1453,18 +1563,20 @@
 
             const track = playlist[index];
             audio.src = track.src;
-            if (titleElem) {
-                titleElem.innerText = `${index + 1}/${playlist.length}: ${track.title}`;
-            }
 
+            // Handle audio fallback if local song file fails
             audio.onerror = () => {
                 if (track.fallback && audio.src !== track.fallback) {
                     audio.src = track.fallback;
                 }
             };
+
+            if (titleElem) {
+                titleElem.innerText = `${index + 1}/${playlist.length}: ${track.title}`;
+            }
         }
 
-        function playMusic() {
+        function playTrack() {
             const audio = document.getElementById('bg-music');
             const icon = document.getElementById('audio-icon');
             if (!audio) return;
@@ -1472,39 +1584,30 @@
             audio.play().then(() => {
                 isPlaying = true;
                 if (icon) {
-                    icon.className = 'fa-solid fa-pause';
+                    icon.className = "fa-solid fa-pause";
                 }
-            }).catch(() => {
-                isPlaying = false;
-                if (icon) {
-                    icon.className = 'fa-solid fa-music';
-                }
+            }).catch(e => {
+                console.log("Audio playback waiting for interaction", e);
             });
         }
 
-        function toggleMusic() {
+        function pauseTrack() {
             const audio = document.getElementById('bg-music');
             const icon = document.getElementById('audio-icon');
             if (!audio) return;
 
-            if (isPlaying) {
-                audio.pause();
-                isPlaying = false;
-                if (icon) icon.className = 'fa-solid fa-music';
-            } else {
-                playMusic();
+            audio.pause();
+            isPlaying = false;
+            if (icon) {
+                icon.className = "fa-solid fa-music";
             }
         }
 
-        function playNextTrack() {
+        function nextTrack() {
             currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
             loadTrack(currentTrackIndex);
-            playMusic();
+            playTrack();
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            initAudio();
-        });
     </script>
 </body>
 </html>
