@@ -119,6 +119,7 @@
             }
         }
     </script>
+
     <style>
         .font-serif-italic { font-style: italic; }
         .bg-blur { backdrop-filter: blur(8px); }
@@ -249,19 +250,10 @@
         <!-- Top Flap (3D Folding) -->
         <div id="envelope-flap" class="envelope-flap absolute top-0 left-0 right-0 h-0 border-t-[125px] sm:border-t-[155px] border-t-[#ebdccb] border-x-[155px] sm:border-x-[210px] border-x-transparent z-30 drop-shadow-lg"></div>
 
-        <!-- Customizable Wax Seal Monogram Logo -->
-        <div id="wax-seal" class="pulse-seal wax-seal-outer absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 w-18 h-18 sm:w-22 sm:h-22 rounded-full border-2 border-earth-300/80 flex items-center justify-center text-earth-100 transition-all duration-500 group-hover:scale-110 shadow-2xl">
-            <div class="w-15 h-15 sm:w-18 sm:h-18 rounded-full border-2 border-dashed border-earth-300/60 flex flex-col items-center justify-center p-1 text-center bg-earth-950/60 backdrop-blur-sm relative">
-                <!-- Outer Ring Floral Accent -->
-                <div class="absolute inset-0.5 rounded-full border border-earth-400/30"></div>
-                <!-- Custom Monogram Initials -->
-<div id="wax-seal" class="pulse-seal wax-seal-outer absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 w-18 h-18 sm:w-22 sm:h-22 rounded-full border-2 border-earth-300/80 flex items-center justify-center text-earth-100 transition-all duration-500 group-hover:scale-110 shadow-2xl">
-    <div class="w-15 h-15 sm:w-18 sm:h-18 rounded-full border-2 border-dashed border-earth-300/60 flex items-center justify-center p-2 bg-earth-950/60 backdrop-blur-sm relative overflow-hidden">
-        <img src="logo.png" alt="Monogram Logo" class="w-full h-full object-contain relative z-10">
-    </div>
-</div>
-                <!-- Subtle Crest Icon -->
-                <i class="fa-solid fa-crown text-[9px] sm:text-[10px] text-earth-300 mt-0.5 opacity-90 z-10"></i>
+        <!-- Customizable Wax Seal Monogram Logo (Using logo.png with graceful monogram fallback) -->
+        <div id="wax-seal" class="pulse-seal wax-seal-outer absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-40 w-20 h-20 sm:w-24 sm:h-24 rounded-full border-2 border-earth-300/80 flex items-center justify-center text-earth-100 transition-all duration-500 group-hover:scale-110 shadow-2xl">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full border-2 border-dashed border-earth-300/60 flex items-center justify-center p-2 bg-earth-950/70 backdrop-blur-sm relative overflow-hidden shadow-inner">
+                <img src="logo.png" alt="Connie & Eris Monogram Logo" class="w-full h-full object-contain relative z-10 drop-shadow-md" onerror="this.onerror=null; this.parentElement.innerHTML='<span class=\'font-serif text-xl font-bold text-earth-200 tracking-wider\'>C&E</span>';">
             </div>
         </div>
     </div>
@@ -588,7 +580,7 @@
                         </div>
                         <p class="text-earth-900 font-semibold text-base md:text-lg">Angel's Place Private Resort</p>
                         <p class="text-earth-700 text-sm md:text-base">Bonga Menor, Bustos, Bulacan</p>
-                        <p class="text-earth-800 text-sm md:text-base bg-earth-50 p-3 rounded-lg border border-earth-200">Welcome drinks, program registration, and guest photo area.</p>
+                        <p class="text-earth-800 text-sm md:text-base bg-earth-50 p-3 rounded-lg border border-earth-200">Early Dinner, program registration, and guest photo area.</p>
                     </div>
                 </div>
 
@@ -598,8 +590,8 @@
                         6:00 PM Onwards
                     </div>
                     <div class="bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-earth-200">
-                        <h3 class="font-serif text-2xl md:text-3xl text-earth-900">Dinner &amp; Party Time! 🎉</h3>
-                        <p class="text-earth-800 text-base md:text-lg mt-2">Feast, speeches, guest offerings, toasts, and dancing under the stars!</p>
+                        <h3 class="font-serif text-2xl md:text-3xl text-earth-900">Party Time! 🎉</h3>
+                        <p class="text-earth-800 text-base md:text-lg mt-2">Speeches, guest offerings, toasts, and dancing under the stars!</p>
                     </div>
                 </div>
             </div>
@@ -639,11 +631,11 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
                 <div class="bg-earth-100/80 p-6 rounded-2xl border border-earth-300 text-center">
                     <span class="text-xs font-bold uppercase tracking-widest text-earth-600">Maid of Honor</span>
-                    <h4 class="font-serif text-2xl text-earth-900 font-bold mt-1">[Maid of Honor Name]</h4>
+                    <h4 class="font-serif text-2xl text-earth-900 font-bold mt-1">Joybelle Marie Vicente</h4>
                 </div>
                 <div class="bg-earth-100/80 p-6 rounded-2xl border border-earth-300 text-center">
                     <span class="text-xs font-bold uppercase tracking-widest text-earth-600">Best Man</span>
-                    <h4 class="font-serif text-2xl text-earth-900 font-bold mt-1">[Best Man Name]</h4>
+                    <h4 class="font-serif text-2xl text-earth-900 font-bold mt-1">Jaztine R. Canoza</h4>
                 </div>
             </div>
 
@@ -681,41 +673,41 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                <!-- Bridesmaids (6 Total) -->
-                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center">
-                    <div class="flex items-center justify-center gap-2 mb-1">
-                        <i class="fa-solid fa-person-dress text-earth-500 text-xl"></i>
-                        <h4 class="font-serif text-2xl text-earth-900">Bridesmaids</h4>
-                    </div>
-                    <p class="text-xs text-earth-600 mb-6 font-medium">Standing by Connie's side</p>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs md:text-sm text-earth-800 font-medium">
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 1</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 2</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 3</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 4</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 5</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Bridesmaid 6</div>
-                    </div>
-                </div>
+<!-- Bridesmaids -->
+<div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center">
+    <div class="flex items-center justify-center gap-2 mb-1">
+        <i class="fa-solid fa-person-dress text-earth-500 text-xl"></i>
+        <h4 class="font-serif text-2xl text-earth-900">Bridesmaids</h4>
+    </div>
+    <p class="text-xs text-earth-600 mb-6 font-medium">Standing by Connie's side</p>
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs md:text-sm text-earth-800 font-medium">
+        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">April Grace Bercadez</div>
+        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Andrea German</div>
+        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Jocelyn Cunanan</div>
+        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Melissa Anne Marie Pancho</div>
+        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Mrynilyn Pollosco</div>
+        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Nicole Ribano</div>
+        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200 col-span-2 sm:col-span-1 sm:col-start-2">Rowena Panelo</div>
+    </div>
+</div>
 
-                <!-- Groomsmen (6 Total) -->
-                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center">
-                    <div class="flex items-center justify-center gap-2 mb-1">
-                        <i class="fa-solid fa-user-tie text-earth-500 text-xl"></i>
-                        <h4 class="font-serif text-2xl text-earth-900">Groomsmen</h4>
-                    </div>
-                    <p class="text-xs text-earth-600 mb-6 font-medium">Standing by Eris's side</p>
-                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs md:text-sm text-earth-800 font-medium">
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 1</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 2</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 3</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 4</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 5</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Groomsman 6</div>
-                    </div>
-                </div>
-            </div>
-
+<!-- Groomsmen -->
+<div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-earth-200 text-center">
+    <div class="flex items-center justify-center gap-2 mb-1">
+        <i class="fa-solid fa-user-tie text-earth-500 text-xl"></i>
+        <h4 class="font-serif text-2xl text-earth-900">Groomsmen</h4>
+    </div>
+    <p class="text-xs text-earth-600 mb-6 font-medium">Standing by Eris's side</p>
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-3 text-xs md:text-sm text-earth-800 font-medium">
+        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Alden Aaron Amores</div>
+        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Byron Vega</div>
+        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Caesar Cunanan</div>
+        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Ivan Lester Canoza</div>
+        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Jimwell Alejandro</div>
+        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Julius Sarrondo</div>
+        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200 col-span-2 sm:col-span-1 sm:col-start-2">Renzo Jose</div>
+    </div>
+</div>
             <!-- Secondary Sponsors & Bearers Cards -->
             <div class="space-y-6">
                 <!-- Secondary Sponsors -->
@@ -740,7 +732,7 @@
                     </div>
                 </div>
 
-                <!-- Bearers Section (Fixed display with icons and labels) -->
+                <!-- Bearers Section -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-2">
                     <!-- Ring Bearer Card -->
                     <div class="bg-white p-6 rounded-2xl shadow-sm border border-earth-200 text-center flex flex-col items-center justify-center hover:border-earth-400 transition-colors">
@@ -784,14 +776,15 @@
             <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full mb-8"></div>
 
             <p class="text-earth-700 text-base md:text-lg mb-8 max-w-2xl mx-auto leading-relaxed">
-                Watch our pre-wedding highlights and special moments before browsing our photo gallery!
+                Watch our pre-wedding highlights and special moments before browsing our photo gallery! Background music will automatically pause while playing the video and resume when finished.
             </p>
 
-            <div class="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-earth-300 bg-earth-900 aspect-video">
+            <div id="video-wrapper" class="relative rounded-3xl overflow-hidden shadow-2xl border-2 border-earth-300 bg-earth-900 aspect-video group">
                 <iframe 
+                    id="highlight-video-iframe"
                     class="w-full h-full border-0" 
                     src="https://drive.google.com/file/d/1g74XwpXGze8eijLq3ZAKq3n9tMdxH0e3/preview" 
-                    allow="autoplay"
+                    allow="autoplay; encrypted-media"
                     allowfullscreen>
                 </iframe>
             </div>
@@ -1205,6 +1198,7 @@
 
             selectSwatch('camel');
             initAudio();
+            initVideoAudioSync();
         });
 
         function getStoredUserRSVP() {
@@ -1514,97 +1508,181 @@
         }
 
         const playlist = [
-            { title: "Song 1 (Paraluman)", src: "song1.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" },
-            { title: "Song 2 (Ikaw at Ako)", src: "song2.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d217.mp3" },
-            { title: "Song 3 (Araw-araw)", src: "song3.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8b4172f.mp3" },
-            { title: "Song 4 (I think they call this love)", src: "song4.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/02/07/audio_494ebce39e.mp3" },
-            { title: "Song 5 (Museo)", src: "song5.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/10/14/audio_99320e6f77.mp3" }
+            { title: "Paraluman", src: "song1.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3" },
+            { title: "Ikaw at Ako", src: "song2.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/01/18/audio_d0a13f69d217.mp3" },
+            { title: "Araw-araw", src: "song3.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8a2110d.mp3" },
+            { title: "Pasilyo", src: "song4.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/10/14/audio_99393165ec.mp3" },
+            { title: "Palagi", src: "song5.mp3", fallback: "https://cdn.pixabay.com/download/audio/2022/11/06/audio_c35f29f8f4.mp3" }
         ];
 
         let currentTrackIndex = 0;
-        let isPlaying = false;
+        let isMusicPlaying = false;
+        let wasMusicPlayingBeforeVideo = false;
+        let bgAudio = null;
 
         function initAudio() {
-            const audio = document.getElementById('bg-music');
-            const toggleBtn = document.getElementById('audio-toggle');
-            const nextBtn = document.getElementById('audio-next');
-
-            if (!audio) return;
+            bgAudio = document.getElementById('bg-music');
+            if (!bgAudio) return;
 
             loadTrack(currentTrackIndex);
 
-            if (toggleBtn) {
-                toggleBtn.addEventListener('click', () => {
-                    if (isPlaying) {
-                        pauseTrack();
-                    } else {
-                        playTrack();
-                    }
-                });
-            }
-
-            if (nextBtn) {
-                nextBtn.addEventListener('click', () => {
-                    nextTrack();
-                });
-            }
-
-            audio.addEventListener('ended', () => {
+            bgAudio.addEventListener('ended', () => {
                 nextTrack();
             });
+
+            bgAudio.addEventListener('error', (e) => {
+                // Try fallback URL if local mp3 is not present
+                const currentTrack = playlist[currentTrackIndex];
+                if (bgAudio.src !== currentTrack.fallback) {
+                    bgAudio.src = currentTrack.fallback;
+                    if (isMusicPlaying) bgAudio.play().catch(err => console.log('Audio autoplay blocked', err));
+                }
+            });
+
+            const toggleBtn = document.getElementById('audio-toggle');
+            if (toggleBtn) {
+                toggleBtn.addEventListener('click', toggleAudio);
+            }
+
+            const nextBtn = document.getElementById('audio-next');
+            if (nextBtn) {
+                nextBtn.addEventListener('click', nextTrack);
+            }
         }
 
         function loadTrack(index) {
-            const audio = document.getElementById('bg-music');
-            const titleElem = document.getElementById('audio-track-title');
-            if (!audio) return;
-
+            currentTrackIndex = index;
             const track = playlist[index];
-            audio.src = track.src;
+            if (!track || !bgAudio) return;
 
-            // Handle audio fallback if local song file fails
-            audio.onerror = () => {
-                if (track.fallback && audio.src !== track.fallback) {
-                    audio.src = track.fallback;
-                }
-            };
+            bgAudio.src = track.src;
 
-            if (titleElem) {
-                titleElem.innerText = `${index + 1}/${playlist.length}: ${track.title}`;
-            }
+            const badge = document.getElementById('audio-track-badge');
+            const titleElem = document.getElementById('audio-track-title');
+            if (badge) badge.classList.remove('hidden');
+            if (titleElem) titleElem.innerText = `${index + 1}/${playlist.length}: ${track.title}`;
         }
 
         function playTrack() {
-            const audio = document.getElementById('bg-music');
-            const icon = document.getElementById('audio-icon');
-            if (!audio) return;
-
-            audio.play().then(() => {
-                isPlaying = true;
-                if (icon) {
-                    icon.className = "fa-solid fa-pause";
-                }
-            }).catch(e => {
-                console.log("Audio playback waiting for interaction", e);
+            if (!bgAudio) return;
+            bgAudio.play().then(() => {
+                isMusicPlaying = true;
+                updateAudioUI(true);
+            }).catch(err => {
+                console.log("Audio playback waiting for user gesture", err);
             });
         }
 
         function pauseTrack() {
-            const audio = document.getElementById('bg-music');
-            const icon = document.getElementById('audio-icon');
-            if (!audio) return;
+            if (!bgAudio) return;
+            bgAudio.pause();
+            isMusicPlaying = false;
+            updateAudioUI(false);
+        }
 
-            audio.pause();
-            isPlaying = false;
-            if (icon) {
-                icon.className = "fa-solid fa-music";
+        function toggleAudio() {
+            if (isMusicPlaying) {
+                pauseTrack();
+                wasMusicPlayingBeforeVideo = false;
+            } else {
+                playTrack();
             }
         }
 
         function nextTrack() {
             currentTrackIndex = (currentTrackIndex + 1) % playlist.length;
             loadTrack(currentTrackIndex);
-            playTrack();
+            if (isMusicPlaying || wasMusicPlayingBeforeVideo) {
+                playTrack();
+            }
+        }
+
+        function updateAudioUI(playing) {
+            const icon = document.getElementById('audio-icon');
+            const toggleBtn = document.getElementById('audio-toggle');
+
+            if (icon) {
+                if (playing) {
+                    icon.className = 'fa-solid fa-volume-high text-amber-300';
+                } else {
+                    icon.className = 'fa-solid fa-music text-earth-100';
+                }
+            }
+
+            if (toggleBtn) {
+                if (playing) {
+                    toggleBtn.classList.add('ring-2', 'ring-amber-400');
+                } else {
+                    toggleBtn.classList.remove('ring-2', 'ring-amber-400');
+                }
+            }
+        }
+
+        function pauseMusicForVideo() {
+            if (isMusicPlaying) {
+                wasMusicPlayingBeforeVideo = true;
+                pauseTrack();
+            }
+        }
+
+        function resumeMusicAfterVideo() {
+            if (wasMusicPlayingBeforeVideo) {
+                playTrack();
+                wasMusicPlayingBeforeVideo = false;
+            }
+        }
+
+        function initVideoAudioSync() {
+            const videoWrapper = document.getElementById('video-wrapper');
+            const videoIframe = document.getElementById('highlight-video-iframe');
+
+            // 1. Detect focus/click on video iframe
+            if (videoWrapper) {
+                videoWrapper.addEventListener('click', () => {
+                    pauseMusicForVideo();
+                });
+            }
+
+            // 2. Pause when focus moves to video iframe
+            window.addEventListener('blur', () => {
+                if (document.activeElement === videoIframe) {
+                    pauseMusicForVideo();
+                }
+            });
+
+            // 3. Resume background music when clicking away from video or regaining window focus
+            window.addEventListener('focus', () => {
+                if (wasMusicPlayingBeforeVideo && document.activeElement !== videoIframe) {
+                    setTimeout(() => {
+                        if (document.activeElement !== videoIframe) {
+                            resumeMusicAfterVideo();
+                        }
+                    }, 1200);
+                }
+            });
+
+            // 4. Listen to HTML5 video events if swapped locally
+            const htmlVideo = document.getElementById('wedding-video-element');
+            if (htmlVideo) {
+                htmlVideo.addEventListener('play', pauseMusicForVideo);
+                htmlVideo.addEventListener('pause', resumeMusicAfterVideo);
+                htmlVideo.addEventListener('ended', resumeMusicAfterVideo);
+            }
+
+            // 5. Cross-origin message listener (for YouTube/HTML5 iframe postMessage events)
+            window.addEventListener('message', (event) => {
+                try {
+                    const data = typeof event.data === 'string' ? JSON.parse(event.data) : event.data;
+                    if (data && (data.event === 'onStateChange' || data.type === 'video')) {
+                        // 1 = Playing, 2 = Paused, 0 = Ended
+                        if (data.info === 1 || data.status === 'playing') {
+                            pauseMusicForVideo();
+                        } else if (data.info === 2 || data.info === 0 || data.status === 'paused' || data.status === 'ended') {
+                            resumeMusicAfterVideo();
+                        }
+                    }
+                } catch(e) {}
+            });
         }
     </script>
 </body>
