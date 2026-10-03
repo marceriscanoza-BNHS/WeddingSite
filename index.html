@@ -19,7 +19,6 @@
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Cinzel:wght@400;600;700&display=swap" rel="stylesheet">
     
-    <!-- Firebase SDK Modules for RSVP Storage -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
@@ -195,7 +194,6 @@
 </head>
 <body class="bg-earth-50 text-earth-900 font-sans antialiased selection:bg-earth-300 selection:text-earth-900">
 
-<!-- Envelope Opening Overlay -->
 <div id="envelope-overlay" class="fixed inset-0 z-[100] flex flex-col items-center justify-center bg-[#241710] bg-gradient-to-b from-[#2e1d15] via-[#1f120a] to-[#120a06] transition-opacity duration-1000 px-4 overflow-y-auto py-10">
     
     <!-- Ambient background pattern -->
@@ -265,7 +263,6 @@
     </div>
 </div>
 
-    <!-- Navigation Header -->
     <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 bg-earth-50/90 backdrop-blur-md border-b border-earth-200/50">
         <div class="max-w-7xl mx-auto flex justify-between items-center">
             <a href="#home" class="font-serif text-2xl md:text-3xl font-semibold tracking-wider text-earth-900 flex items-center gap-2">
@@ -305,22 +302,47 @@
         </div>
     </nav>
 
-    <!-- Floating Audio Player Bar -->
     <div class="fixed bottom-6 right-6 z-40 flex items-center gap-2">
+        <!-- Track Title Display Badge -->
         <div id="audio-track-badge" class="hidden sm:flex items-center gap-2 bg-earth-900/90 text-earth-100 text-xs py-2 px-3.5 rounded-full shadow-xl border border-earth-400/30 backdrop-blur-md">
             <i class="fa-solid fa-compact-disc text-earth-400 animate-spin" style="animation-duration: 4s;"></i>
-            <span id="audio-track-title" class="font-medium max-w-[140px] truncate">1/5: Loading...</span>
+            <span id="audio-track-title" class="font-medium max-w-[150px] truncate">1/5: Track 1</span>
         </div>
 
+        <!-- Playlist Selector Popup Drawer Button -->
+        <button id="playlist-toggle-btn" onclick="togglePlaylistDrawer()" class="w-10 h-10 rounded-full bg-earth-900/80 text-earth-100 shadow-xl flex items-center justify-center hover:scale-105 transition-all text-xs border border-earth-300/20" title="Song List">
+            <i class="fa-solid fa-list-ul"></i>
+        </button>
+
+        <!-- Skip Previous Button -->
+        <button id="audio-prev" onclick="playPreviousTrack()" class="w-10 h-10 rounded-full bg-earth-900/80 text-earth-100 shadow-xl flex items-center justify-center hover:scale-105 transition-all text-xs border border-earth-300/20" title="Previous Song">
+            <i class="fa-solid fa-backward-step"></i>
+        </button>
+
+        <!-- Skip Next Button -->
         <button id="audio-next" class="w-10 h-10 rounded-full bg-earth-900/80 text-earth-100 shadow-xl flex items-center justify-center hover:scale-105 transition-all text-xs border border-earth-300/20" title="Skip to Next Song">
             <i class="fa-solid fa-forward-step"></i>
         </button>
 
+        <!-- Play / Pause Button -->
         <button id="audio-toggle" class="w-12 h-12 rounded-full bg-earth-800 text-earth-100 shadow-xl flex items-center justify-center hover:scale-105 transition-all group border border-earth-300/30" title="Play / Pause Background Music">
             <i id="audio-icon" class="fa-solid fa-music group-hover:animate-bounce"></i>
         </button>
 
         <audio id="bg-music" preload="none"></audio>
+    </div>
+
+    <!-- Playlist Drawer Modal Menu Popup -->
+    <div id="playlist-drawer" class="fixed bottom-20 right-6 z-50 bg-earth-900/95 text-earth-100 rounded-2xl p-4 shadow-2xl border border-earth-400/40 backdrop-blur-xl w-72 hidden transition-all">
+        <div class="flex justify-between items-center pb-2 mb-2 border-b border-earth-700/60">
+            <span class="text-xs uppercase tracking-wider font-bold text-earth-300 flex items-center gap-1.5">
+                <i class="fa-solid fa-music text-earth-400"></i> Local Audio Playlist
+            </span>
+            <button onclick="togglePlaylistDrawer()" class="text-earth-400 hover:text-white text-xs p-1">&times;</button>
+        </div>
+        <div id="playlist-items-container" class="space-y-1 max-h-48 overflow-y-auto">
+            <!-- Dynamically populated via JS -->
+        </div>
     </div>
 
     <section id="home" class="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 pb-12 px-4">
@@ -473,7 +495,7 @@
                     </div>
                     <div class="p-4 bg-earth-50 rounded-xl border border-earth-200 text-sm text-earth-800">
                        <span class="block text-center font-bold text-earth-900 uppercase text-xs sm:text-sm tracking-wider">
-                           IMAGE ABOVE IS FOR BRIDESMAID ONLY
+                           IMAGE ABOVE IS FOR BRIDESMAIDS ONLY
                        </span>
                     </div>
                 </div>
@@ -626,7 +648,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-12">
                 <div class="bg-earth-100/80 p-6 rounded-2xl border border-earth-300 text-center">
                     <span class="text-xs font-bold uppercase tracking-widest text-earth-600">Maid of Honor</span>
-                    <h4 class="font-serif text-2xl text-earth-900 font-bold mt-1">Joybelle Marie Vicente</h4>
+                    <h4 class="font-serif text-2xl text-earth-900 font-bold mt-1">Joybelle Marie A. Vicente</h4>
                 </div>
                 <div class="bg-earth-100/80 p-6 rounded-2xl border border-earth-300 text-center">
                     <span class="text-xs font-bold uppercase tracking-widest text-earth-600">Best Man</span>
@@ -646,12 +668,12 @@
                     </div>
                     <div class="p-3.5 bg-earth-50 rounded-xl border border-earth-200 flex flex-col justify-center">
                         <span class="text-xs font-bold text-earth-500 uppercase tracking-wider mb-1">Pair 2</span>
-                        <span>Mr. Lito Canoza</span>
+                        <span>Mr. Pedrolito Santos</span>
                         <span>Mrs. Teodora Rivera</span>
                     </div>
                     <div class="p-3.5 bg-earth-50 rounded-xl border border-earth-200 flex flex-col justify-center">
                         <span class="text-xs font-bold text-earth-500 uppercase tracking-wider mb-1">Pair 3</span>
-                        <span>Mr. Ferdie Mendoza</span>
+                        <span>Mr. Ferdinand Mendoza</span>
                         <span>Mrs. Dolores Reyes</span>
                     </div>
                     <div class="p-3.5 bg-earth-50 rounded-xl border border-earth-200 flex flex-col justify-center">
@@ -682,7 +704,7 @@
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Melissa Anne Marie Pancho</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Mrynilyn Pollosco</div>
                         <div class="p-3 bg-earth-50 rounded-xl border border-earth-200">Nicole Ribano</div>
-                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200 col-span-2 sm:col-span-1 sm:col-start-2">Rowena Panelo</div>
+                        <div class="p-3 bg-earth-50 rounded-xl border border-earth-200 col-span-2 sm:col-span-1 sm:col-start-2">Maria Theresa Relano</div>
                     </div>
                 </div>
 
@@ -762,7 +784,6 @@
         </div>
     </section>
 
-    <!-- Video Section -->
     <section id="video-highlight" class="py-20 px-6 md:px-12 bg-earth-100/60 border-t border-earth-200">
         <div class="max-w-4xl mx-auto text-center">
             <span class="text-xs md:text-sm uppercase tracking-widest text-earth-600 font-bold">Cinematic Highlight</span>
@@ -950,7 +971,7 @@
                         <textarea id="guest-offering" rows="3" placeholder="Would you like to sing a song, give a prayer or toast, or share a special performance for Connie &amp; Eris? Let us know here!" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base"></textarea>
                     </div>
 
-                    <button type="submit" class="w-full py-4 rounded-xl bg-earth-700 hover:bg-earth-800 text-earth-50 font-bold tracking-wider uppercase text-xs sm:text-sm shadow-lg transition-all hover:shadow-xl flex items-center justify-center gap-2">
+                    <button type="submit" id="rsvp-submit-btn" class="w-full py-4 rounded-xl bg-earth-700 hover:bg-earth-800 text-earth-50 font-bold tracking-wider uppercase text-xs sm:text-sm shadow-lg transition-all hover:shadow-xl flex items-center justify-center gap-2">
                         <i class="fa-paper-plane fa-solid text-sm"></i> Send RSVP Response
                     </button>
                 </form>
@@ -958,7 +979,6 @@
         </div>
     </section>
 
-    <!-- Gift Registry & Monetary Blessing Section -->
     <section class="py-16 px-6 md:px-12 bg-earth-50 border-t border-earth-200">
         <div class="max-w-4xl mx-auto text-center">
             <i class="fa-solid fa-gift text-3xl text-earth-500 mb-3"></i>
@@ -1120,6 +1140,12 @@
     </div>
 
     <script>
+        /* ==========================================
+         * 1. GOOGLE SHEETS & FIREBASE RSVP CONFIG
+         * ========================================== */
+        // Google Apps Script Web App Deployment URL for RSVP storage
+        const GOOGLE_SHEETS_SCRIPT_URL = "hhttps://script.google.com/macros/s/AKfycbwXS58CelpvdTqdCV8gICPK6GhWwf31xtH1L6j5p1vwYkqWCWfkKw9Gpzn1640N8Sk3/exec";
+
         let envelopeOpened = false;
 
         function openEnvelope() {
@@ -1301,7 +1327,7 @@
                         <textarea id="guest-offering" rows="3" placeholder="Would you like to sing a song, give a prayer or toast, or share a special performance for Connie &amp; Eris? Let us know here!" class="w-full px-5 py-3.5 rounded-xl border border-earth-300 focus:outline-none focus:ring-2 focus:ring-earth-500 bg-earth-50 text-earth-900 text-base">${userRSVP.offering && userRSVP.offering !== 'None' ? userRSVP.offering : ''}</textarea>
                     </div>
 
-                    <button type="submit" class="w-full py-4 rounded-xl bg-earth-700 hover:bg-earth-800 text-earth-50 font-bold tracking-wider uppercase text-xs sm:text-sm shadow-lg transition-all hover:shadow-xl flex items-center justify-center gap-2">
+                    <button type="submit" id="rsvp-submit-btn" class="w-full py-4 rounded-xl bg-earth-700 hover:bg-earth-800 text-earth-50 font-bold tracking-wider uppercase text-xs sm:text-sm shadow-lg transition-all hover:shadow-xl flex items-center justify-center gap-2">
                         <i class="fa-paper-plane fa-solid text-sm"></i> Update RSVP Response
                     </button>
                 </form>
@@ -1310,6 +1336,12 @@
 
         async function handleRSVPSubmit(e) {
             e.preventDefault();
+            const submitBtn = document.getElementById('rsvp-submit-btn');
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.innerHTML = `<i class="fa-solid fa-spinner animate-spin"></i> Submitting...`;
+            }
+
             const name = document.getElementById('guest-name').value.trim();
             const contact = document.getElementById('guest-contact').value.trim();
             const attendance = document.querySelector('input[name="attendance"]:checked').value;
@@ -1323,13 +1355,40 @@
                 timestamp: new Date().toISOString()
             };
 
+            // 1. Save locally to localStorage
             try {
                 localStorage.setItem('connie_eris_user_rsvp', JSON.stringify(payload));
+            } catch(err) {
+                console.log("Local storage error:", err);
+            }
+
+            // 2. Submit to Google Sheets API / Apps Script
+            try {
+                const formData = new URLSearchParams();
+                formData.append('name', name);
+                formData.append('contact', contact);
+                formData.append('attendance', attendance);
+                formData.append('offering', offering);
+                formData.append('timestamp', payload.timestamp);
+
+                fetch(GOOGLE_SHEETS_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                    body: formData.toString()
+                }).then(() => console.log('RSVP sent to Google Sheets'))
+                  .catch(err => console.log('Google Sheets submit note:', err));
+            } catch(err) {
+                console.log('Google Sheets post attempt:', err);
+            }
+
+            // 3. Save to Firebase Firestore cloud database
+            try {
                 if (window.saveRSVPToCloud) {
                     await window.saveRSVPToCloud(payload);
                 }
             } catch(err) {
-                console.log("RSVP local save note", err);
+                console.log("RSVP cloud save note:", err);
             }
 
             const modalText = document.getElementById('rsvp-modal-text');
@@ -1350,7 +1409,6 @@
             if (modal) modal.classList.add('hidden');
         }
 
-        /* Swatch Palette Switcher */
         const swatchData = {
             champagne: {
                 title: "Champagne / Light Beige",
@@ -1438,18 +1496,19 @@
             setInterval(update, 1000);
         }
 
-        /* Audio Playlist Management & Synchronization */
+        /* Audio Playlist Management: Strictly local path folder files 1.mp3 to 5.mp3 */
         const playlist = [
-            { title: "A Thousand Years - Piano", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" },
-            { title: "Perfect - Acoustic", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" },
-            { title: "Can't Help Falling in Love", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" },
-            { title: "Marry Me", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" },
-            { title: "Until I Found You", src: "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3" }
+            { id: 1, title: "Track 1", src: "1.mp3" },
+            { id: 2, title: "Track 2", src: "2.mp3" },
+            { id: 3, title: "Track 3", src: "3.mp3" },
+            { id: 4, title: "Track 4", src: "4.mp3" },
+            { id: 5, title: "Track 5", src: "5.mp3" }
         ];
 
         let currentTrackIdx = 0;
         let isAudioPlaying = false;
         let audioEl;
+        let failedTracksCount = 0;
 
         function initAudio() {
             audioEl = document.getElementById('bg-music');
@@ -1458,6 +1517,7 @@
 
             if (!audioEl) return;
 
+            renderPlaylistDrawerItems();
             loadTrack(currentTrackIdx);
 
             if (toggleBtn) {
@@ -1472,17 +1532,46 @@
 
             if (nextBtn) {
                 nextBtn.addEventListener('click', () => {
-                    currentTrackIdx = (currentTrackIdx + 1) % playlist.length;
-                    loadTrack(currentTrackIdx);
-                    playTrack();
+                    playNextTrack();
                 });
             }
 
+            // Audio End Listener: Auto Advance to Next Local Track
             audioEl.addEventListener('ended', () => {
-                currentTrackIdx = (currentTrackIdx + 1) % playlist.length;
-                loadTrack(currentTrackIdx);
-                playTrack();
+                failedTracksCount = 0;
+                playNextTrack();
             });
+
+            // Audio Error Handling: If local 1.mp3-5.mp3 file doesn't exist, automatically skip to next song
+            audioEl.addEventListener('error', (e) => {
+                console.warn(`Local audio track ${playlist[currentTrackIdx].src} not found or failed to load. Attempting next track...`);
+                failedTracksCount++;
+                if (failedTracksCount < playlist.length) {
+                    currentTrackIdx = (currentTrackIdx + 1) % playlist.length;
+                    loadTrack(currentTrackIdx);
+                    if (isAudioPlaying) {
+                        playTrack();
+                    }
+                } else {
+                    console.log("No recognized local audio files (1.mp3 - 5.mp3) available in the folder path.");
+                    pauseTrack();
+                }
+            });
+        }
+
+        function renderPlaylistDrawerItems() {
+            const container = document.getElementById('playlist-items-container');
+            if (!container) return;
+
+            container.innerHTML = playlist.map((item, idx) => `
+                <button onclick="selectPlayTrack(${idx})" id="playlist-item-${idx}" class="w-full text-left p-2.5 rounded-lg text-xs font-medium flex items-center justify-between transition-colors hover:bg-earth-800 ${idx === currentTrackIdx ? 'bg-earth-800 text-earth-300 font-bold' : 'text-earth-200'}">
+                    <span class="flex items-center gap-2">
+                        <i class="fa-solid ${idx === currentTrackIdx ? 'fa-volume-high text-earth-400' : 'fa-music text-earth-600'}"></i>
+                        <span>Song ${item.id} (${item.src})</span>
+                    </span>
+                    <span class="text-[10px] text-earth-400 font-mono">${idx === currentTrackIdx ? 'PLAYING' : ''}</span>
+                </button>
+            `).join('');
         }
 
         function loadTrack(idx) {
@@ -1490,14 +1579,16 @@
             audioEl.src = playlist[idx].src;
             const titleEl = document.getElementById('audio-track-title');
             if (titleEl) {
-                titleEl.innerText = `${idx + 1}/${playlist.length}: ${playlist[idx].title}`;
+                titleEl.innerText = `${idx + 1}/5: ${playlist[idx].src}`;
             }
+            renderPlaylistDrawerItems();
         }
 
         function playTrack() {
             if (!audioEl) return;
             audioEl.play().then(() => {
                 isAudioPlaying = true;
+                failedTracksCount = 0;
                 const icon = document.getElementById('audio-icon');
                 if (icon) {
                     icon.className = 'fa-solid fa-pause';
@@ -1505,7 +1596,7 @@
                 const badge = document.getElementById('audio-track-badge');
                 if (badge) badge.classList.remove('hidden');
             }).catch(e => {
-                console.log("Audio play prevented until user interaction", e);
+                console.log("Audio play deferred until user interaction", e);
             });
         }
 
@@ -1519,18 +1610,40 @@
             }
         }
 
-        /* Mutual Exclusion: Ensure Video and Audio Do Not Play Simultaneously */
+        function playNextTrack() {
+            currentTrackIdx = (currentTrackIdx + 1) % playlist.length;
+            loadTrack(currentTrackIdx);
+            playTrack();
+        }
+
+        function playPreviousTrack() {
+            currentTrackIdx = (currentTrackIdx - 1 + playlist.length) % playlist.length;
+            loadTrack(currentTrackIdx);
+            playTrack();
+        }
+
+        function selectPlayTrack(idx) {
+            currentTrackIdx = idx;
+            loadTrack(currentTrackIdx);
+            playTrack();
+            const drawer = document.getElementById('playlist-drawer');
+            if (drawer) drawer.classList.add('hidden');
+        }
+
+        function togglePlaylistDrawer() {
+            const drawer = document.getElementById('playlist-drawer');
+            if (drawer) drawer.classList.toggle('hidden');
+        }
+
         function initVideoAudioSync() {
             const videoWrapper = document.getElementById('video-wrapper');
             
-            // 1. Pause background music when user clicks/interacts with video wrapper
             if (videoWrapper) {
                 videoWrapper.addEventListener('pointerdown', () => {
                     pauseTrack();
                 });
             }
 
-            // 2. Pause music when window loses focus to iframe (e.g., user clicked play inside video iframe)
             window.addEventListener('blur', () => {
                 if (document.activeElement && document.activeElement.tagName === 'IFRAME') {
                     pauseTrack();
@@ -1546,7 +1659,6 @@
             }
         }
 
-        /* FAQ Toggle */
         function toggleFAQ(num) {
             const content = document.getElementById(`faq-content-${num}`);
             const icon = document.getElementById(`faq-icon-${num}`);
@@ -1556,7 +1668,6 @@
             }
         }
 
-        /* Lightbox functions */
         function openLightbox(src) {
             const lightbox = document.getElementById('lightbox');
             const img = document.getElementById('lightbox-img');
@@ -1574,7 +1685,6 @@
             }
         }
 
-        /* Calendar Modal */
         function openCalendarModal() {
             const modal = document.getElementById('calendar-modal');
             if (modal) modal.classList.remove('hidden'), modal.classList.add('flex');
