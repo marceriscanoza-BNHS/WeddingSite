@@ -790,7 +790,7 @@
             <h2 class="font-serif text-4xl md:text-6xl text-earth-900 mt-2">Our Love Story Video</h2>
             <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full mb-8"></div>
 
-<div id="video-wrapper" class="relative w-full max-w-5xl mx-auto rounded-3xl overflow-hidden shadow-2xl border-2 border-earth-300 bg-earth-950 h-[450px] sm:h-[600px] md:h-[500px] flex items-center justify-center group my-4">
+<div id="video-wrapper" class="relative w-full max-w-5xl mx-auto rounded-3xl overflow-hidden shadow-2xl border-2 border-earth-300 bg-earth-950 h-[450px] sm:h-[600px] md:h-[700px] flex items-center justify-center group my-4">
     <!-- Video Play Overlay Banner -->
     <div id="video-play-banner" class="absolute inset-0 z-20 bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center cursor-pointer transition-opacity duration-300 hover:bg-black/20" onclick="startVideoAndPauseMusic()">
         <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-earth-700/90 text-white flex items-center justify-center shadow-2xl border-2 border-earth-200 group-hover:scale-110 transition-transform">
@@ -801,14 +801,17 @@
         </span>
     </div>
 
-    <!-- Centered Video Player Frame -->
-    <iframe 
-        id="highlight-video-iframe"
-        class="w-full aspect-video max-h-full border-0 relative z-10" 
-        src="https://drive.google.com/file/d/1g74XwpXGze8eijLq3ZAKq3n9tMdxH0e3/preview" 
-        allow="autoplay; encrypted-media"
-        allowfullscreen>
-    </iframe>
+    <!-- Cropped Video Container (Hides Google Drive Top Header) -->
+    <div class="relative w-full aspect-video max-h-full overflow-hidden flex items-center justify-center">
+        <iframe 
+            id="highlight-video-iframe"
+            class="w-full h-[calc(100%+56px)] -mt-14 border-0 relative z-10" 
+            src="https://drive.google.com/file/d/1g74XwpXGze8eijLq3ZAKq3n9tMdxH0e3/preview" 
+            sandbox="allow-scripts allow-same-origin"
+            allow="autoplay; encrypted-media"
+            allowfullscreen>
+        </iframe>
+    </div>
 </div>
     </section>
 
