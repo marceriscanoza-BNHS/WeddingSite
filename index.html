@@ -210,12 +210,19 @@
     </div>
 
     <!-- Envelope Container -->
-    <div id="envelope-wrapper" class="envelope-perspective envelope-wrapper relative w-[310px] sm:w-[420px] h-[220px] sm:h-[280px] cursor-pointer group select-none z-10 my-6" onclick="openEnvelope()">
-        
-        <!-- Envelope Pocket (Back Interior) -->
-        <div class="absolute inset-0 bg-[#3a271c] rounded-2xl shadow-2xl border border-earth-400/30 overflow-hidden">
-            <div class="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/20"></div>
-        </div>
+<!-- Envelope Container -->
+<div class="relative w-80 h-52 bg-amber-100 rounded-lg shadow-md border border-amber-200">
+  
+  <!-- Envelope Flap / Content -->
+  <!-- ... -->
+
+  <!-- Centered Wax Seal -->
+  <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-12 h-12 bg-red-800 rounded-full flex items-center justify-center shadow-lg border-2 border-red-900">
+    <!-- Icon or Monogram -->
+    <i class="fa-solid fa-stamp text-amber-200 text-lg"></i>
+  </div>
+
+</div>
 
         <!-- Invitation Card Peeking Inside & Sliding Fully Out -->
         <div id="envelope-card" class="envelope-card absolute inset-x-3 sm:inset-x-5 top-3 bottom-3 bg-[#fdfbf7] rounded-xl p-5 sm:p-7 shadow-2xl border-2 border-earth-300 flex flex-col justify-between text-center z-15">
@@ -646,28 +653,28 @@
                 <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4 text-earth-800 text-sm md:text-base font-medium">
                     <div class="p-3.5 bg-earth-50 rounded-xl border border-earth-200 flex flex-col justify-center">
                         <span class="text-xs font-bold text-earth-500 uppercase tracking-wider mb-1">Pair 1</span>
-                        <span>Mr. Principal Sponsor 1</span>
-                        <span>Mrs. Principal Sponsor 1</span>
+                        <span>Mr. Pablo Jacinto</span>
+                        <span>Mrs. Susana Castro</span>
                     </div>
                     <div class="p-3.5 bg-earth-50 rounded-xl border border-earth-200 flex flex-col justify-center">
                         <span class="text-xs font-bold text-earth-500 uppercase tracking-wider mb-1">Pair 2</span>
-                        <span>Mr. Principal Sponsor 2</span>
-                        <span>Mrs. Principal Sponsor 2</span>
+                        <span>Mr. Lito Canoza</span>
+                        <span>Mrs. Teodora Rivera</span>
                     </div>
                     <div class="p-3.5 bg-earth-50 rounded-xl border border-earth-200 flex flex-col justify-center">
                         <span class="text-xs font-bold text-earth-500 uppercase tracking-wider mb-1">Pair 3</span>
-                        <span>Mr. Principal Sponsor 3</span>
-                        <span>Mrs. Principal Sponsor 3</span>
+                        <span>Mr. Ferdie Mendoza</span>
+                        <span>Mrs. Dolores Reyes</span>
                     </div>
                     <div class="p-3.5 bg-earth-50 rounded-xl border border-earth-200 flex flex-col justify-center">
                         <span class="text-xs font-bold text-earth-500 uppercase tracking-wider mb-1">Pair 4</span>
-                        <span>Mr. Principal Sponsor 4</span>
-                        <span>Mrs. Principal Sponsor 4</span>
+                        <span>Mr. Elmer Canoza</span>
+                        <span>Mrs. Isabelita Canoza</span>
                     </div>
                     <div class="p-3.5 bg-earth-50 rounded-xl border border-earth-200 flex flex-col justify-center">
                         <span class="text-xs font-bold text-earth-500 uppercase tracking-wider mb-1">Pair 5</span>
-                        <span>Mr. Principal Sponsor 5</span>
-                        <span>Mrs. Principal Sponsor 5</span>
+                        <span>Mr. George Canoza</span>
+                        <span>Mrs. Fritzie Ann Capalad</span>
                     </div>
                 </div>
             </div>
@@ -716,19 +723,19 @@
                         <i class="fa-solid fa-fire text-earth-500 text-2xl mb-2"></i>
                         <h5 class="font-serif text-xl text-earth-900 font-bold">Candle Sponsors</h5>
                         <p class="text-xs text-earth-600 mt-0.5">To light our path ahead</p>
-                        <p class="text-sm text-earth-800 font-semibold mt-3">[Name &amp; Name]</p>
+                        <p class="text-sm text-earth-800 font-semibold mt-3">Mr. Ivan Lester Canoza &amp; Ms. Andrea German</p>
                     </div>
                     <div class="bg-white p-6 rounded-2xl border border-earth-200 text-center shadow-sm">
                         <i class="fa-solid fa-scroll text-earth-500 text-2xl mb-2"></i>
                         <h5 class="font-serif text-xl text-earth-900 font-bold">Veil Sponsors</h5>
                         <p class="text-xs text-earth-600 mt-0.5">To clothe us in unity</p>
-                        <p class="text-sm text-earth-800 font-semibold mt-3">[Name &amp; Name]</p>
+                        <p class="text-sm text-earth-800 font-semibold mt-3">Mr. Byron Vega &amp; Ms. Melissa Anne Marie Pancho]</p>
                     </div>
                     <div class="bg-white p-6 rounded-2xl border border-earth-200 text-center shadow-sm">
                         <i class="fa-solid fa-link text-earth-500 text-2xl mb-2"></i>
                         <h5 class="font-serif text-xl text-earth-900 font-bold">Cord Sponsors</h5>
                         <p class="text-xs text-earth-600 mt-0.5">To bind our love together</p>
-                        <p class="text-sm text-earth-800 font-semibold mt-3">[Name &amp; Name]</p>
+                        <p class="text-sm text-earth-800 font-semibold mt-3">Mr. Renzo Jose &amp; Ms. Nicole Ribano</p>
                     </div>
                 </div>
 
@@ -741,7 +748,7 @@
                         </div>
                         <h5 class="font-serif text-xl text-earth-900 font-bold">Ring Bearer</h5>
                         <p class="text-xs text-earth-600 mt-0.5">Carrying our holy symbols of eternal love</p>
-                        <p class="text-sm text-earth-800 font-semibold mt-3">[Ring Bearer Name]</p>
+                        <p class="text-sm text-earth-800 font-semibold mt-3">Franchesca Louisse Tan</p>
                     </div>
 
                     <!-- Coin Bearer Card -->
@@ -751,7 +758,7 @@
                         </div>
                         <h5 class="font-serif text-xl text-earth-900 font-bold">Coin Bearer</h5>
                         <p class="text-xs text-earth-600 mt-0.5">Carrying our promise of mutual stewardship</p>
-                        <p class="text-sm text-earth-800 font-semibold mt-3">[Coin Bearer Name]</p>
+                        <p class="text-sm text-earth-800 font-semibold mt-3">Gianluigi Picazo</p>
                     </div>
 
                     <!-- Bible Bearer Card -->
@@ -761,7 +768,7 @@
                         </div>
                         <h5 class="font-serif text-xl text-earth-900 font-bold">Bible Bearer</h5>
                         <p class="text-xs text-earth-600 mt-0.5">Carrying God's word as our guidance</p>
-                        <p class="text-sm text-earth-800 font-semibold mt-3">[Bible Bearer Name]</p>
+                        <p class="text-sm text-earth-800 font-semibold mt-3">Mrs. Jocelyn Cunanan</p>
                     </div>
                 </div>
             </div>
