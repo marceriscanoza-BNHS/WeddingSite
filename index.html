@@ -790,7 +790,7 @@
             <h2 class="font-serif text-4xl md:text-6xl text-earth-900 mt-2">Our Love Story Video</h2>
             <div class="w-20 h-1 bg-earth-400 mx-auto mt-4 rounded-full mb-8"></div>
 
-<div id="video-wrapper" class="relative w-full max-w-5xl mx-auto rounded-3xl overflow-hidden shadow-2xl border-2 border-earth-300 bg-earth-950 h-[450px] sm:h-[600px] md:h-[700px] flex items-center justify-center group my-4">
+<div id="video-wrapper" class="relative w-full max-w-5xl mx-auto rounded-3xl overflow-hidden shadow-2xl border-2 border-earth-300 bg-earth-950 h-[450px] sm:h-[600px] md:h-[500px] flex items-center justify-center group my-4">
     <!-- Video Play Overlay Banner -->
     <div id="video-play-banner" class="absolute inset-0 z-20 bg-black/40 backdrop-blur-[2px] flex flex-col items-center justify-center cursor-pointer transition-opacity duration-300 hover:bg-black/20" onclick="startVideoAndPauseMusic()">
         <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-earth-700/90 text-white flex items-center justify-center shadow-2xl border-2 border-earth-200 group-hover:scale-110 transition-transform">
@@ -1557,19 +1557,25 @@
             `).join('');
         }
 
-        function startVideoAndPauseMusic() {
-            const banner = document.getElementById('video-play-banner');
-            if (banner) {
-                banner.classList.add('opacity-0', 'pointer-events-none');
-            }
-            const audio = document.getElementById('bg-music');
-            if (audio && !audio.paused) {
-                audio.pause();
-                isPlaying = false;
-                const icon = document.getElementById('audio-icon');
-                if (icon) icon.className = "fa-solid fa-music group-hover:animate-bounce";
-            }
-        }
+function startVideoAndPauseMusic() {
+    // 1. Pause background audio if playing
+    const bgMusic = document.getElementById('bg-music'); // or your audio element ID
+    if (bgMusic) {
+        bgMusic.pause();
+    }
+
+    // 2. Hide the overlay banner completely so it doesn't block or darken the video
+    const banner = document.getElementById('video-play-banner');
+    if (banner) {
+        banner.style.display = 'none';
+    }
+
+    // 3. Trigger video playback by appending autoplay to iframe src
+    const iframe = document.getElementById('highlight-video-iframe');
+    if (iframe && !iframe.src.includes('autoplay=1')) {
+        iframe.src += (iframe.src.includes('?') ? '&' : '?') + 'autoplay=1';
+    }
+}
 
         function initVideoAudioSync() {
             const iframe = document.getElementById('highlight-video-iframe');
