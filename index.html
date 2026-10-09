@@ -228,7 +228,25 @@
                     <span class="whitespace-nowrap">Bustos, Bulacan</span>
                 </div>
             </div>
+<!-- RSVP Deadline Callout Badge -->
+<div class="z-10 mt-5 mb-1 animate-fade-in flex items-center justify-center">
+    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-earth-900/80 border border-earth-400/30 text-earth-200 text-xs tracking-wider uppercase backdrop-blur-md shadow-md font-medium">
+        <i class="fa-regular fa-clock text-amber-400 text-xs"></i>
+        Please RSVP on or before <strong class="text-white font-semibold">December 8, 2026</strong>
+    </span>
+</div>
 
+<!-- Action Buttons Container -->
+<div class="flex flex-col sm:flex-row items-center gap-3 z-10 mt-3">
+    <button id="open-envelope-btn" onclick="openEnvelope()" class="px-7 py-3 rounded-full bg-earth-800/90 hover:bg-earth-700 text-earth-100 border border-earth-400/40 text-xs uppercase tracking-widest font-semibold backdrop-blur-md shadow-xl transition-all flex items-center gap-2.5 group">
+        <span id="btn-text">Click Envelope to Open</span>
+        <i class="fa-solid fa-envelope-open text-earth-400 group-hover:translate-x-0.5 transition-transform"></i>
+    </button>
+    
+    <button id="skip-overlay-btn" onclick="skipEnvelopeOverlay()" class="px-5 py-3 rounded-full bg-white/10 hover:bg-white/20 text-earth-200 border border-white/20 text-xs uppercase tracking-widest font-semibold backdrop-blur-md transition-all">
+        Enter Website <i class="fa-solid fa-arrow-right ml-1"></i>
+    </button>
+</div>
             <!-- Envelope Pocket Overlays (Left, Right, Bottom flaps) -->
             <div class="absolute inset-0 rounded-2xl overflow-hidden pointer-events-none z-20">
                 <!-- Left Fold -->
