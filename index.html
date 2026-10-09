@@ -228,13 +228,7 @@
                     <span class="whitespace-nowrap">Bustos, Bulacan</span>
                 </div>
             </div>
-<!-- RSVP Deadline Callout Badge -->
-<div class="z-10 mt-5 mb-1 animate-fade-in flex items-center justify-center">
-    <span class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-earth-900/80 border border-earth-400/30 text-earth-200 text-xs tracking-wider uppercase backdrop-blur-md shadow-md font-medium">
-        <i class="fa-regular fa-clock text-amber-400 text-xs"></i>
-        Please RSVP on or before <strong class="text-white font-semibold">December 8, 2026</strong>
-    </span>
-</div>
+
 
 <!-- Action Buttons Container -->
 <div class="flex flex-col sm:flex-row items-center gap-3 z-10 mt-3">
@@ -269,7 +263,10 @@
         </div>
     </div>
 
-    <div class="flex flex-col sm:flex-row items-center gap-3 z-10 mt-6">
+<div class="flex flex-col items-center z-10 mt-6">
+    
+    <!-- Buttons Row -->
+    <div class="flex flex-col sm:flex-row items-center gap-3">
         <button id="open-envelope-btn" onclick="openEnvelope()" class="px-7 py-3 rounded-full bg-earth-800/90 hover:bg-earth-700 text-earth-100 border border-earth-400/40 text-xs uppercase tracking-widest font-semibold backdrop-blur-md shadow-xl transition-all flex items-center gap-2.5 group">
             <span id="btn-text">Click Envelope to Open</span>
             <i class="fa-solid fa-envelope-open text-earth-400 group-hover:translate-x-0.5 transition-transform"></i>
@@ -279,6 +276,13 @@
             Enter Website <i class="fa-solid fa-arrow-right ml-1"></i>
         </button>
     </div>
+
+    <!-- RSVP Deadline Subtext -->
+    <p class="mt-4 text-[11px] sm:text-xs text-earth-300/90 uppercase tracking-widest font-medium text-center flex items-center gap-1.5 drop-shadow-sm">
+        <i class="fa-regular fa-clock text-amber-400/90 text-xs"></i>
+        <span>Kindly RSVP on or before <strong class="text-white font-semibold underline decoration-amber-400/50 underline-offset-4">December 8, 2026</strong></span>
+    </p>
+
 </div>
 
     <nav id="navbar" class="fixed top-0 left-0 w-full z-50 transition-all duration-300 py-4 px-6 md:px-12 bg-earth-50/90 backdrop-blur-md border-b border-earth-200/50">
